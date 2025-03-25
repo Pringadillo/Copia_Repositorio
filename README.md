@@ -1,2 +1,2 @@
 # ContaCasa
-crear un pequeño programa contable de ingresos gastos de la contabilidad domestica.
+Crear un pequeño programa de contabilidad domestica.
