@@ -1,0 +1,23 @@
+{
+    "name": "ContaCasa",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "python.defaultInterpreterPath": "/usr/bin/python"
+    },
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Flet App",
+            "onAutoForward": "openBrowser"
+        }
+    },
+    "forwardPorts": [8000],
+    "postCreateCommand": "pip install --no-cache-dir -r requirements.txt"
+}
