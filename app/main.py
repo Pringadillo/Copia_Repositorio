@@ -6,13 +6,14 @@ import pathlib
 
 
 
-
-ruta_imagenes = "./assets/"
+#rutas del programa
+ruta_imagenes = "./imagenes/"
 ruta_datos = "./data/"
-ruta_funciones = "./lib/"
-ruta_doc = "./docs/"
+ruta_funciones = "./app/"
 
-base_datos = ""
+# base_datos = "./data/{nombre_BD}"
+
+
 
 # Conectar a la base de datos (o crearla si no existe)
 conexion = sqlite3.connect('mi_base_de_datos.db')
@@ -24,6 +25,11 @@ cursor = conexion.cursor()
 
 
 def main(page: ft.Page):
+
+    #parametros entorno
+
+
+
     texto = ft.Text(value="¡Hola, Flet!")
     boton = ft.ElevatedButton(text="Haz clic")
 
