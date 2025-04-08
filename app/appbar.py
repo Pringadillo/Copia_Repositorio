@@ -10,6 +10,8 @@ def crear_appbar(page):
             page.controls[0].controls[1].content = ft.Text("Contenido del Balance")
         elif e.control.text == "Saldos":
             page.controls[0].controls[1].content = ft.Text("Contenido de Saldos")
+        elif e.control.text == "Configuración":
+            page.controls[0].controls[1].content = ft.Text("Contenido de Configuración")
 
         page.update()
 
@@ -20,6 +22,7 @@ def crear_appbar(page):
                 ft.TextButton(text="Mayor", on_click=boton_click),
                 ft.TextButton(text="Balance", on_click=boton_click),
                 ft.TextButton(text="Saldos", on_click=boton_click),
+                ft.TextButton(text="Configuración", on_click=boton_click),
             ]
         )
     )
