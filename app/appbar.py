@@ -65,7 +65,7 @@ def crear_appbar(page):
 
                         ft.TextButton(
                             text="sumas y Saldos",
-                            icon=ft.icons.ATTACH_MONEY,  # Ícono para el botón "Sunas y Saldos"
+                            icon=ft.icons.BAR_CHART,  # Ícono para el botón "Sunas y Saldos"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
