@@ -50,6 +50,13 @@ def crear_appbar(page):
                     ),
                 ),
                 ft.TextButton(
+                    text="Tabla Códigos",
+                    on_click=boton_click,
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),                
+                ft.TextButton(
                     text="Configuración",
                     on_click=boton_click,
                     style=ft.ButtonStyle(
