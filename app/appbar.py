@@ -2,7 +2,9 @@ import flet as ft
 
 def crear_appbar(page):
     def boton_click(e):
-        if e.control.text == "Diario":
+        if e.control.text == "Tabla Códigos":
+            page.controls[0].controls[1].content = TablaCodigos()
+        elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del Diario")
         elif e.control.text == "Mayor":
             page.controls[0].controls[1].content = ft.Text("Contenido del Mayor")
@@ -107,7 +109,78 @@ def crear_appbar(page):
     return appbar
 
 def TablaCodigos():
-    pass
+    # Submenu CRUD de la tabla código
+    submenu = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.TextButton(
+                    text="Crear",
+                    icon=ft.icons.ADD,  # Ícono para "Crear"
+                    on_click=lambda e: print("Crear"),
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Leer",
+                    icon=ft.icons.RECEIPT,  # Ícono para "Leer"
+                    on_click=lambda e: print("Leer"),
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Actualizar",
+                    icon=ft.icons.EDIT,  # Ícono para "Actualizar"
+                    on_click=lambda e: print("Actualizar"),
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Eliminar",
+                    icon=ft.icons.DELETE,  # Ícono para "Eliminar"
+                    on_click=lambda e: print("Eliminar"),
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,  # Centrar los botones horizontalmente
+            spacing=20,  # Espaciado entre los botones
+        ),
+        bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo suave para el submenú
+        padding=10,  # Espaciado interno del contenedor
+        border_radius=ft.border_radius.all(10),  # Bordes redondeados
+        #expand=1,  # Asegura que el submenú ocupe espacio proporcional
+    )
+    
+    # Contenido de la tabla de códigos
+    contenido_cuerpo = ft.Container(
+        content=ft.Column(
+            controls=[
+                ft.Text("Contenido de Tabla Códigos", size=20),
+                ft.Text("Código 1: Descripción 1"),
+                ft.Text("Código 2: Descripción 2"),
+                ft.Text("Código 3: Descripción 3"),
+                # Agrega más códigos según sea necesario
+            ],
+            expand=True,
+        ),
+        #expand=3,  # Asegura que el contenido ocupe más espacio que el submenú
+    )
+
+    # Fila que contiene el submenú y el contenido
+    cuerpo = ft.Column(
+        controls=[
+            submenu,  # Submenú a la izquierda
+            contenido_cuerpo,  # Contenido a la derecha
+        ],
+        expand=True,
+    )
+
+    return cuerpo
+
 def Diario():
     pass
 def Mayor():
