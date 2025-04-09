@@ -116,7 +116,7 @@ def TablaCodigos():
                 ft.TextButton(
                     text="Crear",
                     icon=ft.icons.ADD,  # Ícono para "Crear"
-                    on_click=lambda e: print("Crear"),
+                    on_click=crear_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
@@ -124,7 +124,7 @@ def TablaCodigos():
                 ft.TextButton(
                     text="Leer",
                     icon=ft.icons.RECEIPT,  # Ícono para "Leer"
-                    on_click=lambda e: print("Leer"),
+                    on_click=leer_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
@@ -132,7 +132,7 @@ def TablaCodigos():
                 ft.TextButton(
                     text="Actualizar",
                     icon=ft.icons.EDIT,  # Ícono para "Actualizar"
-                    on_click=lambda e: print("Actualizar"),
+                    on_click=actualizar_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
@@ -140,7 +140,7 @@ def TablaCodigos():
                 ft.TextButton(
                     text="Eliminar",
                     icon=ft.icons.DELETE,  # Ícono para "Eliminar"
-                    on_click=lambda e: print("Eliminar"),
+                    on_click=eliminar_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
@@ -152,8 +152,7 @@ def TablaCodigos():
         bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo suave para el submenú
         padding=10,  # Espaciado interno del contenedor
         border_radius=ft.border_radius.all(10),  # Bordes redondeados
-        #expand=1,  # Asegura que el submenú ocupe espacio proporcional
-    )
+            )
     
     # Contenido de la tabla de códigos
     contenido_cuerpo = ft.Container(
@@ -171,7 +170,7 @@ def TablaCodigos():
         #expand=3,  # Asegura que el contenido ocupe más espacio que el submenú
     )
 
-    # Fila que contiene el submenú y el contenido
+    # Fila que contiene el submenú y el coColumnnido
     cuerpo = ft.Column(
         controls=[
             submenu,  # Submenú a la izquierda
@@ -200,3 +199,14 @@ def Salir():
     pass
 def guardar():
     pass
+
+
+def crear_codigo():
+    print ("Crear Código")
+def leer_codigo():
+    pass    
+def actualizar_codigo():
+    pass
+def eliminar_codigo():  
+    pass
+
