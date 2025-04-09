@@ -2,6 +2,7 @@ import flet as ft
 
 def crear_cuerpo():
     columna_cuentas = ft.Column(
+        # saldos bancarios
         controls=[
             ft.Text("Cuentas Bancarias", size=20),
             ft.Text("Cuenta 1: $1000"),
@@ -9,6 +10,9 @@ def crear_cuerpo():
             ft.Text("Cuenta 3: $500"),
             # Agrega más cuentas según sea necesario
         ],
+
+        # Resumen de productos financieros
+
         width=200,
     )
 

@@ -64,7 +64,7 @@ def crear_appbar(page):
                         ),
 
                         ft.TextButton(
-                            text="sumas y Saldos",
+                            text="Sumas y Saldos",
                             icon=ft.icons.BAR_CHART,  # Ícono para el botón "Sunas y Saldos"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
@@ -105,3 +105,24 @@ def crear_appbar(page):
         )
     )
     return appbar
+
+def TablaCodigos():
+    pass
+def Diario():
+    pass
+def Mayor():
+    pass        
+def PerdidasGanancias():
+    pass
+def Balance():
+    pass
+def SumasSaldos():
+    pass
+def Inversiones():  
+    pass
+def Configuracion():
+    pass
+def Salir():
+    pass
+def guardar():
+    pass
