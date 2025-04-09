@@ -157,6 +157,7 @@ def TablaCodigos():
     
     # Contenido de la tabla de códigos
     contenido_cuerpo = ft.Container(
+        # poner la tabla Códigos aquí------------------------------------
         content=ft.Column(
             controls=[
                 ft.Text("Contenido de Tabla Códigos", size=20),
