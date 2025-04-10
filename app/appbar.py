@@ -3,7 +3,7 @@ import flet as ft
 
 
 usuario = "Nombre Usuario"  # Nombre del usuario
-
+contenido_cuerpo = ""
 
 def crear_appbar(page):
     def boton_click(e):
@@ -143,7 +143,7 @@ def TablaCodigos():
         content=ft.Row(
             controls=[
                 ft.TextButton(
-                    text="Ver Tabla",
+                    text="Ver Tabla Códigos",
                     icon=ft.icons.TABLE_CHART,  # Ícono para "Ver Tabla"
                     on_click=ver_TablaCodigos,  # Pasa directamente la función
                     style=ft.ButtonStyle(
@@ -230,8 +230,21 @@ def Salir():
 
 
 # -----------------------  SUBMENU TABLA CODIGOS -----------------------
-def ver_TablaCodigos():
+def ver_TablaCodigos(e):
     print("Ver Tabla Códigos")
+
+    contenido_cuerpo = ft.Container(
+        # poner la tabla Códigos aquí------------------------------------
+        content=ft.Column(
+            controls=[
+                ft.Text("Contenido de Tabla Códigos", size=20),
+
+            ],
+            expand=True,
+        ),
+        #expand=3,  # Asegura que el contenido ocupe más espacio que el submenú
+    )
+
 
 
 def crear_codigo(e):
