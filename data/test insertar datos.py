@@ -7,6 +7,7 @@ BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
 
 # --------------------------- CREAR BASE DE DATOS ---------------------------
+
 def crear_base_datos():
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
@@ -33,6 +34,7 @@ def ver_tablas_base_datos():
 
 #crear_base_datos()
 #ver_tablas_base_datos()
+
 
 # ------------------------  TABLA_NIVEL1
 def crear_tabla_nivel1():
@@ -102,7 +104,7 @@ def eliminar_datos_nivel1():
 #ver_tabla_nivel1()
 #eliminar_datos_nivel1()
 
-# -------------------------  TABLA_NIVEL2 
+# -------------------------  TABLA_NIVEL2  
 def crear_tabla_nivel2():
     """Crea la tabla nivel2 si no existe."""
     conn = sqlite3.connect(ruta_BD)
@@ -120,7 +122,7 @@ def crear_tabla_nivel2():
 
     conn.commit()
     conn.close()
-    
+
 def insertar_datos_nivel2(descripcion, nivel1_id):
     """Inserta un nuevo registro en la tabla nivel2."""
     conn = sqlite3.connect(ruta_BD)
@@ -183,6 +185,28 @@ def eliminar_datos_nivel2(id):
 #actualizar_datos_nivel2(3, "Self Bank", 1)
 #eliminar_datos_nivel2(3)
 #ver_tabla_nivel2()
+
+# -------------------------  TABLA PRODUCTOS FINANCIEROS
+
+def crear_tabla_productosfinancieros():
+    """Crea la tabla productosfinancieros si no existe."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Crear tabla para productos financieros
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS productosfinancieros (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        descripcion TEXT NOT NULL,
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+    print("Tabla productosfinancieros creada (si no existía).")
+
+
+
 # --------------------------   TABLA_NIVEL3
 
 def crear_tabla_nivel3():
