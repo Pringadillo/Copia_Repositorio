@@ -1,5 +1,8 @@
 import flet as ft
 
+
+
+
 def crear_cuerpo():
     columna_lateral = ft.Column(
         # saldos bancarios
@@ -11,7 +14,7 @@ def crear_cuerpo():
             # Agrega más cuentas según sea necesario
         ],
 
-        # Resumen de productos financieros
+        # tabla Resumen por productos financieros
 
         width=200,
     )

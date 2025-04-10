@@ -1,6 +1,6 @@
 import flet as ft
 
-
+import appbar
 
 usuario = "Nombre Usuario"  # Nombre del usuario
 contenido_cuerpo = ""
@@ -204,11 +204,20 @@ def TablaCodigos():
         ],
         expand=True,
     )
-
     return cuerpo
 
 def Diario():
-    pass
+    
+    
+
+
+
+
+
+
+
+
+    
 def Mayor():
     pass        
 def PerdidasGanancias():
@@ -221,11 +230,13 @@ def Inversiones():
     pass
 def Configuracion():
     pass
+
+
 def Salir():
     pass
 
 
-# -----------------------  SUBMENU TABLA CODIGOS -----------------------
+# -----------------------  FUNCIONES SUBMENU TABLA CODIGOS -----------------------
 def ver_TablaCodigos(e):
     print("Ver Tabla Códigos")
 

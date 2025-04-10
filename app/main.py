@@ -24,6 +24,7 @@ ruta_BD = f"./data/{BasedeDatos}"
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     #page.icon = "/imagenes/"
+    
     page.appbar = appbar.crear_appbar(page)
     page.add(cuerpo.crear_cuerpo())
 
