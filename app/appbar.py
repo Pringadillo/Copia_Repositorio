@@ -1,5 +1,10 @@
 import flet as ft
 
+
+
+usuario = "Usuario"  # Nombre del usuario
+
+
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla Códigos":
@@ -20,7 +25,30 @@ def crear_appbar(page):
     appbar = ft.AppBar(
         title=ft.Row(
             [
-                # Primeros botones centrados
+                # Botones Izquierda
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(
+                                name=ft.icons.PERSON,  # Ícono de una persona
+                                size=50,  # Tamaño del ícono
+                                color=ft.colors.BLUE,  # Color del ícono
+                            ),
+                            ft.Text(
+                                usuario,  # Nombre del usuario
+                                size=16,
+                                weight=ft.FontWeight.BOLD,
+                                text_align=ft.TextAlign.CENTER,
+                            ),
+                        ],
+                        alignment=ft.MainAxisAlignment.START,  # Alinear contenido a la izquierda
+                        spacing=5,  # Espaciado entre la imagen y el texto
+                    ),
+                    alignment=ft.alignment.top_left,  # Alinear el contenedor a la izquierda
+                    padding=10,  # Espaciado interno del contenedor
+                ),
+
+                # Botones del Centro
                 ft.Row(
                     [
                         ft.TextButton(
@@ -85,7 +113,7 @@ def crear_appbar(page):
                     alignment=ft.MainAxisAlignment.CENTER,  # Centrar los primeros botones
                     expand=True,  # Ocupa el espacio disponible
                 ),
-                # Último botón a la derecha
+                # Botones Derecha
                 ft.TextButton(
                     text="Configuración",
                     icon=ft.icons.SETTINGS,  # Ícono para el botón "Configuración"
@@ -108,29 +136,31 @@ def crear_appbar(page):
     )
     return appbar
 
+# -----------------------  FUNCIONES MENU  -----------------------
 def TablaCodigos():
     # Submenu CRUD de la tabla código
     submenu = ft.Container(
         content=ft.Row(
             controls=[
                 ft.TextButton(
-                    text="Crear",
-                    icon=ft.icons.ADD,  # Ícono para "Crear"
-                    on_click=crear_codigo,  # Pasa directamente la función
-                    style=ft.ButtonStyle(
-                        text_style=ft.TextStyle(size=18, letter_spacing=2)
-                    ),
-                ),
-                ft.TextButton(
-                    text="Leer",
-                    icon=ft.icons.RECEIPT,  # Ícono para "Leer"
+                    text="Ver Tabla",
+                    icon=ft.icons.TABLE_CHART,  # Ícono para "Ver Tabla"
                     on_click=leer_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Actualizar",
+                    text="Crear Código",
+                    icon=ft.icons.ADD,  # Ícono para "Crear"
+                    on_click=crear_codigo,  # Pasa directamente la función
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+
+                ft.TextButton(
+                    text="Actualizar Código",
                     icon=ft.icons.EDIT,  # Ícono para "Actualizar"
                     on_click=actualizar_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
@@ -138,7 +168,7 @@ def TablaCodigos():
                     ),
                 ),
                 ft.TextButton(
-                    text="Eliminar",
+                    text="Eliminar Código",
                     icon=ft.icons.DELETE,  # Ícono para "Eliminar"
                     on_click=eliminar_codigo,  # Pasa directamente la función
                     style=ft.ButtonStyle(
@@ -146,7 +176,7 @@ def TablaCodigos():
                     ),
                 ),
             ],
-            alignment=ft.MainAxisAlignment.CENTER,  # Centrar los botones horizontalmente
+            alignment=ft.MainAxisAlignment.START,  # Centrar los botones horizontalmente
             spacing=20,  # Espaciado entre los botones
         ),
         bgcolor=ft.colors.LIGHT_BLUE_50,  # Fondo suave para el submenú
@@ -197,16 +227,47 @@ def Configuracion():
     pass
 def Salir():
     pass
-def guardar():
-    pass
 
 
-def crear_codigo():
-    print ("Crear Código")
-def leer_codigo():
-    pass    
-def actualizar_codigo():
-    pass
-def eliminar_codigo():  
-    pass
+# -----------------------  SUBMENU TABLA CODIGOS -----------------------
+def crear_codigo(e):
+    pass  # Marcador de posición para una función vacía
+
+def leer_codigo(e):
+    print("Ver Tabla")    
+
+def actualizar_codigo(e):
+    print("Modificar Código")
+
+def eliminar_codigo(e):  
+    print("Eliminar Código")
+
+# -----------------------  SUBMENU DIARIO -----------------------
+
+
+
+# -----------------------  SUBMENU MAYOR -----------------------
+
+
+
+# -----------------------  SUBMENU PerdidasGanancias -----------------------
+
+
+# -----------------------  SUBMENU Balance -----------------------
+
+
+
+# -----------------------  SUBMENU SumasSaldos -----------------------
+
+
+
+
+# -----------------------  SUBMENU Inversiones -----------------------
+
+
+
+# -----------------------  SUBMENU Salir -----------------------
+
+
+
 
