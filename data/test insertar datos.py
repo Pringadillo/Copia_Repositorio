@@ -1,16 +1,43 @@
 import sqlite3
+import os
 
 empresa = "Mi Empresa"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
 
-def crear_tablas():
-    """Crea las tablas para los tres niveles jerárquicos."""
+# --------------------------- CREAR BASE DE DATOS ---------------------------
+def crear_base_datos():
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+    conn.commit()
+    conn.close()
+
+def ver_tablas_base_datos():
+    """Consulta y muestra todas las tablas existentes en la base de datos."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
-    # Eliminar la tabla nivel3 si ya existe
-    cursor.execute("DROP TABLE IF EXISTS nivel3")
+    # Consulta para obtener los nombres de todas las tablas
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    tablas = cursor.fetchall()
+
+    print("Tablas en la base de datos:")
+    if tablas:
+        for tabla in tablas:
+            print(f"- {tabla[0]}")
+    else:
+        print("No hay tablas en la base de datos.")
+
+    conn.close()
+
+#crear_base_datos()
+#ver_tablas_base_datos()
+
+# ------------------------  TABLA_NIVEL1
+def crear_tabla_nivel1():
+    """Crea la tabla nivel1 si no existe."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
 
     # Crear tabla para el nivel 1
     cursor.execute("""
@@ -19,6 +46,66 @@ def crear_tablas():
         descripcion TEXT NOT NULL
     )
     """)
+
+    conn.commit()
+    conn.close()
+    print("Tabla nivel1 creada (si no existía).")
+
+def insertar_datos_nivel1(descripcion):
+    """Inserta un nuevo registro en la tabla nivel1."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Insertar un nuevo registro en la tabla nivel1
+    cursor.execute("INSERT INTO nivel1 (descripcion) VALUES (?)", (descripcion,))
+    
+    conn.commit()
+    conn.close()
+    print(f"Se ha insertado el registro en nivel1: {descripcion}")
+
+def ver_tabla_nivel1():
+    """Consulta y muestra todos los registros de la tabla nivel1."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Consulta para obtener todos los registros de la tabla nivel1
+    cursor.execute("SELECT * FROM nivel1")
+    resultados = cursor.fetchall()
+
+    print("Contenido de la tabla nivel1:")
+    if resultados:
+        for fila in resultados:
+            print(f"ID: {fila[0]}, {fila[1]}")
+    else:
+        print("La tabla nivel1 está vacía.")
+
+    conn.close()
+
+def eliminar_datos_nivel1():
+    """Elimina todos los registros de la tabla nivel1."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Eliminar todos los registros de la tabla nivel1
+    cursor.execute("DELETE FROM nivel1")
+    
+    conn.commit()
+    conn.close()
+    print("Todos los registros de la tabla nivel1 han sido eliminados.")
+
+#crear_tabla_nivel1()
+#insertar_datos_nivel1("Cuentas Financieras")
+#insertar_datos_nivel1("Pasivo")
+#insertar_datos_nivel1("Gastos")
+#insertar_datos_nivel1("Ingresos")
+#ver_tabla_nivel1()
+#eliminar_datos_nivel1()
+
+# -------------------------  TABLA_NIVEL2 
+def crear_tabla_nivel2():
+    """Crea la tabla nivel2 si no existe."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
 
     # Crear tabla para el nivel 2
     cursor.execute("""
@@ -30,119 +117,72 @@ def crear_tablas():
     )
     """)
 
-    # Crear tabla para el nivel 3
+    conn.commit()
+    conn.close()
+    
+def insertar_datos_nivel2(descripcion, nivel1_id):
+    """Inserta un nuevo registro en la tabla nivel2."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Insertar un nuevo registro en la tabla nivel2
+    cursor.execute("INSERT INTO nivel2 (descripcion, nivel1_id) VALUES (?, ?)", (descripcion, nivel1_id))
+    
+    conn.commit()
+    conn.close()
+    print(f"Se ha insertado el registro en nivel2: {descripcion}, nivel1_id: {nivel1_id}")
+
+def ver_tabla_nivel2():
+    """Consulta y muestra todos los registros de la tabla nivel2."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Consulta para obtener todos los registros de la tabla nivel2
+    cursor.execute("SELECT * FROM nivel2")
+    resultados = cursor.fetchall()
+
+    print("Contenido de la tabla nivel2:")
+    if resultados:
+        for fila in resultados:
+            print(f"ID: {fila[0]}, Descripción: {fila[1]}, Nivel1_ID: {fila[2]}")
+    else:
+        print("La tabla nivel2 está vacía.")
+
+    conn.close()
+
+def actualizar_datos_nivel2(id, nueva_descripcion, nuevo_nivel1_id):
+    """Actualiza un registro en la tabla nivel2."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS nivel3 (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        descripcion TEXT NOT NULL,
-        nivel2_id INTEGER NOT NULL,
-        importe REAL DEFAULT 0,  -- Nueva columna para importe
-        fecha_inicio TEXT,       -- Nueva columna para fecha de inicio
-        FOREIGN KEY (nivel2_id) REFERENCES nivel2 (id)
-    )
-    """)
-
+    UPDATE nivel2
+    SET descripcion = ?, nivel1_id = ?
+    WHERE id = ?
+    """, (nueva_descripcion, nuevo_nivel1_id, id))
+    
     conn.commit()
     conn.close()
+    print(f"Se ha actualizado el registro con ID: {id}")
 
-def insertar_datos():
-    """Inserta datos en las tablas jerárquicas."""
+def eliminar_datos_nivel2(id):
+    """Elimina un registro específico de la tabla nivel2."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
-    # Insertar datos en nivel 1
-    cursor.execute("INSERT INTO nivel1 (descripcion) VALUES ('Activo')")
-    cursor.execute("INSERT INTO nivel1 (descripcion) VALUES ('Pasivo')")
-
-    # Obtener el ID del nivel 1 "Activo"
-    cursor.execute("SELECT id FROM nivel1 WHERE descripcion = 'Activo'")
-    activo_id = cursor.fetchone()[0]
-
-    # Insertar datos en nivel 2 bajo "Activo"
-    cursor.execute("INSERT INTO nivel2 (descripcion, nivel1_id) VALUES ('Caja', ?)", (activo_id,))
-    cursor.execute("INSERT INTO nivel2 (descripcion, nivel1_id) VALUES ('Bancos', ?)", (activo_id,))
-
-    # Obtener el ID del nivel 2 "Caja"
-    cursor.execute("SELECT id FROM nivel2 WHERE descripcion = 'Caja'")
-    caja_id = cursor.fetchone()[0]
-
-    # Insertar datos en nivel 3 bajo "Caja"
-    cursor.execute("INSERT INTO nivel3 (descripcion, nivel2_id, importe, fecha_inicio) VALUES ('Caja General', ?, 1500, '2025-01-01')", (caja_id,))
-    cursor.execute("INSERT INTO nivel3 (descripcion, nivel2_id, importe, fecha_inicio) VALUES ('Caja Chica', ?, 500, '2025-02-01')", (caja_id,))
-
+    # Eliminar el registro con el ID especificado
+    cursor.execute("DELETE FROM nivel2 WHERE id = ?", (id,))
+    
     conn.commit()
     conn.close()
+    print(f"Se ha eliminado el registro con ID: {id}")
 
-def consultar_formato_jerarquico():
-    """Consulta y muestra la jerarquía en formato '1.01.01' con la descripción del último nivel."""
-    conn = sqlite3.connect(ruta_BD)
-    cursor = conn.cursor()
-
-    # Consulta para obtener la jerarquía en formato "1.01.01"
-    cursor.execute("""
-    SELECT 
-        n1.id AS nivel1_id,
-        n2.id AS nivel2_id,
-        n3.id AS nivel3_id,
-        n1.descripcion AS nivel1_desc,
-        n2.descripcion AS nivel2_desc,
-        n3.descripcion AS nivel3_desc,
-        n3.importe AS nivel3_importe,
-        n3.fecha_inicio AS nivel3_fecha_inicio
-    FROM nivel1 n1
-    LEFT JOIN nivel2 n2 ON n1.id = n2.nivel1_id
-    LEFT JOIN nivel3 n3 ON n2.id = n3.nivel2_id
-    ORDER BY n1.id, n2.id, n3.id
-    """)
-
-    print("Jerarquía en formato '1.01.01':")
-    for row in cursor.fetchall():
-        nivel1_id = row[0]
-        nivel2_id = row[1] if row[1] is not None else 0
-        nivel3_id = row[2] if row[2] is not None else 0
-        descripcion = row[5] if row[5] is not None else row[4] if row[4] is not None else row[3]
-        importe = row[6] if row[6] is not None else 0
-        fecha_inicio = row[7] if row[7] is not None else "N/A"
-
-        # Formatear el código jerárquico
-        codigo_jerarquico = f"{nivel1_id}.{nivel2_id:02}.{nivel3_id:02}"
-        print(f"{codigo_jerarquico} - {descripcion} - Importe: {importe} - Fecha Inicio: {fecha_inicio}")
-
-    conn.close()
-
-def verificar_estructura_tabla():
-    conn = sqlite3.connect(ruta_BD)
-    cursor = conn.cursor()
-
-    # Ejecutar PRAGMA para obtener la información de la tabla nivel3
-    cursor.execute("PRAGMA table_info(nivel3);")
-    print("Estructura de la tabla nivel3:")
-    for row in cursor.fetchall():
-        print(row)
-
-    conn.close()
+#crear_tabla_nivel2()
+#insertar_datos_nivel2("CaixaEnginyers", 1)
+#actualizar_datos_nivel2(3, "Self Bank", 1)
+#eliminar_datos_nivel2(3)
+#ver_tabla_nivel2()
+# ------------------------  CREAR TABLA_NIVEL3
 
 
-def eliminar_datos():
-    """Elimina todos los datos de las tablas jerárquicas."""
-    conn = sqlite3.connect(ruta_BD)
-    cursor = conn.cursor()
-
-    # Eliminar datos de las tablas en orden jerárquico (de nivel3 a nivel1)
-    cursor.execute("DELETE FROM nivel3")
-    cursor.execute("DELETE FROM nivel2")
-    cursor.execute("DELETE FROM nivel1")
-
-    conn.commit()
-    conn.close()
-    print("Todos los datos han sido eliminados de las tablas.")
-
-
-
-# Ejecutar las funciones
-#crear_tablas()
-#insertar_datos()
-#consultar_formato_jerarquico()
-#verificar_estructura_tabla()
-#eliminar_datos()
 

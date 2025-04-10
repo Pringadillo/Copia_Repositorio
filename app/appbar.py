@@ -2,7 +2,7 @@ import flet as ft
 
 
 
-usuario = "Usuario"  # Nombre del usuario
+usuario = "Nombre Usuario"  # Nombre del usuario
 
 
 def crear_appbar(page):
