@@ -197,7 +197,7 @@ def crear_tabla_productosfinancieros():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS productosfinancieros (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        descripcion TEXT NOT NULL,
+        descripcion TEXT NOT NULL
     )
     """)
 
@@ -205,6 +205,72 @@ def crear_tabla_productosfinancieros():
     conn.close()
     print("Tabla productosfinancieros creada (si no existía).")
 
+def insertar_datos_productosfinancieros(descripcion):
+    """Inserta un nuevo registro en la tabla productosfinancieros."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Insertar un nuevo registro en la tabla productosfinancieros
+    cursor.execute("""
+    INSERT INTO productosfinancieros (descripcion)
+    VALUES (?)
+    """, (descripcion,))
+    
+    conn.commit()
+    conn.close()
+    print(f"Se ha insertado el registro en productosfinancieros: {descripcion}")
+
+def ver_tabla_productosfinancieros():
+    """Consulta y muestra todos los registros de la tabla productosfinancieros."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Consulta para obtener todos los registros de la tabla productosfinancieros
+    cursor.execute("SELECT * FROM productosfinancieros")
+    resultados = cursor.fetchall()
+
+    print("Contenido de la tabla productosfinancieros:")
+    if resultados:
+        for fila in resultados:
+            print(f"ID: {fila[0]}, Descripción: {fila[1]}")
+    else:
+        print("La tabla productosfinancieros está vacía.")
+
+    conn.close()
+
+def actualizar_datos_productosfinancieros(id, nueva_descripcion):
+    """Actualiza un registro en la tabla productosfinancieros."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Actualizar el registro con el ID especificado
+    cursor.execute("""
+    UPDATE productosfinancieros
+    SET descripcion = ?
+    WHERE id = ?
+    """, (nueva_descripcion, id))
+    
+    conn.commit()
+    conn.close()
+    print(f"Se ha actualizado el registro con ID: {id}")
+
+def eliminar_datos_productosfinancieros(id):
+    """Elimina un registro específico de la tabla productosfinancieros."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Eliminar el registro con el ID especificado
+    cursor.execute("DELETE FROM productosfinancieros WHERE id = ?", (id,))
+    
+    conn.commit()
+    conn.close()
+    print(f"Se ha eliminado el registro con ID: {id}")
+
+#crear_tabla_productosfinancieros()
+#insertar_datos_productosfinancieros("Cta.Remunerada")
+#actualizar_datos_productosfinancieros(2, "Cta.Remunerada")
+#eliminar_datos_productosfinancieros(3)
+#ver_tabla_productosfinancieros()
 
 
 # --------------------------   TABLA_NIVEL3
@@ -298,3 +364,37 @@ def eliminar_datos_nivel3(id):
 #eliminar_datos_nivel3(3)
 #ver_tabla_nivel3()
 
+
+
+
+# ------------------------------ CREAR TABLA INICIAL ------------------------------
+# ---------------------------------------------------------------------------------
+
+def crear_tabla_codigo_inicio():
+    crear_base_datos()
+    # Crear tablas productos financieros
+    crear_tabla_productosfinancieros()
+    insertar_datos_productosfinancieros("Cta. Remunerada")
+    insertar_datos_productosfinancieros("Cta. Ahorro")
+    insertar_datos_productosfinancieros("Cta. Inversión")
+    #Datos Tabla_nivel1
+    crear_tabla_nivel1()
+    insertar_datos_nivel1("Cuentas Financieras")
+    insertar_datos_nivel1("Pasivo")
+    insertar_datos_nivel1("Gastos")
+    insertar_datos_nivel1("Ingresos")
+    #Datos Tabla_nivel2
+    crear_tabla_nivel2()
+    insertar_datos_nivel2("Efectivo", 1)  
+    insertar_datos_nivel2("Caixa Enginyers", 1)
+    insertar_datos_nivel2("Self Bank", 1)
+    insertar_datos_nivel2("DeGiro", 1)
+    insertar_datos_nivel2("Trade republic", 1)
+    insertar_datos_nivel2("Santander", 1)
+    insertar_datos_nivel2("BBVA", 1)
+    insertar_datos_nivel2("B.Sabadell", 1)
+    insertar_datos_nivel2("Civislend", 1)
+    insertar_datos_nivel2("StockCrowd", 1)
+    insertar_datos_nivel2("Mintos", 1)
+    insertar_datos_nivel2("Bestinver", 1)
+                          

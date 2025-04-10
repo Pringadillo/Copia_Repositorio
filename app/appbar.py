@@ -15,7 +15,7 @@ def crear_appbar(page):
             page.controls[0].controls[1].content = ft.Text("Contenido del Mayor")
         elif e.control.text == "Balance":
             page.controls[0].controls[1].content = ft.Text("Contenido del Balance")
-        elif e.control.text == "Saldos":
+        elif e.control.text == "SumasySaldos":
             page.controls[0].controls[1].content = ft.Text("Contenido de Saldos")
         elif e.control.text == "Configuración":
             page.controls[0].controls[1].content = ft.Text("Contenido de Configuración")
@@ -219,7 +219,7 @@ def PerdidasGanancias():
     pass
 def Balance():
     pass
-def SumasSaldos():
+def SumasySaldos():
     pass
 def Inversiones():  
     pass
@@ -230,8 +230,12 @@ def Salir():
 
 
 # -----------------------  SUBMENU TABLA CODIGOS -----------------------
+def ver_TablaCodigos():
+    print("Ver Tabla Códigos")
+
+
 def crear_codigo(e):
-    pass  # Marcador de posición para una función vacía
+    print("Crear Código")
 
 def leer_codigo(e):
     print("Ver Tabla")    
