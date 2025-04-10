@@ -145,7 +145,7 @@ def TablaCodigos():
                 ft.TextButton(
                     text="Ver Tabla",
                     icon=ft.icons.TABLE_CHART,  # Ícono para "Ver Tabla"
-                    on_click=leer_codigo,  # Pasa directamente la función
+                    on_click=ver_TablaCodigos,  # Pasa directamente la función
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
