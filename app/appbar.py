@@ -190,10 +190,6 @@ def TablaCodigos():
         content=ft.Column(
             controls=[
                 ft.Text("Contenido de Tabla Códigos", size=20),
-                ft.Text("Código 1: Descripción 1"),
-                ft.Text("Código 2: Descripción 2"),
-                ft.Text("Código 3: Descripción 3"),
-                # Agrega más códigos según sea necesario
             ],
             expand=True,
         ),
