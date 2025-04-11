@@ -564,7 +564,7 @@ def ver_vista_jerarquica_tabla():
     cursor = conn.cursor()
 
     # Consultar la vista jerárquica
-    cursor.execute("SELECT * FROM vista_jerarquica ORDER BY codigo")
+    cursor.execute("SELECT codigo, descripcion, importe, nivel FROM vista_jerarquica ORDER BY codigo")
     resultados = cursor.fetchall()
 
     # Crear la tabla para mostrar los datos
@@ -584,4 +584,4 @@ def ver_vista_jerarquica_tabla():
 
 
 #crear_vista_jerarquica()
-#ver_vista_jerarquica()
+ver_vista_jerarquica_tabla()
