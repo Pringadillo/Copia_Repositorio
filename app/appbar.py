@@ -217,10 +217,11 @@ def Diario():
 
 
 
-    
+
 def Mayor():
-    pass        
-def PerdidasGanancias():
+    pass
+
+def PerdidasyGanancias():
     pass
 def Balance():
     pass

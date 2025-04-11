@@ -1,4 +1,5 @@
 import sqlite3
+from prettytable import PrettyTable
 import os
 from datetime import datetime
 
@@ -98,7 +99,7 @@ def eliminar_datos_nivel1():
 
 #crear_tabla_nivel1()
 #insertar_datos_nivel1("Cuentas Financieras")
-#insertar_datos_nivel1("Pasivo")
+#insertar_datos_nivel1("Deudas")
 #insertar_datos_nivel1("Gastos")
 #insertar_datos_nivel1("Ingresos")
 #ver_tabla_nivel1()
@@ -284,6 +285,7 @@ def crear_tabla_nivel3():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS nivel3 (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        codigo TEXT NOT NULL,
         nivel1_id INTEGER NOT NULL,  
         nivel2_id INTEGER NOT NULL,
         descripcion TEXT NOT NULL,
@@ -298,20 +300,51 @@ def crear_tabla_nivel3():
     conn.close()
     print("Tabla nivel3 creada (si no existía).")
 
-def insertar_datos_nivel3( nivel1_id, nivel2_id, descripcion, importe=0, fecha_inicio=None):
-    """Inserta un nuevo registro en la tabla nivel3."""
+def insertar_datos_nivel3(nivel1_id, nivel2_id, descripcion, importe=0, fecha_inicio=None):
+    """Inserta un nuevo registro en la tabla nivel3 con un sistema en árbol.
+    Si nivel1_id=1 y nivel2_id=2, descripcion debe ser un elemento de la tabla productosfinancieros."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
-    # Insertar un nuevo registro en la tabla nivel3
+    # Validar si nivel1_id=1 y nivel2_id=2
+    if nivel1_id == 1 and nivel2_id == 2:
+        # Comprobar si la descripción existe en la tabla productosfinancieros
+        cursor.execute("SELECT COUNT(*) FROM productosfinancieros WHERE descripcion = ?", (descripcion,))
+        existe = cursor.fetchone()[0]
+        if not existe:
+            print(f"Error: '{descripcion}' no existe en la tabla productosfinancieros. No se puede insertar el registro.")
+            conn.close()
+            return
+
+    # Obtener el último código para el nivel2_id actual
     cursor.execute("""
-    INSERT INTO nivel3 (nivel1_id, nivel2_id, descripcion, importe, fecha_inicio)
-    VALUES (?, ?, ?, ?, ?)
-    """, (nivel1_id, nivel2_id, descripcion, importe, fecha_inicio))
+    SELECT codigo FROM nivel3 
+    WHERE nivel1_id = ? AND nivel2_id = ?
+    ORDER BY codigo DESC LIMIT 1
+    """, (nivel1_id, nivel2_id))
+    ultimo_codigo = cursor.fetchone()
+
+    # Calcular el nuevo código
+    if ultimo_codigo:
+        # Incrementar el último número del código
+        ultimo_numero = int(ultimo_codigo[0].split('.')[-1])
+        nuevo_numero = ultimo_numero + 1
+    else:
+        # Si no hay registros, empezar desde 1
+        nuevo_numero = 1
+
+    # Formatear el nuevo código jerárquico
+    nuevo_codigo = f"{nivel1_id}.{nivel2_id}.{nuevo_numero}"
+
+    # Insertar el nuevo registro
+    cursor.execute("""
+    INSERT INTO nivel3 (codigo, nivel1_id, nivel2_id, descripcion, importe, fecha_inicio)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (nuevo_codigo, nivel1_id, nivel2_id, descripcion, importe, fecha_inicio))
     
     conn.commit()
     conn.close()
-    print(f"Se ha insertado el registro en nivel3: {descripcion}, nivel1_id: {nivel1_id}, nivel2_id: {nivel2_id}")
+    print(f"Se ha insertado el registro en nivel3: {descripcion}, código: {nuevo_codigo}")
 
 def ver_tabla_nivel3():
     """Consulta y muestra todos los registros de la tabla nivel3."""
@@ -399,7 +432,7 @@ def insertar_datos_iniciales():
     #Datos Tabla_nivel1
     #crear_tabla_nivel1()
     insertar_datos_nivel1("Cuentas Financieras")
-    insertar_datos_nivel1("Pasivo")
+    insertar_datos_nivel1("Deudas")
     insertar_datos_nivel1("Gastos")
     insertar_datos_nivel1("Ingresos")
     #Datos Tabla_nivel2
@@ -429,7 +462,7 @@ def insertar_datos_iniciales():
     #crear_tabla_nivel3()
     insertar_datos_nivel3(1,1,"Carlos", 50, "2025-01-01") 
     insertar_datos_nivel3(1,1,"Montse", 50, "2025-01-01")
-    insertar_datos_nivel3(1,2,"Cta.Cte.", 5060, "2025-01-01")
+    insertar_datos_nivel3(1,2,"Cta. Cte.", 5060, "2025-01-01")
     insertar_datos_nivel3(1,2,"Cta. Remunerada", 10000, "2025-01-01")
     insertar_datos_nivel3(1,3,"Cta. Cte.", 1000, "2025-01-01")
     insertar_datos_nivel3(1,3,"Cta. Remunerada", 6000, "2025-01-01")
@@ -450,26 +483,69 @@ def insertar_datos_iniciales():
     insertar_datos_nivel3(4,2,"Int. Crowd.", 0, "2025-01-01")
     insertar_datos_nivel3(4,3,"Otros Ingresos", 0, "2025-01-01")
 
-   
-   
+def crear_tablas_codigo_inicio():
+    """Crea la base de datos y las tablas necesarias en el orden correcto."""
+    crear_base_datos()
+    crear_tabla_nivel1()
+    crear_tabla_nivel2()
+    crear_tabla_nivel3()
+    crear_tabla_productosfinancieros()
+    print("Todas las tablas se han creado correctamente.")
 
-def crear_vista_niveles():
-    """Crea una vista que combina nivel1, nivel2 y nivel3."""
+#crear_tablas_codigo_inicio()
+#insertar_datos_iniciales()
+
+# ----------------------------- VISTAS TABLAS -----------------------------
+# -------------------------------------------------------------------
+
+def crear_vista_jerarquica():
+    """Crea una vista jerárquica que combina nivel1, nivel2 y nivel3 con formato de código y suma de importes."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
-    # Crear la vista
+    # Crear la vista jerárquica
     cursor.execute("""
-    CREATE VIEW IF NOT EXISTS vista_niveles AS
+    CREATE VIEW IF NOT EXISTS vista_jerarquica AS
     SELECT 
-        nivel1.id AS id_nivel1,
-        nivel2.id AS id_nivel2,
-        nivel3.id AS id_nivel3,
-        nivel1.descripcion AS concepto_nivel1,
-        nivel2.descripcion AS concepto_nivel2,
-        nivel3.descripcion AS concepto_nivel3,
+        -- Nivel 1
+        nivel1.id AS codigo,
+        nivel1.descripcion AS descripcion,
+        COALESCE(SUM(nivel3.importe), 0) AS importe,
+        'Nivel1' AS nivel
+    FROM 
+        nivel1
+    LEFT JOIN 
+        nivel2 ON nivel1.id = nivel2.nivel1_id
+    LEFT JOIN 
+        nivel3 ON nivel2.id = nivel3.nivel2_id
+    GROUP BY 
+        nivel1.id
+
+    UNION ALL
+
+    SELECT 
+        -- Nivel 2
+        nivel1.id || '.' || printf('%02d', nivel2.id) AS codigo,
+        nivel2.descripcion AS descripcion,
+        COALESCE(SUM(nivel3.importe), 0) AS importe,
+        'Nivel2' AS nivel
+    FROM 
+        nivel2
+    LEFT JOIN 
+        nivel3 ON nivel2.id = nivel3.nivel2_id
+    INNER JOIN 
+        nivel1 ON nivel2.nivel1_id = nivel1.id
+    GROUP BY 
+        nivel2.id
+
+    UNION ALL
+
+    SELECT 
+        -- Nivel 3
+        nivel1.id || '.' || printf('%02d', nivel2.id) || '.' || printf('%02d', nivel3.id) AS codigo,
+        nivel3.descripcion AS descripcion,
         nivel3.importe AS importe,
-        nivel3.fecha_inicio AS fechainicio
+        'Nivel3' AS nivel
     FROM 
         nivel3
     INNER JOIN 
@@ -480,83 +556,32 @@ def crear_vista_niveles():
 
     conn.commit()
     conn.close()
-    print("Vista 'vista_niveles' creada (si no existía).")
+    print("Vista 'vista_jerarquica' creada (si no existía).")
 
-def ver_vista_niveles():
-    """Consulta y muestra los datos de la vista 'vista_niveles'."""
+def ver_vista_jerarquica_tabla():
+    """Consulta y muestra los datos de la vista jerárquica en formato tabla."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
-    # Consultar la vista
-    cursor.execute("SELECT * FROM vista_niveles")
+    # Consultar la vista jerárquica
+    cursor.execute("SELECT * FROM vista_jerarquica ORDER BY codigo")
     resultados = cursor.fetchall()
 
-    print("Contenido de la vista 'vista_niveles':")
-    if resultados:
-        for fila in resultados:
-            print(f"ID Nivel1: {fila[0]}, ID Nivel2: {fila[1]}, ID Nivel3: {fila[2]}, "
-                  f"Concepto Nivel1: {fila[3]}, Concepto Nivel2: {fila[4]}, Concepto Nivel3: {fila[5]}, "
-                  f"Importe: {fila[6]}, Fecha Inicio: {fila[7]}")
-    else:
-        print("La vista 'vista_niveles' está vacía.")
+    # Crear la tabla para mostrar los datos
+    tabla = PrettyTable()
+    tabla.field_names = ["Código", "Descripción", "Importe", "Nivel"]
+
+    # Agregar las filas a la tabla
+    for fila in resultados:
+        tabla.add_row(fila)
 
     conn.close()
 
-
-#crear_tabla_codigo_inicio()
-
-
-
-def verificar_estado_base_datos():
-    """Verifica si la base de datos y las tablas existen."""
-    print("Verificando estado de la base de datos...")
-    crear_base_datos()
-    ver_tablas_base_datos()
-
-def crear_tabla_codigo_inicio():
-    """Crea la base de datos y las tablas necesarias en el orden correcto."""
-    crear_base_datos()
-    crear_tabla_nivel1()
-    crear_tabla_nivel2()
-    crear_tabla_nivel3()
-    crear_tabla_productosfinancieros()
-    print("Todas las tablas se han creado correctamente.")
+    # Mostrar la tabla
+    print(tabla)
 
 
-def ver_tabla_transformada():
-    """Consulta y muestra una tabla transformada con las columnas solicitadas."""
-    conn = sqlite3.connect(ruta_BD)
-    cursor = conn.cursor()
-
-    # Consulta para obtener los datos transformados
-    cursor.execute("""
-    SELECT 
-        nivel1.id || '.' || nivel2.id || '.' || nivel3.id AS codigo,
-        nivel1.descripcion AS concepto_nivel1,
-        nivel2.descripcion AS concepto_nivel2,
-        nivel3.descripcion AS concepto_nivel3,
-        nivel3.importe AS importe,
-        nivel3.fecha_inicio AS fecha
-    FROM 
-        nivel3
-    INNER JOIN 
-        nivel2 ON nivel3.nivel2_id = nivel2.id
-    INNER JOIN 
-        nivel1 ON nivel3.nivel1_id = nivel1.id
-    """)
-    resultados = cursor.fetchall()
-
-    print("Tabla transformada:")
-    if resultados:
-        for fila in resultados:
-            print(f"{fila[0]}, {fila[1]}, {fila[2]},{fila[3]}, Importe: {fila[4]}, Fecha: {fila[5]}")
-    else:
-        print("No hay datos en la tabla transformada.")
-
-    conn.close()
 
 
-#verificar_estado_base_datos()
-#crear_tabla_codigo_inicio()
-#insertar_datos_iniciales()
-#ver_tabla_transformada()
+#crear_vista_jerarquica()
+#ver_vista_jerarquica()
