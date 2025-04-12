@@ -493,6 +493,7 @@ def crear_tablas_codigo_inicio():
     print("Todas las tablas se han creado correctamente.")
 
 #crear_tablas_codigo_inicio()
+#ver_tablas_base_datos()
 #insertar_datos_iniciales()
 
 # ----------------------------- VISTAS TABLAS -----------------------------
@@ -508,10 +509,9 @@ def crear_vista_jerarquica():
     CREATE VIEW IF NOT EXISTS vista_jerarquica AS
     SELECT 
         -- Nivel 1
-        nivel1.id AS codigo,
+        CAST(nivel1.id AS TEXT) AS codigo,
         nivel1.descripcion AS descripcion,
-        COALESCE(SUM(nivel3.importe), 0) AS importe,
-        'Nivel1' AS nivel
+        COALESCE(SUM(nivel3.importe), 0) AS importe
     FROM 
         nivel1
     LEFT JOIN 
@@ -519,7 +519,7 @@ def crear_vista_jerarquica():
     LEFT JOIN 
         nivel3 ON nivel2.id = nivel3.nivel2_id
     GROUP BY 
-        nivel1.id
+        nivel1.id, nivel1.descripcion
 
     UNION ALL
 
@@ -527,8 +527,7 @@ def crear_vista_jerarquica():
         -- Nivel 2
         nivel1.id || '.' || printf('%02d', nivel2.id) AS codigo,
         nivel2.descripcion AS descripcion,
-        COALESCE(SUM(nivel3.importe), 0) AS importe,
-        'Nivel2' AS nivel
+        COALESCE(SUM(nivel3.importe), 0) AS importe
     FROM 
         nivel2
     LEFT JOIN 
@@ -536,7 +535,7 @@ def crear_vista_jerarquica():
     INNER JOIN 
         nivel1 ON nivel2.nivel1_id = nivel1.id
     GROUP BY 
-        nivel2.id
+        nivel2.id, nivel2.descripcion, nivel1.id
 
     UNION ALL
 
@@ -544,14 +543,15 @@ def crear_vista_jerarquica():
         -- Nivel 3
         nivel1.id || '.' || printf('%02d', nivel2.id) || '.' || printf('%02d', nivel3.id) AS codigo,
         nivel3.descripcion AS descripcion,
-        nivel3.importe AS importe,
-        'Nivel3' AS nivel
+        nivel3.importe AS importe
     FROM 
         nivel3
     INNER JOIN 
         nivel2 ON nivel3.nivel2_id = nivel2.id
     INNER JOIN 
         nivel1 ON nivel3.nivel1_id = nivel1.id
+    GROUP BY 
+        nivel3.id, nivel3.descripcion, nivel1.id, nivel2.id
     """)
 
     conn.commit()
@@ -564,12 +564,12 @@ def ver_vista_jerarquica_tabla():
     cursor = conn.cursor()
 
     # Consultar la vista jerárquica
-    cursor.execute("SELECT codigo, descripcion, importe, nivel FROM vista_jerarquica ORDER BY codigo")
+    cursor.execute("SELECT codigo, descripcion, importe FROM vista_jerarquica ORDER BY codigo")
     resultados = cursor.fetchall()
 
     # Crear la tabla para mostrar los datos
     tabla = PrettyTable()
-    tabla.field_names = ["Código", "Descripción", "Importe", "Nivel"]
+    tabla.field_names = ["Código", "Descripción", "Importe"]
 
     # Agregar las filas a la tabla
     for fila in resultados:
@@ -581,7 +581,39 @@ def ver_vista_jerarquica_tabla():
     print(tabla)
 
 
+def verificar_vista_jerarquica():
+    """Consulta y muestra los datos de la vista jerárquica directamente desde la base de datos."""
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    # Verificar si la vista existe
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='view' AND name='vista_jerarquica'")
+    vista = cursor.fetchone()
+
+    if vista:
+        print("La vista 'vista_jerarquica' existe. Mostrando datos:")
+        # Consultar los datos de la vista
+        cursor.execute("SELECT * FROM vista_jerarquica ORDER BY codigo")
+        resultados = cursor.fetchall()
+
+        if resultados:
+            for fila in resultados:
+                print(f"Código: {fila[0]}, Descripción: {fila[1]}, Importe: {fila[2]}")
+        else:
+            print("La vista 'vista_jerarquica' está vacía.")
+    else:
+        print("La vista 'vista_jerarquica' no existe.")
+
+    conn.close()
+
 
 
 #crear_vista_jerarquica()
-ver_vista_jerarquica_tabla()
+#verificar_vista_jerarquica()
+#ver_vista_jerarquica_tabla()
+
+
+#ver_tabla_nivel3()
+#eliminar_datos_nivel3(3)
+#eliminar_datos_nivel2(10)
+#eliminar_datos_nivel1()
