@@ -1,8 +1,8 @@
 import flet as ft
 import datetime
 
-import appbar2
-import cuerpo2
+import appbar
+
 
 def crear_cuerpo(page: ft.Page, contenido_actual):
     """Crea el cuerpo dinámico según el contenido actual."""
