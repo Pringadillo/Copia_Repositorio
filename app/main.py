@@ -23,6 +23,12 @@ usuario = "Usuario"  # Nombre del usuario
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     
+    # Crear e inicializar el SnackBar
+    page.snack_bar = ft.SnackBar(
+        content=ft.Text(""),
+        action="Cerrar"
+    )
+
     # Crear la AppBar
     page.appbar = appbar.crear_appbar(page)  # Contenido definido en appbar.py
 
@@ -45,12 +51,12 @@ def main(page: ft.Page):
                 ft.Container(
                     content=barra_lateral_contenido,
                     width=250,  # Ancho de la barra lateral
-                    bgcolor=ft.colors.BLUE_GREY_50,
+                    bgcolor=ft.Colors.BLUE_GREY_50,
                 ),
                 ft.Container(
                     content=contenido_central,
                     expand=True,  # La columna central ocupa el espacio restante
-                    bgcolor=ft.colors.WHITE,
+                    bgcolor=ft.Colors.WHITE,
                 ),
             ],
             expand=True,
