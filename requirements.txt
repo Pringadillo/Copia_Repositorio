@@ -1,5 +1,7 @@
 flet
 pandas
 sqlite3 
+prettytable
+datetime
 json
 tempfile
