@@ -4,15 +4,14 @@ import datetime
 import appbar
 
 
-def crear_cuerpo(page: ft.Page, contenido_actual):
-    """Crea el cuerpo dinámico según el contenido actual."""
-    if contenido_actual == "crear_codigo":
-        return crear_codigo(page)
-    else:
-        return ft.Container(
-            content=ft.Text("Bienvenido a Cuentas de Casa", size=20),
-            expand=True,
-        )
+def crear_cuerpo(page, contenido_actual):
+    # Devuelve un contenedor con el contenido dinámico
+    return ft.Container(
+        content=contenido_actual,
+        bgcolor=ft.colors.LIGHT_BLUE_50,
+        padding=10,
+        expand=True
+    )
 
 def crear_codigo(page: ft.Page):
     """Crea el entorno para insertar un nuevo código en la tabla."""
