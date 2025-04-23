@@ -9,6 +9,13 @@ import tempfile
 import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
+# Arxivos menu
+import app.Menu.CodigosTabla as CodigosTabla
+
+
+
+
+
 
 '''
 # Variables Globales

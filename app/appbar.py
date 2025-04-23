@@ -2,6 +2,8 @@ import flet as ft
 import datetime
 
 import appbar
+import app.Menu.CodigosTabla as CodigosTabla
+
 
 usuario = "Nombre Usuario"  # Nombre del usuario
 contenido_cuerpo = ""
@@ -9,7 +11,7 @@ contenido_cuerpo = ""
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla Códigos":
-            page.controls[0].controls[1].content = TablaCodigos()
+            page.controls[0].controls[1].content = CodigosTabla.TablaCodigos()
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del Diario")
         elif e.control.text == "Mayor":
@@ -136,6 +138,10 @@ def crear_appbar(page):
         )
     )
     return appbar
+
+
+
+'''
 
 # -----------------------  FUNCIONES MENU  -----------------------
 def TablaCodigos():
@@ -394,3 +400,4 @@ def eliminar_codigo(e):
 
 
 
+'''
