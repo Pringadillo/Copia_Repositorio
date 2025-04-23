@@ -35,13 +35,11 @@ def main(page: ft.Page):
     # Crear la barra lateral izquierda
     barra_lateral_contenido = barra_lateral.crear_barra_lateral(page)
 
-    # Crear la columna central (contenido dinámico)
-    contenido_central = ft.Column(
-        controls=[
-            cuerpo.crear_cuerpo(page, cuerpo.contenido_por_defecto)  # Pasar los argumentos requeridos
-        ],
-        expand=True
-    )
+    # Crear el contenido central
+    contenido = cuerpo.contenido_por_defecto  # Contenido a mostrar por defecto
+    contenido_central = cuerpo.crear_cuerpo(page, contenido)
+
+
 
     # Estructura principal de la página
     page.add(
