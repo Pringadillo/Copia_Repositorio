@@ -36,10 +36,9 @@ def main(page: ft.Page):
     barra_lateral_contenido = barra_lateral.crear_barra_lateral(page)
 
     # Crear la columna central (contenido dinámico)
-    contenido_actual = ft.Text("Contenido inicial")  # Contenido inicial
     contenido_central = ft.Column(
         controls=[
-            cuerpo.crear_cuerpo(page, contenido_actual)  # Pasar los argumentos requeridos
+            cuerpo.crear_cuerpo(page, cuerpo.contenido_por_defecto)  # Pasar los argumentos requeridos
         ],
         expand=True
     )

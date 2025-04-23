@@ -5,15 +5,15 @@ def crear_barra_lateral(page):
         controls=[
             ft.Text("Menú", style="headlineSmall"),
             ft.ElevatedButton(
-                text="Opción 1",
+                text="Opción 10",
                 on_click=lambda e: mostrar_snack_bar(page, "Opción 1 seleccionada")
             ),
             ft.ElevatedButton(
-                text="Opción 2",
+                text="Opción 20",
                 on_click=lambda e: mostrar_snack_bar(page, "Opción 2 seleccionada")
             ),
             ft.ElevatedButton(
-                text="Opción 3",
+                text="Opción 30",
                 on_click=lambda e: mostrar_snack_bar(page, "Opción 3 seleccionada")
             ),
         ],
