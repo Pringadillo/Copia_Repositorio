@@ -5,8 +5,10 @@ import sqlite3
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-
 from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
+
+from ..Submenu import FuncionesTablaCodigo
+
 
 
 def TablaCodigos():
@@ -20,6 +22,11 @@ def TablaCodigos():
         #expand=True, # No es necesario para un tamaño fijo
     )
 
+    def ver_TablaCodigos(e):
+        ver_TablaCodigos= FuncionesTablaCodigo.ver_TablaCodigos(e)
+        contenido_cuerpo_container.content = ver_TablaCodigos
+
+    '''
     # Funciones para actualizar el contenido dinámico
     def ver_TablaCodigos(e):
         opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
@@ -39,6 +46,7 @@ def TablaCodigos():
             alignment=ft.alignment.top_left,  # Ejemplo de nueva alineación
         )
         e.page.update()
+    '''
 
     def crear_codigo(e):
         contenido_cuerpo_container.content = ft.Text("Formulario para Crear Código", size=20)
