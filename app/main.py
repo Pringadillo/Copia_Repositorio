@@ -5,15 +5,20 @@ import os
 import pathlib
 import json
 import tempfile
+import sys
 
+
+# Agregar el directorio raíz al PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
+# Archivos estructura del codigo
 import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
+
 # Arxivos menu
 import app.Menu.CodigosTabla as CodigosTabla
-
-
-
 
 
 
