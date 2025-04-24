@@ -14,8 +14,12 @@ from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
 def TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
     contenido_cuerpo_container = ft.Container(
-        content=ft.Text("Seleccione una opción del submenú", size=20),
-        #expand=True,
+        width=600,
+        height=600,
+        alignment=ft.alignment.center,  # Centra el contenido dentro del Container
+        content=ft.Text("Seleccione una opción del submenú", size=30),
+        bgcolor=ft.colors.BLUE_GREY_100,  # Opcional: para visualizar el Container
+        #expand=True, # No es necesario para un tamaño fijo
     )
 
     # Funciones para actualizar el contenido dinámico
@@ -29,7 +33,13 @@ def TablaCodigos():
             width=300,
         )
 
-        contenido_cuerpo_container.content = desplegable_nivel1
+        # Aquí puedes importar la función que crea el desplegable de nivel 1
+        #from ui_elements import crear_desplegable_nivel1
+        #desplegable_nivel1 = crear_desplegable_nivel1()
+        contenido_cuerpo_container.content = ft.Container(
+            content=desplegable_nivel1,
+            alignment=ft.alignment.top_left,  # Ejemplo de nueva alineación
+        )
         e.page.update()
 
     def crear_codigo(e):
@@ -93,10 +103,14 @@ def TablaCodigos():
     cuerpo = ft.Column(
         controls=[
             submenu,  # Submenú siempre visible
-            contenido_cuerpo_container,  # Contenido dinámico que cambia
+            ft.Container(
+                content=contenido_cuerpo_container,
+                alignment=ft.alignment.center, # Centra contenido_cuerpo_container
+            ),
         ],
         expand=True,
-    )
+        spacing=100, #separacion entre el submenú y el contenido
+        )
     return cuerpo
 
 
