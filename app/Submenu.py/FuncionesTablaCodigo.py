@@ -4,7 +4,7 @@ import sqlite3
 
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
 
@@ -14,5 +14,14 @@ def crear_desplegable_nivel1():
 # Aquí puedes importar la función que crea el desplegable de nivel 1
 #from ui_elements import crear_desplegable_nivel1
 #desplegable_nivel1 = crear_desplegable_nivel1()
+
+
+def mi_funcion_en_tabla_codigo ():
+    print("Hola desde la función en TablaCodigos")
+
+
+def calcular_cuadrado(numero):
+    return numero * numero
+
 
 
