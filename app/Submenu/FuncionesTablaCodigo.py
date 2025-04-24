@@ -16,9 +16,6 @@ y el CRUD correspondiente.
 
 
 
-def crear_desplegable_nivel1():
-    pass
-
 # Aquí puedes importar la función que crea el desplegable de nivel 1
 #from ui_elements import crear_desplegable_nivel1
 #desplegable_nivel1 = crear_desplegable_nivel1()
@@ -40,9 +37,15 @@ def ver_TablaCodigos(e):
         # Aquí puedes importar la función que crea el desplegable de nivel 1
         #from ui_elements import crear_desplegable_nivel1
         #desplegable_nivel1 = crear_desplegable_nivel1()
-    contenido_cuerpo_container.content = ft.Container(
+    
+    
+    submenu_verTablaCodigo = ft.Container(
             content=desplegable_nivel1,
             alignment=ft.alignment.top_left,  # Ejemplo de nueva alineación
         )
     e.page.update()
+    return submenu_verTablaCodigo
   
+
+
+

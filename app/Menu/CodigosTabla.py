@@ -13,14 +13,27 @@ from ..Submenu import FuncionesTablaCodigo
 
 def TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
-    contenido_cuerpo_container = ft.Container(
-        width=600,
-        height=600,
-        alignment=ft.alignment.center,  # Centra el contenido dentro del Container
-        content=ft.Text("Seleccione una opción del submenú", size=30),
-        bgcolor=ft.colors.BLUE_GREY_100,  # Opcional: para visualizar el Container
-        #expand=True, # No es necesario para un tamaño fijo
-    )
+    contenido_cuerpo_container = ft.Row(
+            [
+                ft.Container(
+                    content=ft.Text("Contenido Dinámico", size=20),
+                    bgcolor=ft.colors.RED_200, expand=1),  # 1/5 del espacio
+                ft.Container(
+                    content=ft.Text("Seleccione una opción del submenú", size=30,),
+                    bgcolor=ft.colors.BLUE_200, expand=12), # 3/5 del espacio
+                    height=200  # Una altura mayor para este contenedor
+
+                    
+                ft.Container(
+                    content=ft.Text("Contenido Dinámico", size=20),
+                    bgcolor=ft.colors.GREEN_200, expand=1), # 1/5 del espacio
+            ],
+            expand=True,  # Haz que la fila se expanda para llenar el contenedor padre
+        )
+    
+    
+    #alignment=ft.alignment.center, 
+  
 
     def ver_TablaCodigos(e):
         ver_TablaCodigos= FuncionesTablaCodigo.ver_TablaCodigos(e)
