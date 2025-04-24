@@ -3,7 +3,7 @@ import datetime
 import sqlite3
 import os
 
-import data.funciones_BD as datos_BD
+from data.funciones_BD import ruta_BD
 
 '''
 empresa = "Mi Empresa"
@@ -12,9 +12,7 @@ ruta_BD = f"./data/{BasedeDatos}"
 
 
 '''
-
-
-print (datos_BD.empresa)
+print ("Ruta de la base de datos:", ruta_BD)
 
 
 
@@ -101,7 +99,7 @@ def TablaCodigos():
 
 
 
-
+'''
 
 def obtener_datos_nivel1():
     conn = sqlite3.connect(ruta_BD)
@@ -233,4 +231,4 @@ if __name__ == "__main__":
         os.makedirs("./data")
         # Aquí podrías añadir la lógica para crear la base de datos y las tablas si no existen
 
-    ft.app(target=main)
+    ft.app(target=main)'''
