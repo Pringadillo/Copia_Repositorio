@@ -127,7 +127,7 @@ def obtener_opciones_nivel1_desde_bd():
 #insertar_datos_nivel1("Ingresos")
 #ver_tabla_nivel1()
 #eliminar_datos_nivel1()
-print(obtener_opciones_nivel1_desde_bd())
+#print(obtener_opciones_nivel1_desde_bd())
 
 # -------------------------  TABLA_NIVEL2  
 def crear_tabla_nivel2():

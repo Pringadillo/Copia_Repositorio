@@ -6,17 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from data.funciones_BD import  ruta_BD, ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd
-
-'''
-empresa = "Mi Empresa"
-BasedeDatos = f"bd_{empresa}.db"
-ruta_BD = f"./data/{BasedeDatos}"
-
-
-'''
-print ("Ruta de la base de datos:", ruta_BD)
-print (ver_tabla_nivel1())
+from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
 
 
 
@@ -25,7 +15,7 @@ def TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
     contenido_cuerpo_container = ft.Container(
         content=ft.Text("Seleccione una opción del submenú", size=20),
-        expand=True,
+        #expand=True,
     )
 
     # Funciones para actualizar el contenido dinámico
@@ -33,7 +23,7 @@ def TablaCodigos():
         opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
 
         desplegable_nivel1 = ft.Dropdown(
-            label="Selecciona Nivel 1",
+            label="Selecciona Grupo",
             options=opciones_nivel1,
             on_change=lambda ev: print(f"Nivel 1 seleccionado: {ev.control.value}"),
             width=300,
