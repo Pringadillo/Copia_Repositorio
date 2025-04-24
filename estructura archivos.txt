@@ -1,0 +1,17 @@
+app/
+    __init__.py
+    Menu/
+        __init__.py
+        CodigosTabla.py
+        __pycache__/
+            ...
+    submenu/
+        __init__.py  # Asegúrate de que este archivo exista
+        FuncionesTablaCodigo.py
+    __pycache__/
+        ...
+    appbar.py
+    barra_lateral.py
+    cuerpo.py
+    login.py
+    main.py
