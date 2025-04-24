@@ -14,8 +14,8 @@ def crear_appbar(page):
             page.controls[0].controls[1].content = CodigosTabla.TablaCodigos()
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del Diario")
-        elif e.control.text == "Mayor":
-            page.controls[0].controls[1].content = ft.Text("Contenido del Mayor")
+        elif e.control.text == "Informes":
+            page.controls[0].controls[1].content = ft.Text("Contenido del Informes")
         elif e.control.text == "Balance":
             page.controls[0].controls[1].content = ft.Text("Contenido del Balance")
         elif e.control.text == "SumasySaldos":
@@ -71,7 +71,7 @@ def crear_appbar(page):
                             ),
                         ),
                         ft.TextButton(
-                            text="Mayor",
+                            text="Informes",
                             icon=ft.icons.LIST,  # Ícono para el botón "Mayor"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
