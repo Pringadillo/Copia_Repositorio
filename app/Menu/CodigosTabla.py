@@ -1,9 +1,12 @@
 import flet as ft
 import datetime
 import sqlite3
-import os
 
-from data.funciones_BD import ruta_BD
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+
+from .data.funciones_BD import crear_tabla, insertar_datos, eliminar_datos, actualizar_datos
 
 '''
 empresa = "Mi Empresa"
