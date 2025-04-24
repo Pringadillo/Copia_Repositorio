@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from .data.funciones_BD import crear_tabla, insertar_datos, eliminar_datos, actualizar_datos
+from data.funciones_BD import  ruta_BD, ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd
 
 '''
 empresa = "Mi Empresa"
@@ -16,6 +16,7 @@ ruta_BD = f"./data/{BasedeDatos}"
 
 '''
 print ("Ruta de la base de datos:", ruta_BD)
+print (ver_tabla_nivel1())
 
 
 
@@ -29,7 +30,16 @@ def TablaCodigos():
 
     # Funciones para actualizar el contenido dinámico
     def ver_TablaCodigos(e):
-        contenido_cuerpo_container.content = ft.Text("Tabla Códigos", size=20)
+        opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
+
+        desplegable_nivel1 = ft.Dropdown(
+            label="Selecciona Nivel 1",
+            options=opciones_nivel1,
+            on_change=lambda ev: print(f"Nivel 1 seleccionado: {ev.control.value}"),
+            width=300,
+        )
+
+        contenido_cuerpo_container.content = desplegable_nivel1
         e.page.update()
 
     def crear_codigo(e):

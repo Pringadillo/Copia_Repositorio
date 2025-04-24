@@ -1,7 +1,12 @@
 import sqlite3
+import flet as ft
+
 from prettytable import PrettyTable
 import os
+
 from datetime import datetime
+
+
 
 empresa = "Mi Empresa"
 BasedeDatos = f"bd_{empresa}.db"
@@ -97,6 +102,24 @@ def eliminar_datos_nivel1():
     conn.close()
     print("Todos los registros de la tabla nivel1 han sido eliminados.")
 
+def obtener_opciones_nivel1_desde_bd():
+    """Consulta los registros de la tabla nivel1 y los formatea para el Dropdown de Flet."""
+    opciones = []
+    try:
+        conn = sqlite3.connect(ruta_BD)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, descripcion FROM nivel1")  # Ajusta los nombres de las columnas si son diferentes
+        resultados = cursor.fetchall()
+        for id_val, descripcion in resultados:
+            opciones.append(ft.dropdown.Option(text=descripcion, key=id_val))
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de la tabla nivel1: {e}")
+    finally:
+        if conn:
+            conn.close()
+    return opciones
+
+
 #crear_tabla_nivel1()
 #insertar_datos_nivel1("Cuentas Financieras")
 #insertar_datos_nivel1("Deudas")
@@ -104,6 +127,7 @@ def eliminar_datos_nivel1():
 #insertar_datos_nivel1("Ingresos")
 #ver_tabla_nivel1()
 #eliminar_datos_nivel1()
+print(obtener_opciones_nivel1_desde_bd())
 
 # -------------------------  TABLA_NIVEL2  
 def crear_tabla_nivel2():
