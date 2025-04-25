@@ -9,15 +9,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
 
 def submenu_Grupos(e):
-    opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
-
-    desplegable_nivel1 = ft.Dropdown(
-        label="Grupo",
-        options=opciones_nivel1,
-        on_change=lambda ev: print(f"Nivel 1 seleccionado: {ev.control.value}"),
-        width=300,
-    )
-
     texto1 = ft.Row(
         [
             ft.Text(  # Corrección: El texto va como primer argumento posicional
