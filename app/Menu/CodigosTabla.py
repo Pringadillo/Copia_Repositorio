@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
 #from ..Submenu import FuncionesTablaCodigo
-from ..Submenu.FuncionesTablaCodigo import submenu_ver_codigo 
+from ..Submenu.FuncionesTablaCodigo import submenu_ver_codigo, submenu_crear_codigo 
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
@@ -18,13 +18,12 @@ def menu_TablaCodigos():
     )
 
     def ver_TablaCodigos(e):
-        # Ahora 'submenu_ver_codigo' no necesita acceder directamente a 'contenido_cuerpo_container'
-        nuevo_contenido = submenu_ver_codigo(e.page)
-        contenido_cuerpo_container.content = nuevo_contenido
+        contenido_cuerpo_container.content = ft.Text("MOSTRAR TABLA CÓDIGO", size=20)
         e.page.update()
 
     def crear_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Crear Código", size=20)
+        nuevo_contenido = submenu_crear_codigo(e.page)
+        contenido_cuerpo_container.content = nuevo_contenido
         e.page.update()
 
     def actualizar_codigo(e):
