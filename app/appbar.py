@@ -10,7 +10,7 @@ contenido_cuerpo = ""
 
 def crear_appbar(page):
     def boton_click(e):
-        if e.control.text == "Tabla Códigos":
+        if e.control.text == "Tabla de Códigos":
             page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
@@ -55,14 +55,6 @@ def crear_appbar(page):
                 ft.Row(
                     [
                         ft.TextButton(
-                            text="Tabla Códigos",
-                            icon=ft.icons.ACCOUNT_TREE,  # Ícono para el botón "Tabla Código"
-                            on_click=boton_click,
-                            style=ft.ButtonStyle(
-                                text_style=ft.TextStyle(size=18, letter_spacing=2)
-                            ),
-                        ),
-                        ft.TextButton(
                             text="Diario",
                             icon=ft.icons.BOOK,  # Ícono para el botón "Diario"
                             on_click=boton_click,
@@ -81,6 +73,14 @@ def crear_appbar(page):
                         ft.TextButton(
                             text="Inversiones",
                             icon=ft.icons.ATTACH_MONEY,  # Ícono para el botón "Inversiones"
+                            on_click=boton_click,
+                            style=ft.ButtonStyle(
+                                text_style=ft.TextStyle(size=18, letter_spacing=2)
+                            ),
+                        ),
+                                            ft.TextButton(
+                            text="Tabla de Códigos",
+                            icon=ft.icons.ACCOUNT_TREE,  # Ícono para el botón "Tabla Código"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)

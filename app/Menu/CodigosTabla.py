@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
 #from ..Submenu import FuncionesTablaCodigo
-from ..Submenu.FuncionesTablaCodigo import submenu_ver_codigo, submenu_crear_codigo 
+from ..Submenu.FuncionesTablaCodigo import *
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
@@ -21,51 +21,56 @@ def menu_TablaCodigos():
         contenido_cuerpo_container.content = ft.Text("MOSTRAR TABLA CÓDIGO", size=20)
         e.page.update()
 
-    def crear_codigo(e):
-        nuevo_contenido = submenu_crear_codigo(e.page)
-        contenido_cuerpo_container.content = nuevo_contenido
+    def crear_Grupo(e):
+        contenido_cuerpo_container.content = ft.Text("MOSTRAR GRUPOS", size=20)
+        '''
+        contenido_grupo = submenu_Grupos(e.page)
+        contenido_cuerpo_container.content = contenido_grupo'''
         e.page.update()
 
-    def actualizar_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Actualizar Código", size=20)
+    def crear_Subgrupo(e):
+        contenido_cuerpo_container.content = ft.Text("MOSTRAR SUBGRUPOS", size=20)
+        '''
+        contenido_subgrupos = submenu_Subgrupos(e.page)
+        contenido_cuerpo_container.content = contenido_subgrupos'''
         e.page.update()
 
-    def eliminar_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Eliminar Código", size=20)
+    def crear_Cuenta(e):
+        contenido_cuerpo_container.content = ft.Text("MOSTRAR CUENTAS", size=20)
+        '''
+        contenido_cuentas = submenu_Cuentas(e.page)
+        contenido_cuerpo_container.content = contenido_cuentas'''
         e.page.update()
 
-    # Submenú CRUD de la tabla código
+    # -----------------------------------------  SUBMENU  -----------------------------------------
+    # Definición de los botones del submenú    
     submenu = ft.Container(
         content=ft.Row(
             controls=[
                 ft.TextButton(
-                    text="Ver Tabla Códigos",
-                    icon=ft.icons.TABLE_CHART,
+                    text="Tabla de Códigos",
                     on_click=ver_TablaCodigos,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Crear Código",
-                    icon=ft.icons.ADD,
-                    on_click=crear_codigo,
+                    text="Grupos",
+                    on_click=crear_Grupo,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Actualizar Código",
-                    icon=ft.icons.EDIT,
-                    on_click=actualizar_codigo,
+                    text="Subgrupos",
+                    on_click=crear_Subgrupo,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Eliminar Código",
-                    icon=ft.icons.DELETE,
-                    on_click=eliminar_codigo,
+                    text="Cuentas",
+                    on_click=crear_Cuenta,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
@@ -79,7 +84,7 @@ def menu_TablaCodigos():
         border_radius=ft.border_radius.all(10),
     )
 
-    # Estructura principal que incluye el submenú y el contenido dinámico
+    # ----------------------  Estructura principal -----------------
     cuerpo = ft.Column(
         controls=[
             submenu,  # Submenú siempre visible
