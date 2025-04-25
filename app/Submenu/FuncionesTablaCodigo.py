@@ -7,27 +7,24 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
+#from ..Menu.CodigosTabla import contenido_cuerpo_container
 
-
-
-
-def submenu_ver_codigo(e):
+def submenu_ver_codigo(page: ft.Page):
     opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
 
     desplegable_nivel1 = ft.Dropdown(
-            label="Selecciona Grupo",
-            options=opciones_nivel1,
-            on_change=lambda ev: print(f"Nivel 1 seleccionado: {ev.control.value}"),
-            width=300,
-        )
+        label="Selecciona Grupo",
+        options=opciones_nivel1,
+        on_change=lambda ev: print(f"Nivel 1 seleccionado: {ev.control.value}"),
+        width=300,
+    )
 
-    
     submenu_verTablaCodigo = ft.Container(
-            content=desplegable_nivel1,
-            alignment=ft.alignment.top_left,  # Ejemplo de nueva alineación
-        )
-    e.page.update()
+        content=desplegable_nivel1,
+        alignment=ft.alignment.top_left,
+    )
     return submenu_verTablaCodigo
+    
   
 
 def submenu_crear_codigo(e):

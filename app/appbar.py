@@ -16,11 +16,11 @@ def crear_appbar(page):
             page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
         elif e.control.text == "Informes":
             page.controls[0].controls[1].content = ft.Text("Contenido del INFORMES")
-        elif e.control.text == "Balance":
-            page.controls[0].controls[1].content = ft.Text("Contenido del INVERSISONES")
-        elif e.control.text == "SumasySaldos":
-            page.controls[0].controls[1].content = ft.Text("Contenido de CONFIGURAION")
+        elif e.control.text == "Inversiones":
+            page.controls[0].controls[1].content = ft.Text("Contenido del INVERSIONES")
         elif e.control.text == "Configuración":
+            page.controls[0].controls[1].content = ft.Text("Contenido de CONFIGURACION")
+        elif e.control.text == "Salir":
             page.controls[0].controls[1].content = ft.Text("Contenido de SALIR")
 
         page.update()
@@ -72,7 +72,7 @@ def crear_appbar(page):
                         ),
                         ft.TextButton(
                             text="Informes",
-                            icon=ft.icons.LIST,  # Ícono para el botón "Mayor"
+                            icon=ft.icons.LIST,  # Ícono para el botón "Informes"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)

@@ -5,22 +5,36 @@ import sqlite3
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
-#from ..Submenu import FuncionesTablaCodigo
-from ..Submenu.FuncionesTablaCodigo import submenu_ver_codigo 
+from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
+
+from ..Submenu import FuncionesTablaCodigo
+
+
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
-    contenido_cuerpo_container = ft.Container(
-        content=ft.Text("Seleccione una opción del submenú", size=30, text_align=ft.TextAlign.CENTER),
-        alignment=ft.alignment.center,
-        expand=True,  # Haz que el contenedor se expanda dentro de la Column
-    )
+    contenido_cuerpo_container = ft.Row(
+            [
+                ft.Container(
+                    content=ft.Text("Contenido Dinámico", size=20),
+                    bgcolor=ft.colors.RED_200, expand=1),  # 1/5 del espacio
+                ft.Container(
+                    content=ft.Text("Seleccione una opción del submenú", size=30,),
+                    bgcolor=ft.colors.BLUE_200, expand=12), # 3/5 del espacio
+                    #height=200  # Una altura mayor para este contenedor
 
+                    
+                ft.Container(
+                    content=ft.Text("Contenido Dinámico", size=20),
+                    bgcolor=ft.colors.GREEN_200, expand=1), # 1/5 del espacio
+            ],
+            expand=True,  # Haz que la fila se expanda para llenar el contenedor padre
+        )
+    
     def ver_TablaCodigos(e):
-        # Ahora 'submenu_ver_codigo' no necesita acceder directamente a 'contenido_cuerpo_container'
-        nuevo_contenido = submenu_ver_codigo(e.page)
-        contenido_cuerpo_container.content = nuevo_contenido
+        
+        ver_la_TablaCodigos= FuncionesTablaCodigo.submenu_ver_codigo(e)
+        contenido_cuerpo_container.content = ver_la_TablaCodigos
         e.page.update()
 
     def crear_codigo(e):
@@ -84,13 +98,15 @@ def menu_TablaCodigos():
     cuerpo = ft.Column(
         controls=[
             submenu,  # Submenú siempre visible
-            contenido_cuerpo_container,
+            ft.Container(
+                content=contenido_cuerpo_container,
+                alignment=ft.alignment.center, # Centra contenido_cuerpo_container
+               
+            ),
         ],
         expand=True,
-        spacing=10,  # separacion entre el submenú y el contenido
-
-    )
+        spacing=10, #separacion entre el submenú y el contenido
+        
+        )
     return cuerpo
-
-
 
