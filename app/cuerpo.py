@@ -15,8 +15,6 @@ def crear_cuerpo(page, contenido):
     )
 
 
-#contenido_por_defecto = ft.Text("Contenido inicial por defecto")  # Contenido a mostrar por defecto
-
 contenido_por_defecto = ft.Column(
     [
         ft.Text("Bienvenido a la aplicación de Cuentas de Casa", size=20, weight=ft.FontWeight.BOLD),

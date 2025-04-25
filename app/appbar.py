@@ -11,17 +11,17 @@ contenido_cuerpo = ""
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla Códigos":
-            page.controls[0].controls[1].content = CodigosTabla.TablaCodigos()
+            page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
         elif e.control.text == "Diario":
-            page.controls[0].controls[1].content = ft.Text("Contenido del Diario")
+            page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
         elif e.control.text == "Informes":
-            page.controls[0].controls[1].content = ft.Text("Contenido del Informes")
+            page.controls[0].controls[1].content = ft.Text("Contenido del INFORMES")
         elif e.control.text == "Balance":
-            page.controls[0].controls[1].content = ft.Text("Contenido del Balance")
+            page.controls[0].controls[1].content = ft.Text("Contenido del INVERSISONES")
         elif e.control.text == "SumasySaldos":
-            page.controls[0].controls[1].content = ft.Text("Contenido de Saldos")
+            page.controls[0].controls[1].content = ft.Text("Contenido de CONFIGURAION")
         elif e.control.text == "Configuración":
-            page.controls[0].controls[1].content = ft.Text("Contenido de Configuración")
+            page.controls[0].controls[1].content = ft.Text("Contenido de SALIR")
 
         page.update()
 
@@ -77,33 +77,7 @@ def crear_appbar(page):
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
                             ),
-                        ),
-                        ft.TextButton(
-                            text="Perdidas y Ganancias",
-                            icon=ft.icons.PIE_CHART,  # Ícono para el botón "Perdidas y Ganancias"
-                            #icon=ft.icons.BALANCE,  # Ícono para el botón "Perdidas y Ganancias"
-                            on_click=boton_click,
-                            style=ft.ButtonStyle(
-                                text_style=ft.TextStyle(size=18, letter_spacing=2)
-                            ),
-                        ),                        
-                        ft.TextButton(
-                            text="Balance",
-                            icon=ft.icons.BALANCE,  # Ícono para el botón "Balance"
-                            on_click=boton_click,
-                            style=ft.ButtonStyle(
-                                text_style=ft.TextStyle(size=18, letter_spacing=2)
-                            ),
-                        ),
-
-                        ft.TextButton(
-                            text="Sumas y Saldos",
-                            icon=ft.icons.BAR_CHART,  # Ícono para el botón "Sunas y Saldos"
-                            on_click=boton_click,
-                            style=ft.ButtonStyle(
-                                text_style=ft.TextStyle(size=18, letter_spacing=2)
-                            ),
-                        ),
+                        ),                    
                         ft.TextButton(
                             text="Inversiones",
                             icon=ft.icons.ATTACH_MONEY,  # Ícono para el botón "Inversiones"
