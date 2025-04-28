@@ -13,7 +13,7 @@ def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
     contenido_cuerpo_container = ft.Container(
         content=ft.Text("Seleccione una opción del submenú", size=30, text_align=ft.TextAlign.CENTER),
-        alignment=ft.alignment.center,
+        alignment=ft.alignment.top_center,
         expand=True,  # Haz que el contenedor se expanda dentro de la Column
     )
 
@@ -22,9 +22,9 @@ def menu_TablaCodigos():
         e.page.update()
 
     def crear_Grupo(e):
-        contenido_cuerpo_container.content = ft.Text("menu MOSTRAR GRUPOS", size=20)       
-        #contenido_grupo = submenu_Grupos(e.page)
-        #contenido_cuerpo_container.content = contenido_grupo
+        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR GRUPOS", size=20)       
+        contenido_grupo = submenu_Grupos(e.page)
+        contenido_cuerpo_container.content = contenido_grupo
         e.page.update()
 
     def crear_Subgrupo(e):
