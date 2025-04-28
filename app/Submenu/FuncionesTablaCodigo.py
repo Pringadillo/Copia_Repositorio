@@ -63,10 +63,10 @@ def submenu_Grupos(e):
                 texto3,
                 texto2,
             ],
-            alignment=ft.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
         bgcolor=ft.colors.WHITE,
-        alignment=ft.alignment.top_left,
+        alignment=ft.alignment.top_left,  # Alineación del contenedor en la parte superior izquierda
     )
     return submenu_crear_codigo_container
     
