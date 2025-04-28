@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
-from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
+from data.funciones_BD import  *
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -22,11 +22,26 @@ def submenu_Grupos(e):
         alignment=ft.MainAxisAlignment.CENTER,
         height=100,
     )
+    texto2 = ft.Row(
+        [
+            ft.Text(  # Corrección: El texto va como primer argumento posicional
+                "TEXTO PARA GRUPOS desde submenu",
+                size=30,
+                weight=ft.FontWeight.BOLD,
+                text_align=ft.TextAlign.CENTER,
+                color=ft.colors.BLUE_900,
+            ),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        height=100,
+    )
 
-    submenu_crear_codigo_container = ft.Container(  # Renombrado para claridad
+    submenu_crear_codigo_container = ft.Container(  
         content=ft.Column(
             controls=[
                 texto1,
+                texto2,
+
             ],
             alignment=ft.MainAxisAlignment.CENTER,
         ),
