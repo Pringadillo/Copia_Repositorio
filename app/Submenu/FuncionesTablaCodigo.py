@@ -38,14 +38,29 @@ def submenu_Grupos(e):
                 color=ft.colors.BLACK,
             ),
         ],
-        alignment=ft.MainAxisAlignment.START,
+        alignment=ft.MainAxisAlignment.CENTER,
         height=200,
+    )
+
+    texto3 = ft.Row(
+        [
+            ft.Text(
+                "GRUPOS DE CUENTAS",
+                size=30,
+                weight=ft.FontWeight.BOLD,
+                text_align=ft.TextAlign.CENTER,
+                color=ft.colors.BLUE_900,
+            ),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        height=100,
     )
 
     submenu_crear_codigo_container = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
+                texto3,
                 texto2,
             ],
             alignment=ft.MainAxisAlignment.CENTER,
