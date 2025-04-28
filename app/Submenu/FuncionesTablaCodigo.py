@@ -6,12 +6,13 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
-from data.funciones_BD import  *
+from data.funciones_BD import *
+from data.funciones_BD import ver_tabla_nivel1
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
         [
-            ft.Text(  # Corrección: El texto va como primer argumento posicional
+            ft.Text(
                 "No se pueden modificar los GRUPOS",
                 size=30,
                 weight=ft.FontWeight.BOLD,
@@ -22,26 +23,30 @@ def submenu_Grupos(e):
         alignment=ft.MainAxisAlignment.CENTER,
         height=100,
     )
+
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    datos_nivel1 = ver_tabla_nivel1()
+
+    # Convierte los datos en un solo texto para mostrar en texto2
     texto2 = ft.Row(
         [
-            ft.Text(  # Corrección: El texto va como primer argumento posicional
-                "TEXTO PARA GRUPOS desde submenu",
-                size=30,
-                weight=ft.FontWeight.BOLD,
-                text_align=ft.TextAlign.CENTER,
-                color=ft.colors.BLUE_900,
+            ft.Text(
+                "\n".join(datos_nivel1),  # Une las líneas con saltos de línea
+                size=20,
+                weight=ft.FontWeight.NORMAL,
+                text_align=ft.TextAlign.LEFT,
+                color=ft.colors.BLACK,
             ),
         ],
-        alignment=ft.MainAxisAlignment.CENTER,
-        height=100,
+        alignment=ft.MainAxisAlignment.START,
+        height=200,
     )
 
-    submenu_crear_codigo_container = ft.Container(  
+    submenu_crear_codigo_container = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
                 texto2,
-
             ],
             alignment=ft.MainAxisAlignment.CENTER,
         ),

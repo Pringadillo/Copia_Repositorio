@@ -73,7 +73,7 @@ def insertar_datos_nivel1(descripcion):
     print(f"Se ha insertado el registro en nivel1: {descripcion}")
 
 def ver_tabla_nivel1():
-    """Consulta y muestra todos los registros de la tabla nivel1."""
+    """Consulta y devuelve todos los registros de la tabla nivel1."""
     conn = sqlite3.connect(ruta_BD)
     cursor = conn.cursor()
 
@@ -81,14 +81,13 @@ def ver_tabla_nivel1():
     cursor.execute("SELECT * FROM nivel1")
     resultados = cursor.fetchall()
 
-    print("Contenido de la tabla nivel1:")
-    if resultados:
-        for fila in resultados:
-            print(f"ID: {fila[0]}, {fila[1]}")
-    else:
-        print("La tabla nivel1 está vacía.")
-
     conn.close()
+
+    # Formatea los resultados como una lista de cadenas
+    if resultados:
+        return [f"ID: {fila[0]}, Descripción: {fila[1]}" for fila in resultados]
+    else:
+        return ["La tabla nivel1 está vacía."]
 
 def eliminar_datos_nivel1():
     """Elimina todos los registros de la tabla nivel1."""
