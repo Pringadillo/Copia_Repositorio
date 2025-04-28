@@ -22,15 +22,14 @@ def menu_TablaCodigos():
         e.page.update()
 
     def crear_Grupo(e):
-        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR GRUPOS", size=20)       
         contenido_grupo = submenu_Grupos(e.page)
         contenido_cuerpo_container.content = contenido_grupo
         e.page.update()
 
     def crear_Subgrupo(e):
-        contenido_cuerpo_container.content = ft.Text("menu MOSTRAR SUBGRUPOS", size=20)
-        #contenido_subgrupos = submenu_Subgrupos(e.page)
-        #contenido_cuerpo_container.content = contenido_subgrupos
+        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR SUBGRUPOS", size=20)
+        contenido_subgrupos = submenu_Subgrupos(e.page)
+        contenido_cuerpo_container.content = contenido_subgrupos
         e.page.update()
 
     def crear_Cuenta(e):

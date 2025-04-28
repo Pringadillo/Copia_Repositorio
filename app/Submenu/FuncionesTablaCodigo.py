@@ -6,8 +6,8 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
-from data.funciones_BD import *
-from data.funciones_BD import ver_tabla_nivel1
+#from data.funciones_BD import *
+from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -71,7 +71,12 @@ def submenu_Grupos(e):
     return submenu_crear_codigo_container
     
 def submenu_Subgrupos(e):
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    #datos_nivel1 = ver_tabla_nivel1()
+    
     opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
+
+
 
     desplegable_nivel1 = ft.Dropdown(
         label="Grupo",
@@ -83,7 +88,7 @@ def submenu_Subgrupos(e):
     texto1 = ft.Row(
         [
             ft.Text(  # Corrección: El texto va como primer argumento posicional
-                "TEXTO PARA SUBGRUPOS",
+                "SUBGRUPOS DE CUENTAS",
                 size=30,
                 weight=ft.FontWeight.BOLD,
                 text_align=ft.TextAlign.CENTER,
@@ -100,7 +105,7 @@ def submenu_Subgrupos(e):
                 texto1,
                 desplegable_nivel1,
             ],
-            alignment=ft.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
         bgcolor=ft.colors.WHITE,
         alignment=ft.alignment.top_left,
