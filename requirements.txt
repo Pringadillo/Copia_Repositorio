@@ -5,3 +5,4 @@ prettytable
 datetime
 json
 tempfile
+prettytable
