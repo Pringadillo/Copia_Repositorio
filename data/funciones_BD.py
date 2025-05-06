@@ -85,7 +85,9 @@ def ver_tabla_nivel1():
 
     # Formatea los resultados como una lista de cadenas
     if resultados:
-        return [f"{fila[0]} - {fila[1]}" for fila in resultados]
+        print("Datos de la tabla nivel1:")
+        for fila in resultados:
+            print(f"{fila[0]} - {fila[1]}")
     else:
         return ["La tabla nivel1 está vacía."]
 
@@ -124,7 +126,7 @@ def obtener_opciones_nivel1_desde_bd():
 #insertar_datos_nivel1("Deudas")
 #insertar_datos_nivel1("Gastos")
 #insertar_datos_nivel1("Ingresos")
-#ver_tabla_nivel1()
+ver_tabla_nivel1()
 #eliminar_datos_nivel1()
 #print(obtener_opciones_nivel1_desde_bd())
 
