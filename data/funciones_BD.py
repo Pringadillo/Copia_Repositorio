@@ -85,9 +85,7 @@ def ver_tabla_nivel1():
 
     # Formatea los resultados como una lista de cadenas
     if resultados:
-        print("Datos de la tabla nivel1:")
-        for fila in resultados:
-            print(f"{fila[0]} - {fila[1]}")
+        return [f"{fila[0]} - {fila[1]}" for fila in resultados]
     else:
         return ["La tabla nivel1 está vacía."]
 
