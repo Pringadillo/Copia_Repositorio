@@ -6,8 +6,6 @@ import os
 
 from datetime import datetime
 
-
-
 empresa = "Mi Empresa"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
@@ -42,7 +40,7 @@ def ver_tablas_base_datos():
 #ver_tablas_base_datos()
 
 
-# ------------------------  TABLA_NIVEL1
+# ---------------------------------------------------------------------  TABLA_NIVEL1
 def crear_tabla_nivel1():
     """Crea la tabla nivel1 si no existe."""
     conn = sqlite3.connect(ruta_BD)
@@ -124,11 +122,11 @@ def obtener_opciones_nivel1_desde_bd():
 #insertar_datos_nivel1("Deudas")
 #insertar_datos_nivel1("Gastos")
 #insertar_datos_nivel1("Ingresos")
-ver_tabla_nivel1()
+#print(ver_tabla_nivel1())
 #eliminar_datos_nivel1()
 #print(obtener_opciones_nivel1_desde_bd())
 
-# -------------------------  TABLA_NIVEL2  
+# -----------------------------------------------------------------------  TABLA_NIVEL2  
 def crear_tabla_nivel2():
     """Crea la tabla nivel2 si no existe."""
     conn = sqlite3.connect(ruta_BD)
@@ -208,9 +206,9 @@ def eliminar_datos_nivel2(id):
 #insertar_datos_nivel2("CaixaEnginyers", 1)
 #actualizar_datos_nivel2(3, "Self Bank", 1)
 #eliminar_datos_nivel2(3)
-#ver_tabla_nivel2()
+ver_tabla_nivel2()
 
-# -------------------------  TABLA PRODUCTOS FINANCIEROS
+# ------------------------------------------------------------------------   TABLA PRODUCTOS FINANCIEROS
 
 def crear_tabla_productosfinancieros():
     """Crea la tabla productosfinancieros si no existe."""
@@ -297,7 +295,7 @@ def eliminar_datos_productosfinancieros(id):
 #ver_tabla_productosfinancieros()
 
 
-# --------------------------   TABLA_NIVEL3
+# -----------------------------------------------------------------------   TABLA_NIVEL3
 
 def crear_tabla_nivel3():
     """Crea la tabla nivel3 si no existe."""
@@ -506,14 +504,25 @@ def crear_tablas_codigo_inicio():
 #crear_tablas_codigo_inicio()
 #ver_tablas_base_datos()
 #insertar_datos_iniciales()
-#ver_tabla_nivel3()
+ver_tabla_nivel3()
 
 
-# ----------------------------- VISTAS TABLAS -----------------------------
-# -------------------------------------------------------------------
+# ----------------------------- VISTAS TABLAS ----------------------------------------
+# ------------------------------------------------------------------------------------
+
+'''
+ver_tabla_nivel3()
+esta es la idea base
+'''
 
 
-# ------------------------------ Insertar Codgio en tabla -----------------------------
+
+
+
+
+
+
+# ------------------------------ Insertar Código en tabla -----------------------------
 # -------------------------------------------------------------------------------------
 
 
