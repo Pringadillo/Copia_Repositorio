@@ -203,60 +203,64 @@ def submenu_4_columnas(e):
     )
 
     texto2 = ft.Row(
-        alignment=ft.MainAxisAlignment.SPACE_AROUND,
-        controls=[
-            ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
-                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Activo
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                ),
-                bgcolor=ft.colors.GREEN_100,  # Verde claro para Activo/Financiero
-                padding=10,
-                border_radius=ft.border_radius.all(5),
+    alignment=ft.MainAxisAlignment.SPACE_AROUND,
+    controls=[
+        ft.Container(
+            expand=True,  # Hace que la columna ocupe espacio igualitario
+            content=ft.Column(
+                [
+                    ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
+                    # Aquí irían los códigos de nivel 2 y 3 relacionados con Activo
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            ft.VerticalDivider(),
-            ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Text("DEUDAS", weight=ft.FontWeight.BOLD),
-                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Pasivo
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                ),
-                bgcolor=ft.colors.RED_100,    # Rojo claro para Pasivo/Deudas
-                padding=10,
-                border_radius=ft.border_radius.all(5),
+            bgcolor=ft.colors.GREEN_100,
+            padding=10,
+            border_radius=ft.border_radius.all(5),
+        ),
+        ft.VerticalDivider(),
+        ft.Container(
+            expand=True,  # Hace que la columna ocupe espacio igualitario
+            content=ft.Column(
+                [
+                    ft.Text("DEUDAS", weight=ft.FontWeight.BOLD),
+                    # Aquí irían los códigos de nivel 2 y 3 relacionados con Pasivo
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            ft.VerticalDivider(),
-            ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Text("GASTOS", weight=ft.FontWeight.BOLD),
-                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Gastos
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                ),
-                bgcolor=ft.colors.ORANGE_100, # Naranja claro para Gastos
-                padding=10,
-                border_radius=ft.border_radius.all(5),
+            bgcolor=ft.colors.RED_100,
+            padding=10,
+            border_radius=ft.border_radius.all(5),
+        ),
+        ft.VerticalDivider(),
+        ft.Container(
+            expand=True,  # Hace que la columna ocupe espacio igualitario
+            content=ft.Column(
+                [
+                    ft.Text("GASTOS", weight=ft.FontWeight.BOLD),
+                    # Aquí irían los códigos de nivel 2 y 3 relacionados con Gastos
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            ft.VerticalDivider(),
-            ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Text("INGRESOS", weight=ft.FontWeight.BOLD),
-                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Ingresos
-                    ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                ),
-                bgcolor=ft.colors.BLUE_100,   # Azul claro para Ingresos
-                padding=10,
-                border_radius=ft.border_radius.all(5),
+            bgcolor=ft.colors.ORANGE_100,
+            padding=10,
+            border_radius=ft.border_radius.all(5),
+        ),
+        ft.VerticalDivider(),
+        ft.Container(
+            expand=True,  # Hace que la columna ocupe espacio igualitario
+            content=ft.Column(
+                [
+                    ft.Text("INGRESOS", weight=ft.FontWeight.BOLD),
+                    # Aquí irían los códigos de nivel 2 y 3 relacionados con Ingresos
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-        ],
+            bgcolor=ft.colors.BLUE_100,
+            padding=10,
+            border_radius=ft.border_radius.all(5),
+        ),
+    ],
     )
 
     
