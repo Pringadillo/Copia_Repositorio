@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
 #from ..Submenu import FuncionesTablaCodigo
-from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas
+from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
@@ -18,8 +18,13 @@ def menu_TablaCodigos():
     )
 
     def ver_TablaCodigos(e):
-        contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
+        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
+        #e.page.update()
+        contenido_verTablasCodigos = submenu_4_columnas(e.page)
+        contenido_cuerpo_container.content = contenido_verTablasCodigos
         e.page.update()
+
+
 
     def crear_Grupo(e):
         contenido_grupo = submenu_Grupos(e.page)
@@ -33,7 +38,7 @@ def menu_TablaCodigos():
         e.page.update()
 
     def crear_Cuenta(e):
-        contenido_cuerpo_container.content = ft.Text("menu MOSTRAR CUENTAS", size=20)
+        contenido_cuerpo_container.content = ft.Text("desde menu CUENTAS", size=20)
         #contenido_cuentas = submenu_Cuentas(e.page)
         #contenido_cuerpo_container.content = contenido_cuentas
         e.page.update()

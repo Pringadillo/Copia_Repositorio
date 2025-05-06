@@ -71,8 +71,7 @@ def submenu_Grupos(e):
     return submenu_crear_codigo_container
     
 def submenu_Subgrupos(e):
-
-    
+    # Llama a ver_tabla_nivel1 para obtener los datos    
     opciones_nivel1 = obtener_opciones_nivel1_desde_bd()
 
     desplegable_nivel1 = ft.Dropdown(
@@ -189,47 +188,87 @@ def submenu_ver_codigo(e):
     e.page.update()
 
 def submenu_4_columnas(e):
-    # Obtén los datos de los subgrupos y cuentas desde la base de datos
-    grupos = obtener_opciones_nivel1_desde_bd()  # Supongamos que esta función devuelve los grupos
-    columnas = []
-
-    # Genera las columnas dinámicamente
-    for grupo in grupos:
-        # Obtén los subgrupos y cuentas para cada grupo
-        subgrupos_y_cuentas = ver_tabla_nivel1()  # Reemplaza con la función adecuada para obtener los datos
-
-        # Crea una columna con los datos del grupo
-        columna = ft.Column(
-            controls=[
-                ft.Text(
-                    f"Grupo: {grupo}",
-                    size=20,
-                    weight=ft.FontWeight.BOLD,
-                    color=ft.colors.BLUE_900,
-                ),
-                ft.Text(
-                    "\n".join(subgrupos_y_cuentas),  # Une los subgrupos y cuentas con saltos de línea
-                    size=16,
-                    weight=ft.FontWeight.NORMAL,
-                    color=ft.colors.BLACK,
-                ),
-            ],
-            alignment=ft.MainAxisAlignment.START,
-            expand=1,  # Expande la columna uniformemente
-        )
-        columnas.append(columna)
-
-    # Crea un contenedor con las 4 columnas distribuidas uniformemente
-    contenido_cuerpo_container = ft.Container(
-        content=ft.Row(
-            controls=columnas,
-            alignment=ft.MainAxisAlignment.SPACE_EVENLY,  # Distribuye uniformemente las columnas
-        ),
-        bgcolor=ft.colors.WHITE,
-        expand=1,
+    texto1 = ft.Row(
+        [
+            ft.Text(
+                "TABLA DE CÓDIGOS",
+                size=30,
+                weight=ft.FontWeight.BOLD,
+                text_align=ft.TextAlign.CENTER,
+                color=ft.colors.BLUE_900,
+            ),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        height=100,
     )
 
-    # Actualiza la página con el nuevo contenido
-    e.page.controls.clear()
-    e.page.controls.append(contenido_cuerpo_container)
-    e.page.update()
+    texto2 = ft.Row(
+        alignment=ft.MainAxisAlignment.SPACE_AROUND,
+        controls=[
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
+                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Activo
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                bgcolor=ft.colors.GREEN_100,  # Verde claro para Activo/Financiero
+                padding=10,
+                border_radius=ft.border_radius.all(5),
+            ),
+            ft.VerticalDivider(),
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("DEUDAS", weight=ft.FontWeight.BOLD),
+                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Pasivo
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                bgcolor=ft.colors.RED_100,    # Rojo claro para Pasivo/Deudas
+                padding=10,
+                border_radius=ft.border_radius.all(5),
+            ),
+            ft.VerticalDivider(),
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("GASTOS", weight=ft.FontWeight.BOLD),
+                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Gastos
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                bgcolor=ft.colors.ORANGE_100, # Naranja claro para Gastos
+                padding=10,
+                border_radius=ft.border_radius.all(5),
+            ),
+            ft.VerticalDivider(),
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("INGRESOS", weight=ft.FontWeight.BOLD),
+                        # Aquí irían los códigos de nivel 2 y 3 relacionados con Ingresos
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                bgcolor=ft.colors.BLUE_100,   # Azul claro para Ingresos
+                padding=10,
+                border_radius=ft.border_radius.all(5),
+            ),
+        ],
+    )
+
+    
+    submenu_crear_codigo_container = ft.Container(
+        content=ft.Column(
+            controls=[
+                texto1,
+                texto2,
+            ],
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+        ),
+        bgcolor=ft.colors.WHITE,
+        alignment=ft.alignment.top_left,  # Alineación del contenedor en la parte superior izquierda
+    )
+    return submenu_crear_codigo_container    
