@@ -313,7 +313,7 @@ def crear_tabla_nivel3():
         importe REAL DEFAULT 0,  
         fecha_inicio TEXT NOT NULL DEFAULT (DATE('now')),  -- Fecha obligatoria, por defecto el día actual
         FOREIGN KEY (nivel1_id) REFERENCES nivel1 (id),  -- Relación con nivel1
-        FOREIGN KEY (nivel2_id) REFERENCES nivel2 (id)   -- Relación con nivel2
+        FOREIGN KEY (nivel2_id) REFERENCES nivel2 (id)   -- Relación con nivel2       
     )
     """)
 
@@ -413,7 +413,7 @@ def eliminar_datos_nivel3(id):
 #insertar_datos_nivel3("Cta.Cte.", 1, 3, 3000, "2025-01-03")  # Suponiendo que nivel2_id = 1 existe
 #actualizar_datos_nivel3(4, "Depósito", 1, 1, 20000, "2025-03-10")
 #eliminar_datos_nivel3(3)
-#ver_tabla_nivel3()
+ver_tabla_nivel3()
 
 # ------------------------------ CREAR TABLA INICIAL ------------------------------
 # ---------------------------------------------------------------------------------
@@ -496,10 +496,11 @@ def crear_tablas_codigo_inicio():
     crear_tabla_nivel2()
     crear_tabla_productosfinancieros()
     crear_tabla_nivel3()
+    print("Tablas iniciales creadas correctamente.")
 
     # Insertar datos iniciales
     insertar_datos_iniciales()
-    print("Tablas iniciales creadas y datos insertados correctamente.")
+    print("Datos iniciales creados correctamente.")
 
 #crear_tablas_codigo_inicio()
 #ver_tablas_base_datos()
@@ -554,7 +555,7 @@ def ver_estructura_nivel3_indentada(nivel1_id):
     conn.close()
 
 
-ver_estructura_nivel3_indentada(4)
+#ver_estructura_nivel3_indentada(4)
 
 
 
@@ -569,4 +570,107 @@ ver_estructura_nivel3_indentada(4)
 
 
 
+def obtener_estructura_nivel3(nivel1_id):
+    """
+    Consulta la estructura de nivel2 y nivel3 para un nivel1_id dado y la devuelve
+    en una lista de diccionarios.
+    """
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            n2.id AS nivel2_id,
+            n2.descripcion AS descripcion_nivel2,
+            n3.nivel3_id AS nivel3_id,
+            n3.descripcion AS descripcion_nivel3
+        FROM nivel3 n3
+        INNER JOIN nivel2 n2 ON n3.nivel2_id = n2.id
+        WHERE n3.nivel1_id = ?
+        ORDER BY n2.id, n3.nivel3_id
+    """, (nivel1_id,))
+    resultados = cursor.fetchall()
+    conn.close()
+
+    estructura = []
+    nivel2_anterior_id = None
+    for fila in resultados:
+        nivel2_id = fila[0]
+        descripcion_nivel2 = fila[1]
+        nivel3_id = fila[2]
+        descripcion_nivel3 = fila[3]
+
+        if nivel2_id != nivel2_anterior_id:
+            estructura.append({
+                'tipo': 'nivel2',
+                'nivel2_id': f"{nivel2_id:02d}",
+                'descripcion': descripcion_nivel2
+            })
+            nivel2_anterior_id = nivel2_id
+        estructura.append({
+            'tipo': 'nivel3',
+            'nivel2_id': f"{nivel2_id:02d}",
+            'nivel3_id': f"{nivel3_id:02d}",
+            'descripcion': f"{descripcion_nivel3}"
+        })
+    return estructura
+
+# Ejemplo de cómo usar la función y formatear los resultados en otra función
+def formatear_estructura(estructura):
+    """
+    Recibe la lista de diccionarios de la estructura y la formatea para imprimir.
+    """
+    for item in estructura:
+        if item['tipo'] == 'nivel2':
+            print(f"{item['nivel2_id']}    {item['descripcion']}")
+        elif item['tipo'] == 'nivel3':
+            print(f"  {item['nivel3_id']}    {item['descripcion']}")
+
+
+
+
+
+
+#estructura = obtener_estructura_nivel3(4)
+#formatear_estructura(estructura)
+
+
+def obtener_todos_los_datos(ruta_bd, nombre_tabla):
+    """
+    Obtiene todos los datos de una tabla SQLite sin conocer su estructura.
+
+    Args:
+        ruta_bd (str): La ruta al archivo de la base de datos SQLite.
+        nombre_tabla (str): El nombre de la tabla de la que se quieren obtener los datos.
+
+    Returns:
+        list: Una lista de tuplas, donde cada tupla representa una fila de la tabla.
+              Devuelve una lista vacía si la tabla no existe o hay un error.
+    """
+    conn = sqlite3.connect(ruta_bd)
+    cursor = conn.cursor()
+    datos = []
+
+    try:
+        cursor.execute(f"SELECT * FROM {nombre_tabla}")
+        datos = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Error al consultar la tabla '{nombre_tabla}': {e}")
+    finally:
+        conn.close()
+
+    return datos
+
+
+'''
+nombre_tabla = "nivel3"  # Cambia esto al nombre de la tabla que deseas consultar
+datos_tabla = obtener_todos_los_datos(ruta_BD, nombre_tabla)
+
+if datos_tabla:
+        print(f"Datos de la tabla '{nombre_tabla}':")
+        for fila in datos_tabla:
+            print(fila)
+else:
+        print(f"No se encontraron datos en la tabla '{nombre_tabla}'.")
+'''
 
