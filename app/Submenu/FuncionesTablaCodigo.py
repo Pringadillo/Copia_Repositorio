@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 #from data.funciones_BD import *
-from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd
+from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd, ver_estructura_nivel3_indentada
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -209,8 +209,9 @@ def submenu_4_columnas(e):
             expand=True,  # Hace que la columna ocupe espacio igualitario
             content=ft.Column(
                 [
-                    ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
+                    ft.Text("1 - CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
                     # Aquí irían los códigos de nivel 2 y 3 relacionados con Activo
+
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
@@ -223,7 +224,7 @@ def submenu_4_columnas(e):
             expand=True,  # Hace que la columna ocupe espacio igualitario
             content=ft.Column(
                 [
-                    ft.Text("DEUDAS", weight=ft.FontWeight.BOLD),
+                    ft.Text("2 - DEUDAS", weight=ft.FontWeight.BOLD),
                     # Aquí irían los códigos de nivel 2 y 3 relacionados con Pasivo
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -237,7 +238,7 @@ def submenu_4_columnas(e):
             expand=True,  # Hace que la columna ocupe espacio igualitario
             content=ft.Column(
                 [
-                    ft.Text("GASTOS", weight=ft.FontWeight.BOLD),
+                    ft.Text("3 - GASTOS", weight=ft.FontWeight.BOLD),
                     # Aquí irían los códigos de nivel 2 y 3 relacionados con Gastos
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -251,7 +252,7 @@ def submenu_4_columnas(e):
             expand=True,  # Hace que la columna ocupe espacio igualitario
             content=ft.Column(
                 [
-                    ft.Text("INGRESOS", weight=ft.FontWeight.BOLD),
+                    ft.Text("4 - INGRESOS", weight=ft.FontWeight.BOLD),
                     # Aquí irían los códigos de nivel 2 y 3 relacionados con Ingresos
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,

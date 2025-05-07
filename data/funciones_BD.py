@@ -206,7 +206,7 @@ def eliminar_datos_nivel2(id):
 #insertar_datos_nivel2("CaixaEnginyers", 1)
 #actualizar_datos_nivel2(3, "Self Bank", 1)
 #eliminar_datos_nivel2(3)
-ver_tabla_nivel2()
+#ver_tabla_nivel2()
 
 # ------------------------------------------------------------------------   TABLA PRODUCTOS FINANCIEROS
 
@@ -504,7 +504,7 @@ def crear_tablas_codigo_inicio():
 #crear_tablas_codigo_inicio()
 #ver_tablas_base_datos()
 #insertar_datos_iniciales()
-ver_tabla_nivel3()
+#ver_tabla_nivel3()
 
 
 # ----------------------------- VISTAS TABLAS ----------------------------------------
@@ -514,6 +514,47 @@ ver_tabla_nivel3()
 ver_tabla_nivel3()
 esta es la idea base
 '''
+
+def ver_estructura_nivel3_indentada(nivel1_id):
+    """
+    Consulta y muestra la estructura de nivel2 y nivel3 indentada con IDs para un nivel1_id dado.
+    """
+    conn = sqlite3.connect(ruta_BD)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT
+        n2.id AS nivel2_id,
+        n2.descripcion AS descripcion_nivel2,
+        n3.nivel3_id AS nivel3_id,
+        n3.descripcion AS descripcion_nivel3
+    FROM nivel3 n3
+    INNER JOIN nivel2 n2 ON n3.nivel2_id = n2.id
+    WHERE n3.nivel1_id = ?
+    ORDER BY n2.id, n3.nivel3_id
+    """, (nivel1_id,))
+    resultados = cursor.fetchall()
+
+    print(f"Estructura de nivel2 y nivel3 para nivel1_id: {nivel1_id}")
+    if resultados:
+        nivel2_anterior_id = None
+        for fila in resultados:
+            nivel2_id = fila[0]
+            descripcion_nivel2 = fila[1]
+            nivel3_id = fila[2]
+            descripcion_nivel3 = fila[3]
+
+            if nivel2_id != nivel2_anterior_id:
+                print(f"{nivel2_id:02d}     {descripcion_nivel2}")
+                nivel2_anterior_id = nivel2_id
+            print(f"  {nivel3_id:02d}    {descripcion_nivel3}")
+    else:
+        print(f"No se encontraron registros para el nivel1_id: {nivel1_id}.")
+
+    conn.close()
+
+
+ver_estructura_nivel3_indentada(4)
 
 
 
