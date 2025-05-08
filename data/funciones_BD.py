@@ -413,7 +413,7 @@ def eliminar_datos_nivel3(id):
 #insertar_datos_nivel3("Cta.Cte.", 1, 3, 3000, "2025-01-03")  # Suponiendo que nivel2_id = 1 existe
 #actualizar_datos_nivel3(4, "Depósito", 1, 1, 20000, "2025-03-10")
 #eliminar_datos_nivel3(3)
-ver_tabla_nivel3()
+#ver_tabla_nivel3()
 
 # ------------------------------ CREAR TABLA INICIAL ------------------------------
 # ---------------------------------------------------------------------------------
