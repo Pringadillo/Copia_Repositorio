@@ -288,7 +288,6 @@ if __name__ == "__main__":
     db_manager.insertar_datos_cuenta(2, 3, "Tata")
     db_manager.insertar_datos_cuenta(2, 3, "Albert")
     db_manager.insertar_datos_cuenta(2, 3, "Joan Moises")
-
     db_manager.insertar_datos_cuenta(3, 1, "Comida")
     db_manager.insertar_datos_cuenta(3, 1, "Agua")
     db_manager.insertar_datos_cuenta(3, 1, "Luz")
