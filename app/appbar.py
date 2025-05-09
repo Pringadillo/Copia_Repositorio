@@ -2,11 +2,11 @@ import flet as ft
 import datetime
 import globals 
 
+import app.Menu.MenuTabla 
+
 import app.Menu.MenuTabla as MenuTabla
 
-
-
-
+ruta_bd = globals.ruta_BD 
 contenido_cuerpo = ""
 
 def crear_appbar(page):
@@ -18,7 +18,7 @@ def crear_appbar(page):
         elif e.control.text == "Inversiones":
             page.controls[0].controls[1].content = ft.Text("Contenido del INVERSIONES")
         elif e.control.text == "Tabla de Códigos":
-            page.controls[0].controls[1].content = MenuTabla.menu_TablaCodigos()
+            page.controls[0].controls[1].content = MenuTabla.menu_TablaCodigos(ruta_bd)
         elif e.control.text == "Configuración":
             page.controls[0].controls[1].content = ft.Text("Contenido de CONFIGURACION")
         elif e.control.text == "Salir":

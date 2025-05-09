@@ -2,14 +2,12 @@ import flet as ft
 import datetime
 import sqlite3
 import globals
-
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-# Ya no importamos ruta_BD aquí
-# from data.funciones_BD import ruta_BD
 
 from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
+
+ruta_bd = globals.ruta_BD  # Importamos la ruta de la base de datos desde globals.py
 
 def menu_TablaCodigos(ruta_bd): # Añadimos ruta_bd como argumento
     # Contenedor dinámico para el contenido_cuerpo

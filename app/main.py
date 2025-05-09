@@ -19,6 +19,11 @@ import globals
 from data import funciones_BD
 
 
+
+# Crear la Base de Datos si no existe
+funciones_BD.Crear_Tablas(globals.ruta_BD)
+
+
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
 
