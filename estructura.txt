@@ -1,0 +1,20 @@
+app/
+    __init__.py
+    Menu/
+        __init__.py
+        CodigosTabla.py
+        __pycache__/
+            ...
+    submenu/
+        __init__.py  
+        FuncionesTablaCodigo.py
+
+    data/
+        __init__.py
+
+    __pycache__/
+        ...
+    appbar.py
+    barra_lateral.py
+    cuerpo.py
+    main.py
