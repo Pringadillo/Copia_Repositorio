@@ -13,14 +13,14 @@ from ..Submenu import FuncionesTablaCodigo
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
-    contenido_cuerpo_container = ft.Row(
+    contenido_menu_container = ft.Row(
             [
                 ft.Container(
                     content=ft.Text("Contenido Dinámico", size=20),
                     bgcolor=ft.colors.RED_200, expand=1),  # 1/5 del espacio
                 ft.Container(
                     content=ft.Text("Seleccione una opción del submenú", size=30,),
-                    bgcolor=ft.colors.BLUE_200, expand=12), # 3/5 del espacio
+                    bgcolor=ft.colors.BLUE_200, expand=10), # 3/5 del espacio
                     #height=200  # Una altura mayor para este contenedor
 
                     
@@ -33,20 +33,20 @@ def menu_TablaCodigos():
     
     def ver_TablaCodigos(e):
         
-        ver_la_TablaCodigos= FuncionesTablaCodigo.submenu_ver_codigo(e)
-        contenido_cuerpo_container.content = ver_la_TablaCodigos
+        ver_la_TablaCodigos= FuncionesTablaCodigo.submenu_Grupos(e)
+        contenido_menu_container.content = ver_la_TablaCodigos
         e.page.update()
 
     def crear_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Crear Código", size=20)
+        contenido_menu_container.content = ft.Text("Formulario para Crear Código", size=20)
         e.page.update()
 
     def actualizar_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Actualizar Código", size=20)
+        contenido_menu_container.content = ft.Text("Formulario para Actualizar Código", size=20)
         e.page.update()
 
     def eliminar_codigo(e):
-        contenido_cuerpo_container.content = ft.Text("Formulario para Eliminar Código", size=20)
+        contenido_menu_container.content = ft.Text("Formulario para Eliminar Código", size=20)
         e.page.update()
 
     # Submenú CRUD de la tabla código
@@ -99,7 +99,7 @@ def menu_TablaCodigos():
         controls=[
             submenu,  # Submenú siempre visible
             ft.Container(
-                content=contenido_cuerpo_container,
+                content=contenido_menu_container,
                 alignment=ft.alignment.center, # Centra contenido_cuerpo_container
                
             ),

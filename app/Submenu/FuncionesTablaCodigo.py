@@ -8,11 +8,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 #from data.funciones_BD import *
 from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd, ver_estructura_nivel3_indentada
-                                    
-from data.CLASE_test_BD_1 import db_manager  # Importa la instancia desde CLASE_test_BD_1.py
-from mi_clase import MiClase  # Importa la clase desde el archivo mi_clase.py
-
-
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -61,7 +56,7 @@ def submenu_Grupos(e):
         height=100,
     )
 
-    submenu_Grupo_container = ft.Container(
+    submenu_Grupos_container = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
@@ -73,7 +68,7 @@ def submenu_Grupos(e):
         bgcolor=ft.colors.WHITE,
         alignment=ft.alignment.top_left,  # Alineación del contenedor en la parte superior izquierda
     )
-    return submenu_Grupo_container
+    return submenu_Grupos_container
     
 def submenu_Subgrupos(e):
     # Llama a ver_tabla_nivel1 para obtener los datos    
@@ -170,7 +165,7 @@ def submenu_Cuentas(e):
         height=100,
     )
 
-    submenu_crear_codigo_container = ft.Container(  # Renombrado para claridad
+    submenu_Cuentas_container = ft.Container(  
         content=ft.Column(
             controls=[
                 texto1,
@@ -180,7 +175,18 @@ def submenu_Cuentas(e):
         bgcolor=ft.colors.WHITE,
         alignment=ft.alignment.top_left,
     )
-    return submenu_crear_codigo_container
+    return submenu_Cuentas_container
+
+#parece que no se utiliza
+def submenu_ver_codigo(e):
+    # Aquí puedes importar la función que crea el desplegable de nivel 1
+    #from ui_elements import crear_desplegable_nivel1
+    #desplegable_nivel1 = crear_desplegable_nivel1()
+    contenido_menu_container = ft.Container(
+        content=ft.Text("Contenido Dinámico", size=20),
+        bgcolor=ft.colors.RED_200, expand=1)  # 1/5 del espacio
+
+    e.page.update()
 
 def submenu_4_columnas(e):
     texto1 = ft.Row(
@@ -197,7 +203,7 @@ def submenu_4_columnas(e):
         height=100,
     )
 
-    columnas4 = ft.Row(
+    texto2 = ft.Row(
     alignment=ft.MainAxisAlignment.SPACE_AROUND,
     controls=[
         ft.Container(
@@ -205,12 +211,12 @@ def submenu_4_columnas(e):
             content=ft.Column(
                 [
                     ft.Text("1 - CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD),
-                    ft.Text(db_manager.mostrar_subgrupos_y_cuentas_por_grupo(1), size=20),
+                    # Aquí irían los códigos de nivel 2 y 3 relacionados con Activo
 
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.colors.BLUE_100,
+            bgcolor=ft.colors.GREEN_100,
             padding=10,
             border_radius=ft.border_radius.all(5),
         ),
@@ -252,7 +258,7 @@ def submenu_4_columnas(e):
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.colors.GREEN_100,
+            bgcolor=ft.colors.BLUE_100,
             padding=10,
             border_radius=ft.border_radius.all(5),
         ),
@@ -260,15 +266,15 @@ def submenu_4_columnas(e):
     )
 
     
-    submenu_Tabla_de_Codigos_Container = ft.Container(
+    submenu_crear_codigo_container = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
-                columnas4,
+                texto2,
             ],
             alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
         bgcolor=ft.colors.WHITE,
         alignment=ft.alignment.top_left,  # Alineación del contenedor en la parte superior izquierda
     )
-    return submenu_Tabla_de_Codigos_Container    
+    return submenu_crear_codigo_container    

@@ -17,31 +17,22 @@ import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
 
-'''
-# Arxivos menu
-import app.Menu.CodigosTabla as CodigosTabla
-'''
 
-from data.CLASE_test_BD_1 import DatabaseManager  # Importa la instancia desde CLASE_test_BD_1.py
+from data import funciones_BD
 
 
-'''
+
 # Variables Globales
-ruta_imagenes = "./imagenes/"
-empresa = "Mi Empresa"
-BasedeDatos = f"bd_{empresa}.db"
-ruta_BD = f"./data/{BasedeDatos}"
-usuario = "Usuario"  # Nombre del usuario
-instaciar la clase de la base de datos ???
-'''
-empresa = "Mi Casa"
-empresa_con_guiones_bajos = empresa.replace(" ", "_")
-instancia_empresa = DatabaseManager(empresa_con_guiones_bajos.lower())
+# mirar en Funciones_DB.py
 
 
 
 
-'''
+#crear la Base de Datos
+funciones_BD.crear_tablas_codigo_inicio()
+
+
+
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     
@@ -86,6 +77,7 @@ def main(page: ft.Page):
 
 
 ft.app(target=main)
-'''
+
+
 
 

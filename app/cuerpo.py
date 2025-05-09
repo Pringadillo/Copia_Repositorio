@@ -1,7 +1,6 @@
 import flet as ft
 import datetime
 
-import appbar
 
 
 

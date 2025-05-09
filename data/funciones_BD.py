@@ -6,7 +6,7 @@ import os
 
 from datetime import datetime
 
-empresa = "Mi Empresa"
+empresa = "TEST_4"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
 

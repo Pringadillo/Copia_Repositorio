@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
-#from ..Submenu import FuncionesTablaCodigo
+
 from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
 def menu_TablaCodigos():
