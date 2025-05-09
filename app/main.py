@@ -17,7 +17,6 @@ import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
 
-
 from data import funciones_BD
 
 
@@ -26,10 +25,10 @@ from data import funciones_BD
 # mirar en Funciones_DB.py
 
 
-
-
 #crear la Base de Datos
-funciones_BD.crear_tablas_codigo_inicio()
+#funciones_BD.Crear_Tablas()
+#funciones_BD.Insertar_Datos_Iniciales()
+#funciones_BD.mostrar_datos_cuentas()
 
 
 
