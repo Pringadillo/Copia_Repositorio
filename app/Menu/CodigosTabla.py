@@ -24,8 +24,6 @@ def menu_TablaCodigos():
         contenido_cuerpo_container.content = contenido_verTablasCodigos
         e.page.update()
 
-
-
     def crear_Grupo(e):
         contenido_grupo = submenu_Grupos(e.page)
         contenido_cuerpo_container.content = contenido_grupo

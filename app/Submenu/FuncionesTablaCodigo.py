@@ -8,6 +8,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 #from data.funciones_BD import *
 from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd, ver_estructura_nivel3_indentada
+                                    
+
+
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -202,7 +205,7 @@ def submenu_4_columnas(e):
         height=100,
     )
 
-    texto2 = ft.Row(
+    columnas4 = ft.Row(
     alignment=ft.MainAxisAlignment.SPACE_AROUND,
     controls=[
         ft.Container(
@@ -215,7 +218,7 @@ def submenu_4_columnas(e):
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.colors.GREEN_100,
+            bgcolor=ft.colors.BLUE_100,
             padding=10,
             border_radius=ft.border_radius.all(5),
         ),
@@ -257,7 +260,7 @@ def submenu_4_columnas(e):
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.colors.BLUE_100,
+            bgcolor=ft.colors.GREEN_100,
             padding=10,
             border_radius=ft.border_radius.all(5),
         ),
@@ -269,7 +272,7 @@ def submenu_4_columnas(e):
         content=ft.Column(
             controls=[
                 texto1,
-                texto2,
+                columnas4,
             ],
             alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
