@@ -1,5 +1,21 @@
 import sqlite3
 import sys
+import os
+
+# Obtiene la ruta absoluta del directorio padre de 'app/Menu' (que es la raíz del proyecto)
+ruta_raiz = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ruta_raiz)
+
+#from app import globals
+
+#para comprobar si existen los modulos'
+#ruta_bd = globals.ruta_BD  # Importamos la ruta de la base de datos desde globals.py
+#print(ruta_bd)
+print(ruta_raiz)
+#print(globals.ruta_BD)
+
+ruta_bd = os.path.join(ruta_raiz, "data", "bd_TEST_100.db")  # Ruta de la base de datos
+#print(ruta_bd)
 
 from datetime import datetime
 
@@ -31,7 +47,7 @@ def crear_conexion():
         sqlite3.Connection: Un objeto de conexión a la base de datos.
                         Retorna None si ocurre un error al conectar.
     """
-    ruta_bd = globals.ruta_BD  # Ruta de la base de datos desde globals.py
+    #ruta_bd = globals.ruta_BD  # Ruta de la base de datos desde globals.py
     conn = establecer_conexion(ruta_bd)
     return conn
 
@@ -302,7 +318,7 @@ def Insertar_Datos_Iniciales(ruta_bd):
     Args:
         ruta_bd (str): La ruta al archivo de la base de datos.
     """
-    conn = establecer_conexion(ruta_bd)
+    conn = crear_conexion()
     if conn:
         # Insertar los datos iniciales en GRUPO (Nivel 1)
         insertar_datos_grupo(conn, "PRODCTOS FINANCIEROS")
@@ -412,5 +428,5 @@ def Insertar_Datos_Iniciales(ruta_bd):
 
         conn.close()
 
-#Insertar_Datos_Iniciales(ruta_bd)
+Insertar_Datos_Iniciales(ruta_bd)
 

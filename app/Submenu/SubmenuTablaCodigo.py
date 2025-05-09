@@ -1,11 +1,10 @@
 import flet as ft
 import datetime
 import sqlite3
-import globals
 import sys
 import os
 
-
+from app import globals
 #from data import funciones_BD
 from data.funciones_BD import mostrar_datos_grupo
 
