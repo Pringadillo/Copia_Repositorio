@@ -1,7 +1,7 @@
 import sqlite3
 
 class DatabaseManager:
-    def __init__(self, empresa="Test_BD_1"):
+    def __init__(self, empresa="Test_BD_2"):
         self.empresa = empresa
         self.base_de_datos = f"bd_{self.empresa}.db"
         self.ruta_bd = f"./data/{self.base_de_datos}"
@@ -201,6 +201,63 @@ class DatabaseManager:
         for registro in registros:
             print(registro)
 
+
+    def mostrar_subgrupos_y_cuentas_por_grupo(self, grupo_id):
+        """
+        Muestra los subgrupos y cuentas asociadas a un grupo específico.
+
+        Args:
+            grupo_id (int): ID del grupo para el cual se desean mostrar los subgrupos y cuentas.
+        """
+        with self._conectar() as conn:
+            cursor = conn.cursor()
+
+            # Obtener los subgrupos del grupo solicitado
+            cursor.execute("""
+                SELECT subgrupo_id, descripcion_subgrupo
+                FROM SUBGRUPO
+                WHERE grupo_id = ?
+            """, (grupo_id,))
+            subgrupos = cursor.fetchall()
+
+            if not subgrupos:
+                print(f"No se encontraron subgrupos para el grupo con ID {grupo_id}.")
+                return
+
+            #print(f"\nSubgrupos y cuentas del grupo con ID {grupo_id}:\n")
+
+            # Iterar sobre los subgrupos y obtener las cuentas asociadas
+            for subgrupo_id, descripcion_subgrupo in subgrupos:
+                print(f"Subgrupo {subgrupo_id} {descripcion_subgrupo}")
+
+                # Obtener las cuentas asociadas al subgrupo
+                cursor.execute("""
+                    SELECT cod_3, desc_3
+                    FROM CUENTAS
+                    WHERE grupo_id = ? AND subgrupo_id = ?
+                """, (grupo_id, subgrupo_id))
+                cuentas = cursor.fetchall()
+
+                if cuentas:
+                    for cod_3, desc_3 in cuentas:
+                        print(f"   {cod_3} - {desc_3}")
+                else:
+                    print("    No hay cuentas asociadas a este subgrupo.")
+
+
+'''
+db_manager = DatabaseManager()
+db_manager.mostrar_subgrupos_y_cuentas_por_grupo(4)
+
+'''
+
+
+
+
+
+
+'''
+
 if __name__ == "__main__":
     # Crear una instancia de la clase DatabaseManager
     db_manager = DatabaseManager()
@@ -279,7 +336,7 @@ if __name__ == "__main__":
     db_manager.insertar_datos_cuenta(1, 14, "Depósitos")    
     db_manager.insertar_datos_cuenta(1, 15, "Cta.Cte.")
     db_manager.insertar_datos_cuenta(1, 15, "Depósitos") 
-    db_manager.insertar_datos_cuenta(1, 15, "Crowfunding")    
+    db_manager.insertar_datos_cuenta(1, 16, "Crowfunding")    
     db_manager.insertar_datos_cuenta(2, 1, "Roger")
     db_manager.insertar_datos_cuenta(2, 1, "Enric")
     db_manager.insertar_datos_cuenta(2, 2, "Enaire 0%")
@@ -320,3 +377,4 @@ if __name__ == "__main__":
     db_manager.mostrar_datos_grupo()
     db_manager.mostrar_datos_subgrupo()
     db_manager.mostrar_datos_cuentas()
+    '''
