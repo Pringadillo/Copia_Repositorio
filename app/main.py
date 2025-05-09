@@ -19,16 +19,18 @@ import barra_lateral  # Importamos el contenido de la barra lateral
 
 from data import funciones_BD
 
-
+empresa = "TEST_60"
+BasedeDatos = f"bd_{empresa}.db"
+ruta_BD = f"./data/{BasedeDatos}"
 
 # Variables Globales
 # mirar en Funciones_DB.py
 
 
 #crear la Base de Datos
-#funciones_BD.Crear_Tablas()
-#funciones_BD.Insertar_Datos_Iniciales()
-#funciones_BD.mostrar_datos_cuentas()
+funciones_BD.Crear_Tablas()
+funciones_BD.Insertar_Datos_Iniciales()
+funciones_BD.mostrar_datos_cuentas()
 
 
 

@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
-#from data.funciones_BD import *
+#from data import funciones_BD
 from data.funciones_BD import mostrar_datos_grupo
 
 def submenu_Grupos(e):

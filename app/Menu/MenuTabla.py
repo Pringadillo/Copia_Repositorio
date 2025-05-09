@@ -36,9 +36,9 @@ def menu_TablaCodigos():
         e.page.update()
 
     def crear_Cuenta(e):
-        contenido_cuerpo_container.content = ft.Text("desde menu CUENTAS", size=20)
-        #contenido_cuentas = submenu_Cuentas(e.page)
-        #contenido_cuerpo_container.content = contenido_cuentas
+        #contenido_cuerpo_container.content = ft.Text("desde menu CUENTAS", size=20)
+        contenido_cuentas = submenu_Cuentas(e.page)
+        contenido_cuerpo_container.content = contenido_cuentas
         e.page.update()
 
     # -----------------------------------------  SUBMENU  -----------------------------------------

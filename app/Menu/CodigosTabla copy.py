@@ -5,7 +5,7 @@ import sqlite3
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
+from data.funciones_BD import  ruta_BD
 
 from ..Submenu import FuncionesTablaCodigo
 
@@ -22,8 +22,6 @@ def menu_TablaCodigos():
                     content=ft.Text("Seleccione una opción del submenú", size=30,),
                     bgcolor=ft.colors.BLUE_200, expand=10), # 3/5 del espacio
                     #height=200  # Una altura mayor para este contenedor
-
-                    
                 ft.Container(
                     content=ft.Text("Contenido Dinámico", size=20),
                     bgcolor=ft.colors.GREEN_200, expand=1), # 1/5 del espacio
