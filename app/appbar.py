@@ -5,8 +5,8 @@ import appbar
 import app.Menu.CodigosTabla as CodigosTabla
 
 
-usuario = "Nombre Usuario"  # Nombre del usuario
-contenido_cuerpo = ""
+usuario = "Nombre KK de Vaca"  # Nombre del usuario
+
 
 def crear_appbar(page):
     def boton_click(e):
