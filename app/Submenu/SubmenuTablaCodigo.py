@@ -4,7 +4,7 @@ import sqlite3
 import globals
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
 
 #from data import funciones_BD
 from data.funciones_BD import mostrar_datos_grupo

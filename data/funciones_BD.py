@@ -1,8 +1,9 @@
 import sqlite3
-import flet as ft  # Aunque se importa, no se usa en este archivo. ¿Es necesario aquí?
-from prettytable import PrettyTable  # Tampoco se usa aquí.
-import os
+import sys
+
 from datetime import datetime
+
+
 
 def establecer_conexion(ruta_bd):
     """
@@ -20,6 +21,19 @@ def establecer_conexion(ruta_bd):
     except sqlite3.Error as e:
         print(f"Error al conectar a la base de datos: {e}")
         return None
+    
+def crear_conexion():
+    """
+    Crea una conexión a la base de datos SQLite especificada en la variable 'ruta_bd'.
+    Si la base de datos no existe, se creará un nuevo archivo de base de datos.
+
+    Retorna:
+        sqlite3.Connection: Un objeto de conexión a la base de datos.
+                        Retorna None si ocurre un error al conectar.
+    """
+    ruta_bd = globals.ruta_BD  # Ruta de la base de datos desde globals.py
+    conn = establecer_conexion(ruta_bd)
+    return conn
 
 def crear_tabla_grupo(conn):
     """
@@ -397,4 +411,6 @@ def Insertar_Datos_Iniciales(ruta_bd):
         insertar_datos_cuenta(conn, 4, 3, "Otros Ingresos")
 
         conn.close()
+
+#Insertar_Datos_Iniciales(ruta_bd)
 

@@ -11,7 +11,5 @@ sys.path.append(ROOT_DIR)
 empresa = "TEST_100"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
-usuario = "Nombre Usuario"
-
-
+usuario = "Nombre KKKK & K"
 

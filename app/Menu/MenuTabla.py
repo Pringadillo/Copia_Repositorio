@@ -5,7 +5,7 @@ import globals
 import sys
 import os
 
-from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
+from ..Submenu.SubmenuTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
 ruta_bd = globals.ruta_BD  # Importamos la ruta de la base de datos desde globals.py
 
