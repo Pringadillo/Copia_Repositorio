@@ -1,3 +1,18 @@
+'''
+
+En principio NO UTILIZAR ESTE SCRIPT, ya que es un test 
+
+
+'''
+
+
+
+
+
+
+
+
+
 import sqlite3
 
 class DatabaseManager:
@@ -245,28 +260,18 @@ class DatabaseManager:
                     print("    No hay cuentas asociadas a este subgrupo.")
 
 
-'''
-db_manager = DatabaseManager()
-db_manager.mostrar_subgrupos_y_cuentas_por_grupo(4)
-
-'''
+# ------------------------------------------   FIN CLASE   ------------------------------------------ 
 
 
 
 
-
-
-'''
-
-if __name__ == "__main__":
-    # Crear una instancia de la clase DatabaseManager
-    db_manager = DatabaseManager()
-
+def Crear_Tablas(db_manager):
     # Crear las tablas
     db_manager.crear_tabla_grupo()
     db_manager.crear_tabla_subgrupo()
     db_manager.crear_tabla_cuentas()
 
+def Insertar_Datos_Iniciales(db_manager):
     # Insertar los datos iniciales en GRUPO (Nivel 1)
     db_manager.insertar_datos_grupo("PRODCTOS FINANCIEROS")
     db_manager.insertar_datos_grupo("DEUDAS")
@@ -373,8 +378,10 @@ if __name__ == "__main__":
     db_manager.insertar_datos_cuenta(4, 2, "Crowfunding")
     db_manager.insertar_datos_cuenta(4, 3, "Otros Ingresos")
 
-    # Mostrar los datos
-    db_manager.mostrar_datos_grupo()
-    db_manager.mostrar_datos_subgrupo()
-    db_manager.mostrar_datos_cuentas()
-    '''
+# Mostrar los datos
+#db_manager = DatabaseManager()
+#db_manager.mostrar_datos_grupo()
+#db_manager.mostrar_datos_subgrupo()
+#db_manager.mostrar_datos_cuentas()
+#db_manager.mostrar_subgrupos_y_cuentas_por_grupo(4)
+  
