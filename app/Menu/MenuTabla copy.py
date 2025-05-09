@@ -5,12 +5,11 @@ import sqlite3
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-# Ya no importamos ruta_BD aquí
-# from data.funciones_BD import ruta_BD
+from data.funciones_BD import ruta_BD
 
 from ..Submenu.FuncionesTablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
-def menu_TablaCodigos(ruta_bd): # Añadimos ruta_bd como argumento
+def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
     contenido_cuerpo_container = ft.Container(
         content=ft.Text("Seleccione una opción del submenú", size=30, text_align=ft.TextAlign.CENTER),
@@ -19,27 +18,31 @@ def menu_TablaCodigos(ruta_bd): # Añadimos ruta_bd como argumento
     )
 
     def ver_TablaCodigos(e):
-        contenido_verTablasCodigos = submenu_4_columnas(e.page, ruta_bd) # Pasar ruta_bd
+        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
+        #e.page.update()
+        contenido_verTablasCodigos = submenu_4_columnas(e.page)
         contenido_cuerpo_container.content = contenido_verTablasCodigos
         e.page.update()
 
     def crear_Grupo(e):
-        contenido_grupo = submenu_Grupos(e.page, ruta_bd) # Pasar ruta_bd
+        contenido_grupo = submenu_Grupos(e.page)
         contenido_cuerpo_container.content = contenido_grupo
         e.page.update()
 
     def crear_Subgrupo(e):
-        contenido_subgrupos = submenu_Subgrupos(e.page, ruta_bd) # Pasar ruta_bd
+        #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR SUBGRUPOS", size=20)
+        contenido_subgrupos = submenu_Subgrupos(e.page)
         contenido_cuerpo_container.content = contenido_subgrupos
         e.page.update()
 
     def crear_Cuenta(e):
-        contenido_cuentas = submenu_Cuentas(e.page, ruta_bd) # Pasar ruta_bd
+        #contenido_cuerpo_container.content = ft.Text("desde menu CUENTAS", size=20)
+        contenido_cuentas = submenu_Cuentas(e.page)
         contenido_cuerpo_container.content = contenido_cuentas
         e.page.update()
 
     # -----------------------------------------  SUBMENU  -----------------------------------------
-    # Definición de los botones del submenú
+    # Definición de los botones del submenú    
     submenu = ft.Container(
         content=ft.Row(
             controls=[
@@ -91,7 +94,6 @@ def menu_TablaCodigos(ruta_bd): # Añadimos ruta_bd como argumento
 
     )
     return cuerpo
-
 
 
 
