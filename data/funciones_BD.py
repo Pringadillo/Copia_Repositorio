@@ -281,10 +281,6 @@ def Crear_Tablas(ruta_bd):
         crear_tabla_cuentas(conn)
         conn.close()
 
-
-
-
-
 def Insertar_Datos_Iniciales(ruta_bd):
     """
     Inserta los datos iniciales en las tablas de la base de datos.
@@ -401,3 +397,4 @@ def Insertar_Datos_Iniciales(ruta_bd):
         insertar_datos_cuenta(conn, 4, 3, "Otros Ingresos")
 
         conn.close()
+

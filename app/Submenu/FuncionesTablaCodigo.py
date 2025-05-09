@@ -1,7 +1,7 @@
 import flet as ft
 import datetime
 import sqlite3
-
+import globals
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))

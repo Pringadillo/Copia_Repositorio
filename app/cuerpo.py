@@ -1,6 +1,6 @@
 import flet as ft
 import datetime
-
+import globals
 
 
 

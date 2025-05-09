@@ -7,21 +7,16 @@ import json
 import tempfile
 import sys
 
-# Agregar el directorio raíz al PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
 
 # Archivos estructura del codigo
 import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
 
+import globals
 from data import funciones_BD
-
-
-# Variables Globales
-empresa = "TEST_100"
-BasedeDatos = f"bd_{empresa}.db"
-ruta_BD = f"./data/{BasedeDatos}"
 
 
 def main(page: ft.Page):
@@ -43,15 +38,11 @@ def main(page: ft.Page):
     contenido = cuerpo.contenido_por_defecto  # Contenido a mostrar por defecto
     contenido_central = cuerpo.crear_cuerpo(page, contenido)
 
-    # Crear la Base de Datos e insertar datos iniciales
-    funciones_BD.Crear_Tablas(ruta_BD)
-    funciones_BD.Insertar_Datos_Iniciales(ruta_BD)
+    # Crear la Base de Datos si no existe
+    funciones_BD.Crear_Tablas(globals.ruta_BD)
+    
 
-    # Para mostrar datos, necesitas pasar la ruta_BD y obtener una conexión
-    conn = funciones_BD.establecer_conexion(ruta_BD)
-    if conn:
-        funciones_BD.mostrar_datos_cuentas(conn)
-        conn.close()
+
 
     # Estructura principal de la página
     page.add(

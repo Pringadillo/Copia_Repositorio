@@ -1,6 +1,7 @@
 import flet as ft
 import datetime
 import sqlite3
+import globals
 
 import sys
 import os

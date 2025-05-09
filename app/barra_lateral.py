@@ -1,4 +1,6 @@
 import flet as ft
+import globals
+
 
 def crear_barra_lateral(page):
     return ft.Column(

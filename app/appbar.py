@@ -1,11 +1,12 @@
 import flet as ft
 import datetime
+import globals 
 
-import appbar
 import app.Menu.MenuTabla as MenuTabla
 
 
-usuario = "Nombre Usuario"  # Nombre del usuario
+
+
 contenido_cuerpo = ""
 
 def crear_appbar(page):
@@ -38,7 +39,7 @@ def crear_appbar(page):
                                 color=ft.colors.BLUE,  # Color del ícono
                             ),
                             ft.Text(
-                                usuario,  # Nombre del usuario
+                                globals.usuario,  # Nombre del usuario
                                 size=16,
                                 weight=ft.FontWeight.BOLD,
                                 text_align=ft.TextAlign.CENTER,
