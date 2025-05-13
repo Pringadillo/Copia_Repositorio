@@ -7,10 +7,7 @@ import os
 
 import globals
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-#from app.data.funciones_BD import ruta_BDr_opciones_nivel1_desde_bd
-#from ..Submenu import FuncionesTablaCodigo
-from Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
+from app.Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo

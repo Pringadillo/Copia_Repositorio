@@ -6,11 +6,7 @@ import sys
 import os
 
 import globals
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
-
-#from data.funciones_BD import *
-
-from data.funciones_BD import mostrar_datos_grupo, ruta_BD
+from app.data.funciones_BD import mostrar_datos_grupo
 
 
 

@@ -15,14 +15,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Archivos estructura del codigo
 import appbar
 import cuerpo
-import barra_lateral  # Importamos el contenido de la barra lateral
-import globals  # Importamos las variables globales
+import barra_lateral
+#import globals  # Importamos las variables globales
 
 # Arxivos menu
-import Menu.CodigosTabla as CodigosTabla
-
-
-
+#import app.Menu.CodigosTabla as CodigosTabla
 
 
 def main(page: ft.Page):

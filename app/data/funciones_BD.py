@@ -1,7 +1,7 @@
 import sqlite3
 import flet as ft
 
-import globals
+import app.globals as globals
 from datetime import datetime
 
 
@@ -309,7 +309,7 @@ def mostrar_datos_cuentas(ruta_BDapp):
 
 def ver_tablas_base_datos():
     """Consulta y muestra todas las tablas existentes en la base de datos."""
-    conn = sqlite3.connect(ruta_BD)
+    conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
 
     # Consulta para obtener los nombres de todas las tablas
@@ -325,7 +325,7 @@ def ver_tablas_base_datos():
 
     conn.close()
 
-#ver_tablas_base_datos()
+ver_tablas_base_datos()
 
 
 '''
