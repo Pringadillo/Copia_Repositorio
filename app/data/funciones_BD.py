@@ -7,7 +7,6 @@ import os
 from datetime import datetime
 
 
-
 empresa = "Mi Empresa"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"app/data/{BasedeDatos}"
