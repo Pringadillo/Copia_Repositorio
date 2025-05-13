@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from data.funciones_BD import  ruta_BD, obtener_opciones_nivel1_desde_bd
 
-from ..Submenu import MENU_TablaCodigo
+from ..Submenu import Submenu_TablaCodigo
 
 
 
@@ -33,7 +33,7 @@ def menu_TablaCodigos():
     
     def ver_TablaCodigos(e):
         
-        ver_la_TablaCodigos= MENU_TablaCodigo.submenu_ver_codigo(e)
+        ver_la_TablaCodigos= Submenu_TablaCodigo.submenu_ver_codigo(e)
         contenido_cuerpo_container.content = ver_la_TablaCodigos
         e.page.update()
 

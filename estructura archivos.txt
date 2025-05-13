@@ -1,5 +1,9 @@
 app/
     __init__.py
+    data/
+        __init__.py
+    imagenes/
+        __init__.py
     Menu/
         __init__.py
         CodigosTabla.py
