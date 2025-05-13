@@ -16,10 +16,55 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import appbar
 import cuerpo
 import barra_lateral
-#import globals  # Importamos las variables globales
+import globals  # Importamos las variables globales
 
+import data.funciones_BD as funciones_BD
 # Arxivos menu
 #import app.Menu.CodigosTabla as CodigosTabla
+
+
+nombre_empresa=globals.empresa
+ruta_db =globals.ruta_BD
+
+
+def existe_base_de_datos(ruta_db):
+    """
+    Verifica si un archivo de base de datos SQLite existe en la ruta especificada.
+
+    Args:
+        ruta_db (str): La ruta completa al archivo de la base de datos.
+
+    Returns:
+        bool: True si el archivo existe, False en caso contrario.
+    """
+    os.path.exists(ruta_db)
+
+
+if existe_base_de_datos(ruta_db):
+    print(f"La base de datos '{ruta_db}' existe.")
+    # Aquí puedes proceder a conectar a la base de datos si es necesario
+    try:
+        conn = sqlite3.connect(ruta_db)
+        # Realizar operaciones con la base de datos
+        conn.close()
+    except sqlite3.Error as e:
+        print(f"Error al conectar a la base de datos: {e}")
+else:
+    print(f"La base de datos '{ruta_db}' NO EXISTE.")
+
+    funciones_BD.crear_base_datos(nombre_empresa, ruta_db)
+    funciones_BD.crear_tabla_GRUPO(ruta_db)
+    funciones_BD.crear_tabla_SUBGRUPO(ruta_db)
+    funciones_BD.crear_tabla_CUENTAS(ruta_db)
+    funciones_BD.insertar_GRUPO_inicio(ruta_db)
+    funciones_BD.insertar_SUBGRUPO_inicio(ruta_db)
+    funciones_BD.insertar_CUENTAS_inicio(ruta_db)
+    
+
+    
+
+
+
 
 
 def main(page: ft.Page):
@@ -30,9 +75,6 @@ def main(page: ft.Page):
         content=ft.Text(""),
         action="Cerrar"
     )
-
-    #crear base de datos
-
 
     # Crear la AppBar
     page.appbar = appbar.crear_appbar(page)  # Contenido definido en appbar.py

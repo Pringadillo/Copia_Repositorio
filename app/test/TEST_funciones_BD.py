@@ -449,5 +449,3 @@ if __name__ == "__main__":
     #mostrar_datos_grupo(ruta_BDapp)
     #mostrar_datos_subgrupo(ruta_BDapp)
     #mostrar_datos_cuentas(ruta_BDapp)
-
-
