@@ -7,7 +7,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
 #from data.funciones_BD import *
-from data.funciones_BD import ver_tabla_nivel1, obtener_opciones_nivel1_desde_bd
+
+from data.funciones_BD import mostrar_datos_grupo, obtener_opciones_nivel1_desde_bd, ruta_BD
+
+
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -25,7 +28,7 @@ def submenu_Grupos(e):
     )
 
     # Llama a ver_tabla_nivel1 para obtener los datos
-    datos_nivel1 = ver_tabla_nivel1()
+    datos_nivel1 = mostrar_datos_grupo
 
     # Convierte los datos en un solo texto para mostrar en texto2
     texto2 = ft.Row(

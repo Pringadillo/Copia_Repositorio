@@ -1,8 +1,6 @@
 import flet as ft
 import datetime
 
-import appbar
-
 
 
 def crear_cuerpo(page, contenido):

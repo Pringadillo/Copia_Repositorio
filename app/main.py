@@ -18,7 +18,7 @@ import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
 
 # Arxivos menu
-import app.Menu.CodigosTabla as CodigosTabla
+import Menu.CodigosTabla as CodigosTabla
 
 
 

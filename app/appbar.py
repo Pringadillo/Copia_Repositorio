@@ -3,7 +3,7 @@ import flet as ft
 import app.Menu.CodigosTabla as CodigosTabla
 
 
-usuario = "Nombre KK de Vaca"  # Nombre del usuario
+usuario = "KK_de_Vaca"  # Nombre del usuario
 
 
 def crear_appbar(page):

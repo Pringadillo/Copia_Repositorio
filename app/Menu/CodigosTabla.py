@@ -4,8 +4,9 @@ import sqlite3
 
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from data.funciones_BD import ruta_BD, obtener_opciones_nivel1_desde_bd
+#from app.data.funciones_BD import ruta_BDr_opciones_nivel1_desde_bd
 #from ..Submenu import FuncionesTablaCodigo
 from ..Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
