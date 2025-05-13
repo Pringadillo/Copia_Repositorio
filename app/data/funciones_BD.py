@@ -1,29 +1,31 @@
 import sqlite3
 import flet as ft
 
+import globals
 from datetime import datetime
 
 
-empresa = "Ejemplo_1"
-BasedeDatos = f"bd_{empresa}.db"
-ruta_BD = f"app/data/{BasedeDatos}"
+
+
+
+ruta_BDapp = globals.ruta_BD
 
 def crear_base_datos():
-    conn = sqlite3.connect(ruta_BD)
+    conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
     conn.commit()
     conn.close()
 
 
-def crear_tabla_GRUPO(ruta_BD):
+def crear_tabla_GRUPO(ruta_BDapp):
     """
     Establece una conexión a la base de datos SQLite y crea la tabla GRUPO si no existe.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:  # Usamos 'with' para asegurar el cierre automático de la conexión
             cursor = conn.cursor()
             cursor.execute("""
@@ -38,15 +40,15 @@ def crear_tabla_GRUPO(ruta_BD):
         print(f"Error al conectar o crear la tabla GRUPO: {e}")
         raise  # Re-lanza la excepción para que el llamador pueda manejarla
 
-def crear_tabla_SUBGRUPO(ruta_BD):
+def crear_tabla_SUBGRUPO(ruta_BDapp):
     """
     Crea la tabla SUBGRUPO (Nivel 2) si no existe.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -68,15 +70,15 @@ def crear_tabla_SUBGRUPO(ruta_BD):
         print(f"Error al crear la tabla SUBGRUPO: {e}")
         raise  # Re-lanza la excepción para que el llamador la maneje
 
-def crear_tabla_CUENTAS(ruta_BD):
+def crear_tabla_CUENTAS(ruta_BDapp):
     """
     Crea la tabla CUENTAS (Nivel 3) si no existe.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -102,23 +104,23 @@ def crear_tabla_CUENTAS(ruta_BD):
 
 
 #crear_base_datos()
-#crear_tabla_GRUPO(ruta_BD)
-#crear_tabla_SUBGRUPO(ruta_BD)
-#crear_tabla_CUENTAS(ruta_BD)
+#crear_tabla_GRUPO(ruta_BDapp)
+#crear_tabla_SUBGRUPO(ruta_BDapp)
+#crear_tabla_CUENTAS(ruta_BDapp)
 
 
 # --------------------------------- INSERTAR DATOS ---------------------------------
 
-def insertar_datos_grupo(ruta_BD, descripcion_grupo):
+def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
     """
     Inserta datos en la tabla GRUPO (Nivel 1).
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
         descripcion_grupo (str): Descripción del grupo.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -130,17 +132,17 @@ def insertar_datos_grupo(ruta_BD, descripcion_grupo):
         print(f"Error al insertar en GRUPO (Nivel 1): {e}")
         raise  # Re-lanza la excepción para que el llamador la maneje
 
-def insertar_datos_subgrupo(ruta_BD, grupo_id, descripcion_subgrupo):
+def insertar_datos_subgrupo(ruta_BDapp, grupo_id, descripcion_subgrupo):
     """
     Inserta datos en la tabla SUBGRUPO (Nivel 2).
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
         grupo_id (int): ID del grupo al que pertenece.
         descripcion_subgrupo (str): Descripción del subgrupo.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             # Obtener el máximo subgrupo_id para el grupo_id dado
@@ -168,18 +170,18 @@ def insertar_datos_subgrupo(ruta_BD, grupo_id, descripcion_subgrupo):
         print(f"Error al insertar en SUBGRUPO (Nivel 2): {e}")
         raise  # Re-lanza la excepción para que el llamador la maneje
 
-def insertar_datos_cuenta(ruta_BD, grupo_id, subgrupo_id, descripcion_n3):
+def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3):
     """
     Inserta datos en la tabla CUENTAS (Nivel 3).
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
         grupo_id (int): ID del grupo al que pertenece.
         subgrupo_id (int): ID del subgrupo al que pertenece.
         descripcion_n3 (str): Descripción de la cuenta.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             # Obtener el máximo nivel3_id para el grupo_id y subgrupo_id dados
@@ -222,15 +224,15 @@ def insertar_datos_cuenta(ruta_BD, grupo_id, subgrupo_id, descripcion_n3):
 
 # ---------------------------------- MOSTRAR DATOS ----------------------------------
 
-def mostrar_datos_grupo(ruta_BD):
+def mostrar_datos_grupo(ruta_BDapp):
     """
     Muestra todos los datos de la tabla GRUPO.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM GRUPO")
@@ -242,15 +244,15 @@ def mostrar_datos_grupo(ruta_BD):
         print(f"Error al mostrar datos de GRUPO: {e}")
         raise
 
-def mostrar_datos_subgrupo(ruta_BD):
+def mostrar_datos_subgrupo(ruta_BDapp):
     """
     Muestra todos los datos de la tabla SUBGRUPO.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("SELECT cod_2, desc_2 FROM SUBGRUPO")
@@ -262,15 +264,15 @@ def mostrar_datos_subgrupo(ruta_BD):
         print(f"Error al mostrar datos de SUBGRUPO: {e}")
         raise
 
-def mostrar_datos_cuentas(ruta_BD):
+def mostrar_datos_cuentas(ruta_BDapp):
     """
     Muestra todos los datos de la tabla CUENTAS.
 
     Args:
-        ruta_BD (str): La ruta al archivo de la base de datos.
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
     """
     try:
-        conn = sqlite3.connect(ruta_BD)
+        conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("SELECT cod_3, desc_3 FROM CUENTAS")
@@ -283,9 +285,9 @@ def mostrar_datos_cuentas(ruta_BD):
         raise
 
 
-#mostrar_datos_grupo(ruta_BD)
-#mostrar_datos_subgrupo(ruta_BD)
-#mostrar_datos_cuentas(ruta_BD)
+#mostrar_datos_grupo(ruta_BDapp)
+#mostrar_datos_subgrupo(ruta_BDapp)
+#mostrar_datos_cuentas(ruta_BDapp)
 # ---------------------------------- ACTUALIZAR DATOS ----------------------------------
 
 
@@ -296,13 +298,13 @@ def mostrar_datos_cuentas(ruta_BD):
 # ---------------------------------- ejemplo DATOS ----------------------------------
 
 #crear_base_datos()
-#crear_tabla_GRUPO(ruta_BD)
-#crear_tabla_SUBGRUPO(ruta_BD)
-#crear_tabla_CUENTAS(ruta_BD)
+#crear_tabla_GRUPO(ruta_BDapp)
+#crear_tabla_SUBGRUPO(ruta_BDapp)
+#crear_tabla_CUENTAS(ruta_BDapp)
 
-#mostrar_datos_grupo(ruta_BD)
-#mostrar_datos_subgrupo(ruta_BD)
-#mostrar_datos_cuentas(ruta_BD)
+#mostrar_datos_grupo(ruta_BDapp)
+#mostrar_datos_subgrupo(ruta_BDapp)
+#mostrar_datos_cuentas(ruta_BDapp)
 
 
 def ver_tablas_base_datos():
@@ -328,110 +330,110 @@ def ver_tablas_base_datos():
 
 '''
    # Insertar datos en CUENTAS (Nivel 1)
-insertar_datos_grupo(ruta_BD, "Cuentas Financieras")
-insertar_datos_grupo(ruta_BD, "Deudas")
-insertar_datos_grupo(ruta_BD, "Gastos")
-insertar_datos_grupo(ruta_BD, "Ingresos")
+insertar_datos_grupo(ruta_BDapp, "Cuentas Financieras")
+insertar_datos_grupo(ruta_BDapp, "Deudas")
+insertar_datos_grupo(ruta_BDapp, "Gastos")
+insertar_datos_grupo(ruta_BDapp, "Ingresos")
  ''' 
 
 '''
    # Insertar datos en CUENTAS (Nivel 2)
-insertar_datos_subgrupo(ruta_BD, 1, "Efectivo")
-insertar_datos_subgrupo(ruta_BD, 1, "Caixa Enginyers")
-insertar_datos_subgrupo(ruta_BD, 1, "Self Bank")
-insertar_datos_subgrupo(ruta_BD, 1, "DeGiro")
-insertar_datos_subgrupo(ruta_BD, 1, "Trade Republic")
-insertar_datos_subgrupo(ruta_BD, 1, "Santander")
-insertar_datos_subgrupo(ruta_BD, 1, "BBVA")
-insertar_datos_subgrupo(ruta_BD, 1, "B.Sabadell")
-insertar_datos_subgrupo(ruta_BD, 1, "Civislend")
-insertar_datos_subgrupo(ruta_BD, 1, "StockCrowd")
-insertar_datos_subgrupo(ruta_BD, 1, "Mintos")
-insertar_datos_subgrupo(ruta_BD, 1, "Bestinver")
-insertar_datos_subgrupo(ruta_BD, 2, "Ahorro Hijos")
-insertar_datos_subgrupo(ruta_BD, 2, "Deudas Casa")
-insertar_datos_subgrupo(ruta_BD, 2, "Deudas inversiones")
-insertar_datos_subgrupo(ruta_BD, 3, "Gastos fijos")
-insertar_datos_subgrupo(ruta_BD, 3, "Gastos Variables")
-insertar_datos_subgrupo(ruta_BD, 3, "Otros Gastos")
-insertar_datos_subgrupo(ruta_BD, 4, "Salarios")
-insertar_datos_subgrupo(ruta_BD, 4, "No Salariales")
-insertar_datos_subgrupo(ruta_BD, 4, "Otros Ingresos")
+insertar_datos_subgrupo(ruta_BDapppp, 1, "Efectivo")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Caixa Enginyers")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Self Bank")
+insertar_datos_subgrupo(ruta_BDapp, 1, "DeGiro")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Trade Republic")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Santander")
+insertar_datos_subgrupo(ruta_BDapp, 1, "BBVA")
+insertar_datos_subgrupo(ruta_BDapp, 1, "B.Sabadell")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Civislend")
+insertar_datos_subgrupo(ruta_BDapp, 1, "StockCrowd")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Mintos")
+insertar_datos_subgrupo(ruta_BDapp, 1, "Bestinver")
+insertar_datos_subgrupo(ruta_BDapp, 2, "Ahorro Hijos")
+insertar_datos_subgrupo(ruta_BDapp, 2, "Deudas Casa")
+insertar_datos_subgrupo(ruta_BDapp, 2, "Deudas inversiones")
+insertar_datos_subgrupo(ruta_BDapp, 3, "Gastos fijos")
+insertar_datos_subgrupo(ruta_BDapp, 3, "Gastos Variables")
+insertar_datos_subgrupo(ruta_BDapp, 3, "Otros Gastos")
+insertar_datos_subgrupo(ruta_BDapp, 4, "Salarios")
+insertar_datos_subgrupo(ruta_BDapp, 4, "No Salariales")
+insertar_datos_subgrupo(ruta_BDapp, 4, "Otros Ingresos")
 ''' 
 
 '''
    # Insertar datos en CUENTAS (Nivel 3)
-insertar_datos_cuenta(ruta_BD, 1, 1, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 1, "Depósitos")
-insertar_datos_cuenta(ruta_BD, 1, 1, "Fondos Inv.")
-insertar_datos_cuenta(ruta_BD, 1, 1, "Cta.Cte. $")
-insertar_datos_cuenta(ruta_BD, 1, 1, "Depósitos $")
-insertar_datos_cuenta(ruta_BD, 1, 2, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 2, "Cta. Remunerada")
-insertar_datos_cuenta(ruta_BD, 1, 2, "Depósitos")
-insertar_datos_cuenta(ruta_BD, 1, 2, "Fondos Inv.")
-insertar_datos_cuenta(ruta_BD, 1, 2, "F.Inv. Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 4, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 4, "Renta Variable")
-insertar_datos_cuenta(ruta_BD, 1, 4, "Derivados Financieros")
-insertar_datos_cuenta(ruta_BD, 1, 3, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 3, "Renta Variable")
-insertar_datos_cuenta(ruta_BD, 1, 3, "ETF")
-insertar_datos_cuenta(ruta_BD, 1, 5, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 5, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 1, 6, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 6, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 1, 7, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 1, 8, "Plan Pensiones")
-insertar_datos_cuenta(ruta_BD, 1, 8, "Fondos Inv.")
-insertar_datos_cuenta(ruta_BD, 1, 9, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 1, 10, "CapitalCell")
-insertar_datos_cuenta(ruta_BD, 1, 10, "Cebiotec")
-insertar_datos_cuenta(ruta_BD, 1, 11, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 1, 12, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 12, "Depósitos")
-insertar_datos_cuenta(ruta_BD, 1, 13, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 13, "Depósitos")    
-insertar_datos_cuenta(ruta_BD, 1, 14, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 14, "Depósitos")    
-insertar_datos_cuenta(ruta_BD, 1, 15, "Cta.Cte.")
-insertar_datos_cuenta(ruta_BD, 1, 15, "Depósitos") 
-insertar_datos_cuenta(ruta_BD, 1, 15, "Crowfunding")    
-insertar_datos_cuenta(ruta_BD, 2, 1, "Roger")
-insertar_datos_cuenta(ruta_BD, 2, 1, "Enric")
-insertar_datos_cuenta(ruta_BD, 2, 2, "Enaire 0%")
-insertar_datos_cuenta(ruta_BD, 2, 3, "Inversiones JMG")
-insertar_datos_cuenta(ruta_BD, 2, 3, "Avis")
-insertar_datos_cuenta(ruta_BD, 2, 3, "Tata")
-insertar_datos_cuenta(ruta_BD, 2, 3, "Albert")
-insertar_datos_cuenta(ruta_BD, 2, 3, "Joan Moises")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Comida")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Agua")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Luz")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Gas")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Teléfono/Internet")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Limpieza")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Comunidad Vecinos")
-insertar_datos_cuenta(ruta_BD, 3, 1, "Otros Gastos Fijos")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Ropa")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Salud")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Transporte")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Seguros")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Impuestos")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Vacaciones")
-insertar_datos_cuenta(ruta_BD, 3, 2, "Otros Gastos Variables")
-insertar_datos_cuenta(ruta_BD, 3, 3, "Gastos Extraordinarios")
-insertar_datos_cuenta(ruta_BD, 3, 3, "Otros Gastos Extraordinarios")
-insertar_datos_cuenta(ruta_BD, 3, 3, "Cuadrar Saldos")
-insertar_datos_cuenta(ruta_BD, 4, 1, "Montse")
-insertar_datos_cuenta(ruta_BD, 4, 1, "Carlos")
-insertar_datos_cuenta(ruta_BD, 4, 1, "Pensión")
-insertar_datos_cuenta(ruta_BD, 4, 2, "Bancarios")
-insertar_datos_cuenta(ruta_BD, 4, 2, "Renta Fija")
-insertar_datos_cuenta(ruta_BD, 4, 2, "Renta Variable")
-insertar_datos_cuenta(ruta_BD, 4, 2, "Fondos Inv.")
-insertar_datos_cuenta(ruta_BD, 4, 2, "Crowfunding")
-insertar_datos_cuenta(ruta_BD, 4, 3, "Otros Ingresos")
+insertar_datos_cuenta(ruta_BDapp, 1, 1, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 1, "Depósitos")
+insertar_datos_cuenta(ruta_BDapp, 1, 1, "Fondos Inv.")
+insertar_datos_cuenta(ruta_BDapp, 1, 1, "Cta.Cte. $")
+insertar_datos_cuenta(ruta_BDapp, 1, 1, "Depósitos $")
+insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta. Remunerada")
+insertar_datos_cuenta(ruta_BDapp, 1, 2, "Depósitos")
+insertar_datos_cuenta(ruta_BDapp, 1, 2, "Fondos Inv.")
+insertar_datos_cuenta(ruta_BDapp, 1, 2, "F.Inv. Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 4, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 4, "Renta Variable")
+insertar_datos_cuenta(ruta_BDapp, 1, 4, "Derivados Financieros")
+insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 3, "Renta Variable")
+insertar_datos_cuenta(ruta_BDapp, 1, 3, "ETF")
+insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 5, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 1, 6, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 6, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 1, 7, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 1, 8, "Plan Pensiones")
+insertar_datos_cuenta(ruta_BDapp, 1, 8, "Fondos Inv.")
+insertar_datos_cuenta(ruta_BDapp, 1, 9, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 1, 10, "CapitalCell")
+insertar_datos_cuenta(ruta_BDapp, 1, 10, "Cebiotec")
+insertar_datos_cuenta(ruta_BDapp, 1, 11, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 1, 12, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 12, "Depósitos")
+insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 13, "Depósitos")    
+insertar_datos_cuenta(ruta_BDapp, 1, 14, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 14, "Depósitos")    
+insertar_datos_cuenta(ruta_BDapp, 1, 15, "Cta.Cte.")
+insertar_datos_cuenta(ruta_BDapp, 1, 15, "Depósitos") 
+insertar_datos_cuenta(ruta_BDapp, 1, 15, "Crowfunding")    
+insertar_datos_cuenta(ruta_BDapp, 2, 1, "Roger")
+insertar_datos_cuenta(ruta_BDapp, 2, 1, "Enric")
+insertar_datos_cuenta(ruta_BDapp, 2, 2, "Enaire 0%")
+insertar_datos_cuenta(ruta_BDapp, 2, 3, "Inversiones JMG")
+insertar_datos_cuenta(ruta_BDapp, 2, 3, "Avis")
+insertar_datos_cuenta(ruta_BDapp, 2, 3, "Tata")
+insertar_datos_cuenta(ruta_BDapp, 2, 3, "Albert")
+insertar_datos_cuenta(ruta_BDapp, 2, 3, "Joan Moises")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comida")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Agua")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Luz")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Gas")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Teléfono/Internet")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Limpieza")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comunidad Vecinos")
+insertar_datos_cuenta(ruta_BDapp, 3, 1, "Otros Gastos Fijos")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Ropa")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Salud")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Transporte")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Seguros")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Impuestos")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Vacaciones")
+insertar_datos_cuenta(ruta_BDapp, 3, 2, "Otros Gastos Variables")
+insertar_datos_cuenta(ruta_BDapp, 3, 3, "Gastos Extraordinarios")
+insertar_datos_cuenta(ruta_BDapp, 3, 3, "Otros Gastos Extraordinarios")
+insertar_datos_cuenta(ruta_BDapp, 3, 3, "Cuadrar Saldos")
+insertar_datos_cuenta(ruta_BDapp, 4, 1, "Montse")
+insertar_datos_cuenta(ruta_BDapp, 4, 1, "Carlos")
+insertar_datos_cuenta(ruta_BDapp, 4, 1, "Pensión")
+insertar_datos_cuenta(ruta_BDapp, 4, 2, "Bancarios")
+insertar_datos_cuenta(ruta_BDapp, 4, 2, "Renta Fija")
+insertar_datos_cuenta(ruta_BDapp, 4, 2, "Renta Variable")
+insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
+insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
+insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
 
 '''
 
