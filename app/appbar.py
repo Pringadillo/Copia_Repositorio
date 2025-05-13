@@ -1,16 +1,17 @@
 import flet as ft
 
+import globals
 import app.Menu.CodigosTabla as CodigosTabla
 
 
-usuario = "KK_de_Vaca"  # Nombre del usuario
+usuarioapp = globals.usuario  # Nombre del usuario
 
 
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla de Códigos":
-            #page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
-            page.controls[0].controls[1].content = ft.Text("Contenido del TablaCodigos")
+            page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
+            #page.controls[0].controls[1].content = ft.Text("Contenido del TablaCodigos")
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
         elif e.control.text == "Informes":
@@ -37,7 +38,7 @@ def crear_appbar(page):
                                 color=ft.colors.BLUE,  # Color del ícono
                             ),
                             ft.Text(
-                                usuario,  # Nombre del usuario
+                                usuarioapp,  # Nombre del usuario
                                 size=16,
                                 weight=ft.FontWeight.BOLD,
                                 text_align=ft.TextAlign.CENTER,

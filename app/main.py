@@ -16,20 +16,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import appbar
 import cuerpo
 import barra_lateral  # Importamos el contenido de la barra lateral
+import globals  # Importamos las variables globales
 
 # Arxivos menu
 import Menu.CodigosTabla as CodigosTabla
 
 
 
-'''
-# Variables Globales
-ruta_imagenes = "./imagenes/"
-empresa = "Mi Empresa"
-BasedeDatos = f"bd_{empresa}.db"
-ruta_BD = f"./data/{BasedeDatos}"
-usuario = "Usuario"  # Nombre del usuario
-'''
 
 
 def main(page: ft.Page):

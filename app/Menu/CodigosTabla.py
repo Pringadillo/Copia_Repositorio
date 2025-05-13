@@ -5,10 +5,12 @@ import sqlite3
 import sys
 import os
 
+import globals
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 #from app.data.funciones_BD import ruta_BDr_opciones_nivel1_desde_bd
 #from ..Submenu import FuncionesTablaCodigo
-from ..Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
+from Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
 def menu_TablaCodigos():
     # Contenedor dinámico para el contenido_cuerpo
@@ -18,7 +20,7 @@ def menu_TablaCodigos():
         expand=True,  # Haz que el contenedor se expanda dentro de la Column
     )
 
-    def ver_TablaCodigos(e):
+    def ver_4columnas(e):
         #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
         #e.page.update()
         contenido_verTablasCodigos = submenu_4_columnas(e.page)
@@ -51,7 +53,7 @@ def menu_TablaCodigos():
             controls=[
                 ft.TextButton(
                     text="Tabla de Códigos",
-                    on_click=ver_TablaCodigos,
+                    on_click=ver_4columnas,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
