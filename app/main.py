@@ -44,10 +44,6 @@ def main(page: ft.Page):
     #crear base de datos
 
 
-
-
-
-
     # Crear la AppBar
     page.appbar = appbar.crear_appbar(page)  # Contenido definido en appbar.py
 

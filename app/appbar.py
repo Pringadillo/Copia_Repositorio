@@ -9,7 +9,8 @@ usuario = "KK_de_Vaca"  # Nombre del usuario
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla de Códigos":
-            page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
+            #page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
+            page.controls[0].controls[1].content = ft.Text("Contenido del TablaCodigos")
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
         elif e.control.text == "Informes":
