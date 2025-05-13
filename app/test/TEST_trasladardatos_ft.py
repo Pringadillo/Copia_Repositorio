@@ -1,6 +1,9 @@
 import flet as ft
 import sqlite3
+import app.globals as globals  # Importa las variables globales
 
+
+ruta_BDapp= globals.ruta_BD  # Ruta a la base de datos
 
 def obtener_datos_grupo(ruta_BDapp):
     """

@@ -37,7 +37,7 @@ def existe_base_de_datos(ruta_db):
     Returns:
         bool: True si el archivo existe, False en caso contrario.
     """
-    os.path.exists(ruta_db)
+    return os.path.exists(ruta_db)
 
 
 if existe_base_de_datos(ruta_db):

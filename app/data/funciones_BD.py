@@ -326,7 +326,7 @@ def ver_tablas_base_datos():
 
     conn.close()
 
-ver_tablas_base_datos()
+#ver_tablas_base_datos()
 
 
 def insertar_GRUPO_inicio(ruta_BDapp):
@@ -441,6 +441,11 @@ def insertar_CUENTAS_inicio(ruta_BDapp):
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
+
+
+
+
+
 
 
 
