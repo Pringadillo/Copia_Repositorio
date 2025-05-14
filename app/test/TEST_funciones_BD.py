@@ -6,6 +6,8 @@ empresa = "TEST_Empresa_1"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BDapp = f"./test/{BasedeDatos}"
 
+
+# ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
 def crear_base_datos():
     conn = sqlite3.connect(ruta_BDapp)
     conn.commit()
@@ -81,6 +83,8 @@ def crear_tabla_CUENTAS(ruta_BDapp):
         if conn:
             conn.close()
 
+
+# ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
     try:
         conn = sqlite3.connect(ruta_BDapp)
@@ -159,6 +163,8 @@ def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3, sal
         print(f"Error al insertar en CUENTAS (Nivel 3): {e}")
         raise
 
+
+# ---------------------------------------- FUNCIONES DE MOSTRAR DATOS ----------------------------------------
 def mostrar_datos_grupo(ruta_BDapp):
     try:
         conn = sqlite3.connect(ruta_BDapp)
@@ -214,6 +220,7 @@ def ver_tablas_base_datos():
         print("No hay tablas en la base de datos.")
     conn.close()
 
+# ---------------------------------------- FUNCIONES DE INICIO ----------------------------------------
 def inicio_Base_datos():
     crear_base_datos()
     crear_tabla_GRUPO(ruta_BDapp)
@@ -330,11 +337,6 @@ def insertar_datos_iniciales():
 
 
 
-
-
-
-
-
 if __name__ == "__main__":
     def existe_base_de_datos(ruta_db):
         return os.path.exists(ruta_db)
@@ -355,4 +357,4 @@ if __name__ == "__main__":
         mostrar_datos_subgrupo(ruta_BDapp)
         mostrar_datos_cuentas(ruta_BDapp)
 
-
+    
