@@ -1,5 +1,6 @@
 import flet as ft
 import sqlite3
+from datetime import date
 import app.globals as globals  # Importa las variables globales
 
 

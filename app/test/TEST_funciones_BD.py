@@ -1,27 +1,20 @@
 import sqlite3
 import os
-import sys
+from datetime import date
+
 empresa = "TEST_Empresa_1"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BDapp = f"./test/{BasedeDatos}"
 
 def crear_base_datos():
     conn = sqlite3.connect(ruta_BDapp)
-    cursor = conn.cursor()
     conn.commit()
     conn.close()
 
-
 def crear_tabla_GRUPO(ruta_BDapp):
-    """
-    Establece una conexión a la base de datos SQLite y crea la tabla GRUPO si no existe.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
-        with conn:  # Usamos 'with' para asegurar el cierre automático de la conexión
+        with conn:
             cursor = conn.cursor()
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS GRUPO (
@@ -33,15 +26,9 @@ def crear_tabla_GRUPO(ruta_BDapp):
         print("Tabla GRUPO (Nivel 1) creada (si no existía).")
     except sqlite3.Error as e:
         print(f"Error al conectar o crear la tabla GRUPO: {e}")
-        raise  # Re-lanza la excepción para que el llamador pueda manejarla
+        raise
 
 def crear_tabla_SUBGRUPO(ruta_BDapp):
-    """
-    Crea la tabla SUBGRUPO (Nivel 2) si no existe.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
@@ -63,84 +50,56 @@ def crear_tabla_SUBGRUPO(ruta_BDapp):
         print("Tabla SUBGRUPO (Nivel 2) creada (si no existía).")
     except sqlite3.Error as e:
         print(f"Error al crear la tabla SUBGRUPO: {e}")
-        raise  # Re-lanza la excepción para que el llamador la maneje
+        raise
 
 def crear_tabla_CUENTAS(ruta_BDapp):
-    """
-    Crea la tabla CUENTAS (Nivel 3) si no existe.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
-        with conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS CUENTAS (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    grupo_id INTEGER NOT NULL,
-                    subgrupo_id INTEGER NOT NULL,
-                    cod_2 TEXT NOT NULL,
-                    desc_2 TEXT NOT NULL,
-                    nivel3_id INTEGER NOT NULL,
-                    descripcion_n3 TEXT NOT NULL,
-                    cod_3 TEXT NOT NULL UNIQUE,
-                    desc_3 TEXT NOT NULL,
-                    FOREIGN KEY (grupo_id, subgrupo_id) REFERENCES SUBGRUPO (grupo_id, subgrupo_id),
-                    UNIQUE (grupo_id, subgrupo_id, nivel3_id)
-                )
-            """)
-            conn.commit()
-        print("Tabla CUENTAS (Nivel 3) creada (si no existía).")
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS CUENTAS (
+                grupo_id INTEGER NOT NULL,
+                subgrupo_id INTEGER NOT NULL,
+                cod_2 TEXT NOT NULL,
+                desc_2 TEXT NOT NULL,
+                nivel3_id INTEGER NOT NULL,
+                descripcion_n3 TEXT NOT NULL,
+                cod_3 TEXT NOT NULL UNIQUE,
+                desc_3 TEXT NOT NULL,
+                Saldo_inicial REAL NOT NULL DEFAULT 0,
+                Fecha_Inicio TEXT NOT NULL DEFAULT CURRENT_DATE,
+                PRIMARY KEY (grupo_id, subgrupo_id, nivel3_id),
+                FOREIGN KEY (grupo_id, subgrupo_id) REFERENCES SUBGRUPO(grupo_id, subgrupo_id)
+            )
+        """)
+        conn.commit()
+        print(f"Tabla CUENTAS creada exitosamente en {ruta_BDapp} con los campos Saldo_inicial y Fecha_Inicio.")
     except sqlite3.Error as e:
         print(f"Error al crear la tabla CUENTAS: {e}")
-        raise  # Re-lanza la excepción para que el llamador la maneje
-
-
-#crear_base_datos()
-#crear_tabla_GRUPO(ruta_BDapp)
-#crear_tabla_SUBGRUPO(ruta_BDapp)
-#crear_tabla_CUENTAS(ruta_BDapp)
-
-
-# --------------------------------- INSERTAR DATOS ---------------------------------
+        raise
+    finally:
+        if conn:
+            conn.close()
 
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
-    """
-    Inserta datos en la tabla GRUPO (Nivel 1).
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-        descripcion_grupo (str): Descripción del grupo.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("""
                 INSERT INTO GRUPO (descripcion_grupo) VALUES (?)
-            """, (descripcion_grupo.upper(),))  # <-- Aquí convertimos a mayúsculas
+            """, (descripcion_grupo.upper(),))
             conn.commit()
         print(f"Insertado en GRUPO (Nivel 1): descripcion_grupo='{descripcion_grupo.upper()}'")
     except sqlite3.IntegrityError as e:
         print(f"Error al insertar en GRUPO (Nivel 1): {e}")
-        raise  # Re-lanza la excepción para que el llamador la maneje
+        raise
 
 def insertar_datos_subgrupo(ruta_BDapp, grupo_id, descripcion_subgrupo):
-    """
-    Inserta datos en la tabla SUBGRUPO (Nivel 2).
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-        grupo_id (int): ID del grupo al que pertenece.
-        descripcion_subgrupo (str): Descripción del subgrupo.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
-            # Obtener el máximo subgrupo_id para el grupo_id dado
             cursor.execute("""
                 SELECT COALESCE(MAX(subgrupo_id), 0) + 1
                 FROM SUBGRUPO
@@ -163,30 +122,19 @@ def insertar_datos_subgrupo(ruta_BDapp, grupo_id, descripcion_subgrupo):
         print(f"Insertado en SUBGRUPO (Nivel 2): grupo_id={grupo_id}, subgrupo_id={subgrupo_id}, cod_2={cod_2}, desc_2='{desc_2}', descripcion_grupo='{descripcion_grupo}', descripcion_subgrupo='{descripcion_subgrupo}'")
     except sqlite3.IntegrityError as e:
         print(f"Error al insertar en SUBGRUPO (Nivel 2): {e}")
-        raise  # Re-lanza la excepción para que el llamador la maneje
+        raise
 
-def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3):
-    """
-    Inserta datos en la tabla CUENTAS (Nivel 3).
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-        grupo_id (int): ID del grupo al que pertenece.
-        subgrupo_id (int): ID del subgrupo al que pertenece.
-        descripcion_n3 (str): Descripción de la cuenta.
-    """
+def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3, saldo_inicial=0.0, fecha_inicio=None):
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
-            # Obtener el máximo nivel3_id para el grupo_id y subgrupo_id dados
             cursor.execute("""
                 SELECT COALESCE(MAX(nivel3_id), 0) + 1
                 FROM CUENTAS
                 WHERE grupo_id = ? AND subgrupo_id = ?
             """, (grupo_id, subgrupo_id))
             nivel3_id = cursor.fetchone()[0]
-            # Obtener cod_2 y desc_2 de la tabla SUBGRUPO
             cursor.execute("""
                 SELECT cod_2, desc_2
                 FROM SUBGRUPO
@@ -198,34 +146,20 @@ def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3):
                 desc_2 = resultado[1]
                 cod_3 = f"{cod_2}.{nivel3_id:02d}"
                 desc_3 = f"{desc_2} - {descripcion_n3}"
+                fecha_inicio_insertar = fecha_inicio if fecha_inicio else date.today().isoformat()
                 cursor.execute("""
-                    INSERT INTO CUENTAS (grupo_id, subgrupo_id, cod_2, desc_2, nivel3_id, descripcion_n3, cod_3, desc_3)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """, (grupo_id, subgrupo_id, cod_2, desc_2, nivel3_id, descripcion_n3, cod_3, desc_3))
+                    INSERT INTO CUENTAS (grupo_id, subgrupo_id, cod_2, desc_2, nivel3_id, descripcion_n3, cod_3, desc_3, Saldo_inicial, Fecha_Inicio)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (grupo_id, subgrupo_id, cod_2, desc_2, nivel3_id, descripcion_n3, cod_3, desc_3, saldo_inicial, fecha_inicio_insertar))
                 conn.commit()
-                print(f"Insertado en CUENTAS (Nivel 3): grupo_id={grupo_id}, subgrupo_id={subgrupo_id}, cod_2={cod_2}, desc_2={desc_2}, nivel3_id={nivel3_id}, descripcion_n3='{descripcion_n3}', cod_3={cod_3}, desc_3='{desc_3}'")
+                print(f"Insertado en CUENTAS (Nivel 3): grupo_id={grupo_id}, subgrupo_id={subgrupo_id}, cod_2={cod_2}, desc_2={desc_2}, nivel3_id={nivel3_id}, descripcion_n3='{descripcion_n3}', cod_3={cod_3}, desc_3='{desc_3}', Saldo_inicial={saldo_inicial}, Fecha_Inicio='{fecha_inicio_insertar}'")
             else:
                 print(f"No se encontró subgrupo con grupo_id={grupo_id} y subgrupo_id={subgrupo_id}")
-                # Es importante decidir cómo manejar este caso.  Aquí, simplemente se imprime un mensaje.
-                # Otra opción sería lanzar una excepción:
-                # raise ValueError(f"No se encontró subgrupo con grupo_id={grupo_id} y subgrupo_id={subgrupo_id}")
     except sqlite3.Error as e:
         print(f"Error al insertar en CUENTAS (Nivel 3): {e}")
         raise
 
-
-
-
-
-# ---------------------------------- MOSTRAR DATOS ----------------------------------
-
 def mostrar_datos_grupo(ruta_BDapp):
-    """
-    Muestra todos los datos de la tabla GRUPO.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
@@ -240,12 +174,6 @@ def mostrar_datos_grupo(ruta_BDapp):
         raise
 
 def mostrar_datos_subgrupo(ruta_BDapp):
-    """
-    Muestra todos los datos de la tabla SUBGRUPO.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
@@ -260,12 +188,6 @@ def mostrar_datos_subgrupo(ruta_BDapp):
         raise
 
 def mostrar_datos_cuentas(ruta_BDapp):
-    """
-    Muestra todos los datos de la tabla CUENTAS.
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
@@ -279,59 +201,28 @@ def mostrar_datos_cuentas(ruta_BDapp):
         print(f"Error al mostrar datos de CUENTAS: {e}")
         raise
 
-
-#mostrar_datos_grupo(ruta_BDapp)
-#mostrar_datos_subgrupo(ruta_BDapp)
-#mostrar_datos_cuentas(ruta_BDapp)
-# ---------------------------------- ACTUALIZAR DATOS ----------------------------------
-
-
-# ---------------------------------- ELIMINAR DATOS ----------------------------------
-
-
-
-# ---------------------------------- ejemplo DATOS ----------------------------------
-
-#crear_base_datos()
-#crear_tabla_GRUPO(ruta_BDapp)
-#crear_tabla_SUBGRUPO(ruta_BDapp)
-#crear_tabla_CUENTAS(ruta_BDapp)
-
-#mostrar_datos_grupo(ruta_BDapp)
-#mostrar_datos_subgrupo(ruta_BDapp)
-#mostrar_datos_cuentas(ruta_BDapp)
-
-
 def ver_tablas_base_datos():
-    """Consulta y muestra todas las tablas existentes en la base de datos."""
     conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
-
-    # Consulta para obtener los nombres de todas las tablas
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tablas = cursor.fetchall()
-
     print("Tablas en la base de datos:")
     if tablas:
         for tabla in tablas:
             print(f"- {tabla[0]}")
     else:
         print("No hay tablas en la base de datos.")
-
     conn.close()
 
-#ver_tablas_base_datos()
-
-
-def crear_Base_datos():
-    # Crear la base de datos y las tablas
+def inicio_Base_datos():
     crear_base_datos()
     crear_tabla_GRUPO(ruta_BDapp)
     crear_tabla_SUBGRUPO(ruta_BDapp)
     crear_tabla_CUENTAS(ruta_BDapp)
 
-
 def insertar_datos_iniciales():
+    # ... (igual que tu función actual, usando ruta_BDapp en todas las llamadas)
+
     """
     Inserta datos iniciales en la base de datos.
     """
@@ -366,42 +257,40 @@ def insertar_datos_iniciales():
     insertar_datos_subgrupo(ruta_BDapp, 4, "Otros Ingresos")
 
     # Insertar datos en CUENTAS (Nivel 3)
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Depósitos")
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Cta.Cte. $")
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Depósitos $")
+    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Carlos")
+    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Montse")    
     insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta. Remunerada")
     insertar_datos_cuenta(ruta_BDapp, 1, 2, "Depósitos")
     insertar_datos_cuenta(ruta_BDapp, 1, 2, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "F.Inv. Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte. $")
+    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Depósitos $")
+    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta. Remunerada")
+    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Fondos Inv.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 3, "F.Inv. Cta.Cte.")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Cta.Cte.")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Renta Variable")
-    insertar_datos_cuenta(ruta_BDapp, 1, 4, "Derivados Financieros")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Renta Variable")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "ETF")
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Crowfunding")
+    insertar_datos_cuenta(ruta_BDapp, 1, 4, "ETF")
+    insertar_datos_cuenta(ruta_BDapp, 1, 4, "Fondos Inv.")  
+    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Renta Variable")
+    insertar_datos_cuenta(ruta_BDapp, 1, 5, "ETF")
     insertar_datos_cuenta(ruta_BDapp, 1, 6, "Cta.Cte.")
     insertar_datos_cuenta(ruta_BDapp, 1, 6, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 7, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 8, "Plan Pensiones")
-    insertar_datos_cuenta(ruta_BDapp, 1, 8, "Fondos Inv.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 6, "Derivados Financieros")
+    insertar_datos_cuenta(ruta_BDapp, 1, 7, "Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 7, "P.P Empresa")
+    insertar_datos_cuenta(ruta_BDapp, 1, 8, "Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 9, "Cta.Cte.")
     insertar_datos_cuenta(ruta_BDapp, 1, 9, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 10, "CapitalCell")
-    insertar_datos_cuenta(ruta_BDapp, 1, 10, "Cebiotec")
-    insertar_datos_cuenta(ruta_BDapp, 1, 11, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Depósitos")
-    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Depósitos")    
-    insertar_datos_cuenta(ruta_BDapp, 1, 14, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 14, "Depósitos")    
-    insertar_datos_cuenta(ruta_BDapp, 1, 15, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 15, "Depósitos") 
-    insertar_datos_cuenta(ruta_BDapp, 1, 15, "Crowfunding")    
+    insertar_datos_cuenta(ruta_BDapp, 1, 10, "Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 10, "Crowfunding")
+    insertar_datos_cuenta(ruta_BDapp, 1, 11, "Cta.Cte.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 11, "Crowfunding") 
+    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Plan Pensiones")
+    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Fondos Inv.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "CapitalCell")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cebiotec")    
     insertar_datos_cuenta(ruta_BDapp, 2, 1, "Roger")
     insertar_datos_cuenta(ruta_BDapp, 2, 1, "Enric")
     insertar_datos_cuenta(ruta_BDapp, 2, 2, "Enaire 0%")
@@ -441,11 +330,29 @@ def insertar_datos_iniciales():
 
 
 
-if __name__ == "__main__":
-    #crear_Base_datos()
-    #ver_tablas_base_datos()
-    #insertar_datos_iniciales()
 
-    #mostrar_datos_grupo(ruta_BDapp)
-    #mostrar_datos_subgrupo(ruta_BDapp)
-    #mostrar_datos_cuentas(ruta_BDapp)
+
+
+
+
+if __name__ == "__main__":
+    def existe_base_de_datos(ruta_db):
+        return os.path.exists(ruta_db)
+
+    if existe_base_de_datos(ruta_BDapp):
+        print(f"La base de datos '{ruta_BDapp}' existe.")
+        try:
+            conn = sqlite3.connect(ruta_BDapp)
+            conn.close()
+        except sqlite3.Error as e:
+            print(f"Error al conectar a la base de datos: {e}")
+    else:
+        print(f"La base de datos '{ruta_BDapp}' NO EXISTE.")
+        inicio_Base_datos()
+        ver_tablas_base_datos()
+        insertar_datos_iniciales()
+        mostrar_datos_grupo(ruta_BDapp)
+        mostrar_datos_subgrupo(ruta_BDapp)
+        mostrar_datos_cuentas(ruta_BDapp)
+
+
