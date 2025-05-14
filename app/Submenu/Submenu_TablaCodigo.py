@@ -8,7 +8,7 @@ import os
 import globals
 from app.data.funciones_BD import mostrar_datos_grupo
 
-
+ruta_BDapp = globals.ruta_BD
 
 def submenu_Grupos(e):
     texto1 = ft.Row(
@@ -26,7 +26,7 @@ def submenu_Grupos(e):
     )
 
     # Llama a ver_tabla_nivel1 para obtener los datos
-    datos_nivel1 = mostrar_datos_grupo()
+    datos_nivel1 = mostrar_datos_grupo(ruta_BDapp)
 
     # Convierte los datos en un solo texto para mostrar en texto2
     texto2 = ft.Row(
@@ -73,7 +73,7 @@ def submenu_Grupos(e):
     
 def submenu_Subgrupos(e):
     # Llama a ver_tabla_nivel1 para obtener los datos    
-    opciones_nivel1 = mostrar_datos_grupo()
+    opciones_nivel1 = mostrar_datos_grupo(ruta_BDapp)
 
     desplegable_nivel1 = ft.Dropdown(
         label="Grupo",

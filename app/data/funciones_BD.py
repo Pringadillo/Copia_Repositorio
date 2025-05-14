@@ -2,7 +2,7 @@ import sqlite3
 import flet as ft
 
 import app.globals as globals  # para pruebas se ha de comentar
-from datetime import datetime
+from datetime import date
 
 
 ruta_BDapp = globals.ruta_BD

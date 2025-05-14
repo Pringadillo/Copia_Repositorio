@@ -7,6 +7,7 @@ import json
 import tempfile
 import sys
 
+from datetime import date
 
 # Agregar el directorio raíz al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -50,8 +51,8 @@ if existe_base_de_datos(ruta_BDapp):
 else:
         print(f"La base de datos '{ruta_BDapp}' NO EXISTE.")
         funciones_BD.crear_base_datos(ruta_BDapp)
-        funciones_BD.crear_tabla_GRUPOS(ruta_BDapp)
-        funciones_BD.crear_tabla_SUBGRUPOS(ruta_BDapp)
+        funciones_BD.crear_tabla_GRUPO(ruta_BDapp)
+        funciones_BD.crear_tabla_SUBGRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_CUENTAS(ruta_BDapp)
         # insertar datos iniciales
         funciones_BD.insertar_datos_iniciales(ruta_BDapp)
