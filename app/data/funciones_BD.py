@@ -5,14 +5,11 @@ import app.globals as globals  # para pruebas se ha de comentar
 from datetime import datetime
 
 
-
-
-
 ruta_BDapp = globals.ruta_BD
 
 
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
-def crear_base_datos():
+def crear_base_datos(ruta_BDapp):
     conn = sqlite3.connect(ruta_BDapp)
     conn.commit()
     conn.close()
@@ -342,13 +339,13 @@ def ver_tablas_base_datos():
 
 
 # ---------------------------------------- FUNCIONES DE INICIO ----------------------------------------
-def inicio_Base_datos():
-    crear_base_datos()
+def inicio_Base_datos(ruta_BDapp):
+    crear_base_datos(ruta_BDapp)
     crear_tabla_GRUPO(ruta_BDapp)
     crear_tabla_SUBGRUPO(ruta_BDapp)
     crear_tabla_CUENTAS(ruta_BDapp)
 
-def insertar_datos_iniciales():
+def insertar_datos_iniciales(ruta_BDapp):
     # ... (igual que tu función actual, usando ruta_BDapp en todas las llamadas)
 
     """
@@ -454,140 +451,6 @@ def insertar_datos_iniciales():
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ---------------------------------- ejemplo DATOS ----------------------------------
-
-
-
-def insertar_GRUPO_inicio(ruta_BDapp):
-   # Insertar datos en CUENTAS (Nivel 1)
-    insertar_datos_grupo(ruta_BDapp, "Cuentas Financieras")
-    insertar_datos_grupo(ruta_BDapp, "Deudas")
-    insertar_datos_grupo(ruta_BDapp, "Gastos")
-    insertar_datos_grupo(ruta_BDapp, "Ingresos")
-
-
-def insertar_SUBGRUPO_inicio(ruta_BDapp):
-      # Insertar datos en CUENTAS (Nivel 2)
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Efectivo")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Caixa Enginyers")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Self Bank")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "DeGiro")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Trade Republic")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Santander")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "BBVA")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "B.Sabadell")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Civislend")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "StockCrowd")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Mintos")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Bestinver")
-    insertar_datos_subgrupo(ruta_BDapp, 1, "Inversiones en empresas")
-    insertar_datos_subgrupo(ruta_BDapp, 2, "Ahorro Hijos")
-    insertar_datos_subgrupo(ruta_BDapp, 2, "Deudas Casa")
-    insertar_datos_subgrupo(ruta_BDapp, 2, "Deudas inversiones")
-    insertar_datos_subgrupo(ruta_BDapp, 3, "Gastos fijos")
-    insertar_datos_subgrupo(ruta_BDapp, 3, "Gastos Variables")
-    insertar_datos_subgrupo(ruta_BDapp, 3, "Otros Gastos")
-    insertar_datos_subgrupo(ruta_BDapp, 4, "Salarios")
-    insertar_datos_subgrupo(ruta_BDapp, 4, "No Salariales")
-    insertar_datos_subgrupo(ruta_BDapp, 4, "Otros Ingresos")
-
-
-def insertar_CUENTAS_inicio(ruta_BDapp):
-    """
-    Inserta datos iniciales en la tabla CUENTAS (Nivel 3).
-
-    Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos.
-    """
-    # Insertar datos en CUENTAS (Nivel 3)
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Carlos")
-    insertar_datos_cuenta(ruta_BDapp, 1, 1, "Montse")    
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Depósitos")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte. $")
-    insertar_datos_cuenta(ruta_BDapp, 1, 2, "Depósitos $")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Cta. Remunerada")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 3, "F.Inv. Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 4, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 4, "Renta Variable")
-    insertar_datos_cuenta(ruta_BDapp, 1, 4, "ETF")
-    insertar_datos_cuenta(ruta_BDapp, 1, 4, "Fondos Inv.")  
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Renta Variable")
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "ETF")
-    insertar_datos_cuenta(ruta_BDapp, 1, 6, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 6, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 6, "Derivados Financieros")
-    insertar_datos_cuenta(ruta_BDapp, 1, 7, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 7, "P.P Empresa")
-    insertar_datos_cuenta(ruta_BDapp, 1, 8, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 9, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 9, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 10, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 10, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 1, 11, "Cta.Cte.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 11, "Crowfunding") 
-    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Plan Pensiones")
-    insertar_datos_cuenta(ruta_BDapp, 1, 12, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 1, 13, "CapitalCell")
-    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cebiotec")
-
-    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Roger")
-    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Enric")
-    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Enaire 0%")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Inversiones JMG")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Avis")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Tata")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Albert")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Joan Moises")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comida")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Agua")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Luz")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Gas")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Teléfono/Internet")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Limpieza")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comunidad Vecinos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Otros Gastos Fijos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Ropa")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Salud")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Transporte")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Seguros")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Impuestos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Vacaciones")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Otros Gastos Variables")
-    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Gastos Extraordinarios")
-    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Otros Gastos Extraordinarios")
-    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Cuadrar Saldos")
-    insertar_datos_cuenta(ruta_BDapp, 4, 1, "Montse")
-    insertar_datos_cuenta(ruta_BDapp, 4, 1, "Carlos")
-    insertar_datos_cuenta(ruta_BDapp, 4, 1, "Pensión")
-    insertar_datos_cuenta(ruta_BDapp, 4, 2, "Bancarios")
-    insertar_datos_cuenta(ruta_BDapp, 4, 2, "Renta Fija")
-    insertar_datos_cuenta(ruta_BDapp, 4, 2, "Renta Variable")
-    insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
-    insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
-    insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
-
-
-
-
-
 
 
 

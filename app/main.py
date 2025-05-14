@@ -24,10 +24,10 @@ import data.funciones_BD as funciones_BD
 
 
 nombre_empresa=globals.empresa
-ruta_db =globals.ruta_BD
+ruta_BDapp =globals.ruta_BD
 
 
-def existe_base_de_datos(ruta_db):
+def existe_base_de_datos(ruta_BDapp):
     """
     Verifica si un archivo de base de datos SQLite existe en la ruta especificada.
 
@@ -37,28 +37,25 @@ def existe_base_de_datos(ruta_db):
     Returns:
         bool: True si el archivo existe, False en caso contrario.
     """
-    return os.path.exists(ruta_db)
+    return os.path.exists(ruta_BDapp)
 
 
-if existe_base_de_datos(ruta_db):
-    print(f"La base de datos '{ruta_db}' existe.")
-    # Aquí puedes proceder a conectar a la base de datos si es necesario
-    try:
-        conn = sqlite3.connect(ruta_db)
-        # Realizar operaciones con la base de datos
-        conn.close()
-    except sqlite3.Error as e:
-        print(f"Error al conectar a la base de datos: {e}")
+if existe_base_de_datos(ruta_BDapp):
+        print(f"La base de datos '{ruta_BDapp}' existe.")
+        try:
+            conn = sqlite3.connect(ruta_BDapp)
+            conn.close()
+        except sqlite3.Error as e:
+            print(f"Error al conectar a la base de datos: {e}")
 else:
-    print(f"La base de datos '{ruta_db}' NO EXISTE.")
+        print(f"La base de datos '{ruta_BDapp}' NO EXISTE.")
+        funciones_BD.crear_base_datos(ruta_BDapp)
+        funciones_BD.crear_tabla_GRUPOS(ruta_BDapp)
+        funciones_BD.crear_tabla_SUBGRUPOS(ruta_BDapp)
+        funciones_BD.crear_tabla_CUENTAS(ruta_BDapp)
+        # insertar datos iniciales
+        funciones_BD.insertar_datos_iniciales(ruta_BDapp)
 
-    funciones_BD.crear_base_datos(nombre_empresa, ruta_db)
-    funciones_BD.crear_tabla_GRUPO(ruta_db)
-    funciones_BD.crear_tabla_SUBGRUPO(ruta_db)
-    funciones_BD.crear_tabla_CUENTAS(ruta_db)
-    funciones_BD.insertar_GRUPO_inicio(ruta_db)
-    funciones_BD.insertar_SUBGRUPO_inicio(ruta_db)
-    funciones_BD.insertar_CUENTAS_inicio(ruta_db)
     
 
     
