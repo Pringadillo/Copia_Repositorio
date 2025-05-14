@@ -332,6 +332,11 @@ def ver_tablas_base_datos():
         print("No hay tablas en la base de datos.")
     conn.close()
 
+# ---------------------------------------- FUNCIONES DE ELIMINAR DATOS ----------------------------------------
+
+# ---------------------------------------- FUNCIONES MOPDIFICAR DATOS ------------------------------
+
+
 # ---------------------------------------- FUNCIONES DE INICIO ----------------------------------------
 def inicio_Base_datos():
     crear_base_datos()
