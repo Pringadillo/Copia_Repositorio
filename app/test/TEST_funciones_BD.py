@@ -164,6 +164,88 @@ def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3, sal
         raise
 
 
+# ---------------------------------------- FUNCIONES OBTENER DATOS ----------------------------------------
+
+def obtener_datos_grupo(ruta_BDapp):
+    """
+    Obtiene todos los datos de la tabla GRUPO como una lista de listas.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
+
+    Returns:
+        list[list]: Una lista donde cada sublista representa una fila de la tabla GRUPO.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM GRUPO")
+            registros = cursor.fetchall()
+        return registros
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de GRUPO: {e}")
+        return []
+
+def obtener_datos_subgrupo(ruta_BDapp, grupo_id=1):
+    """
+    Obtiene las columnas cod_2 y desc_2 de la tabla SUBGRUPO
+    para un grupo específico, como una lista de tuplas.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
+        grupo_id (int): El ID del grupo para el que se desean obtener los subgrupos.
+
+    Returns:
+        list[tuple]: Una lista donde cada tupla contiene (cod_2, desc_2)
+                     de los subgrupos pertenecientes al grupo especificado.
+                     Retorna una lista vacía en caso de error o si no se
+                     encuentran subgrupos para el grupo dado.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT cod_2, desc_2 FROM SUBGRUPO WHERE grupo_id = ?", (grupo_id,))
+            registros = cursor.fetchall()
+        return registros
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de SUBGRUPO para el grupo {grupo_id}: {e}")
+        return []
+
+
+def obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1):
+    """
+    Obtiene las columnas cod_3 y desc_3 de la tabla CUENTAS
+    para un grupo y subgrupo específicos.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
+        grupo_id (int, optional): El ID del grupo para filtrar. Por defecto es 1.
+        subgrupo_id (int, optional): El ID del subgrupo para filtrar. Por defecto es 1.
+
+    Returns:
+        list[tuple]: Una lista donde cada tupla contiene (cod_3, desc_3)
+                     de las cuentas que pertenecen al grupo y subgrupo especificados.
+                     Retorna una lista vacía en caso de error o si no se
+                     encuentran cuentas para los criterios dados.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT cod_3, desc_3
+                FROM CUENTAS
+                WHERE grupo_id = ? AND subgrupo_id = ?
+            """, (grupo_id, subgrupo_id))
+            registros = cursor.fetchall()
+        return registros
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de CUENTAS para el grupo {grupo_id} y subgrupo {subgrupo_id}: {e}")
+        return []
+
+
 # ---------------------------------------- FUNCIONES DE MOSTRAR DATOS ----------------------------------------
 def mostrar_datos_grupo(ruta_BDapp):
     try:
@@ -206,6 +288,36 @@ def mostrar_datos_cuentas(ruta_BDapp):
     except sqlite3.Error as e:
         print(f"Error al mostrar datos de CUENTAS: {e}")
         raise
+
+def mostrar_saldoInicio_cuentas(ruta_BDapp):
+    """
+    Muestra los campos cod_3, desc_3, Saldo_inicial y Fecha_Inicio
+    de todos los registros en la tabla CUENTAS.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT cod_3, desc_3, Saldo_inicial, Fecha_Inicio FROM CUENTAS")
+            registros = cursor.fetchall()
+        print("\nContenido de la tabla CUENTAS (Nivel 3):")
+        if registros:
+            print(f"{'Código':<10} | {'Descripción':<40} | {'Saldo Inicial':<15} | {'Fecha Inicio'}")
+            print("-" * 80)
+            for registro in registros:
+                cod_3, desc_3, saldo_inicial, fecha_inicio = registro
+                print(f"{cod_3:<10} | {desc_3:<40} | {saldo_inicial:<15.2f} | {fecha_inicio}")
+        else:
+            print("La tabla CUENTAS está vacía.")
+    except sqlite3.Error as e:
+        print(f"Error al mostrar datos de CUENTAS: {e}")
+        raise
+    finally:
+        if conn:
+            conn.close()
 
 def ver_tablas_base_datos():
     conn = sqlite3.connect(ruta_BDapp)
@@ -358,3 +470,6 @@ if __name__ == "__main__":
         mostrar_datos_cuentas(ruta_BDapp)
 
     
+    #print(obtener_datos_grupo(ruta_BDapp))
+    #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
+    #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1))
