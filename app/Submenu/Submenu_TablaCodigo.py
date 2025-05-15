@@ -81,9 +81,12 @@ def submenu_Subgrupos(e):
 
     # Transforma la lista de tuplas en una lista de objetos ft.dropdown.Option
     opciones_nivel1 = [
-        ft.dropdown.Option(key=str(grupo_id), text=f"{grupo_id}  {nombre_grupo}")
+        ft.dropdown.Option(key=str(grupo_id), text=f"{grupo_id}   {nombre_grupo.split(' - ')[-1].strip().upper()}")
         for grupo_id, nombre_grupo in opciones_nivel1_tuplas
     ]
+
+
+
 
     desplegable_nivel1 = ft.Dropdown(
         label="Grupo",
@@ -114,7 +117,7 @@ def submenu_Subgrupos(e):
         content=ft.Row(
             controls=[
                 ft.Column(controls=[ft.Text("Selecciona Grupo:", weight=ft.FontWeight.BOLD, size=20), desplegable_nivel1], horizontal_alignment=ft.CrossAxisAlignment.START, width=350), # Aumenta el ancho
-                ft.Container(content=columna_subgrupos, width=350, padding=10), # Aumenta el ancho
+                ft.Container(content=columna_subgrupos, width=350, padding=10), 
                 ft.Column(controls=[ft.Text("Acciones:", weight=ft.FontWeight.BOLD, size=20), columna_botones], horizontal_alignment=ft.CrossAxisAlignment.CENTER, width=200), # Aumenta el ancho
             ],
             alignment=ft.MainAxisAlignment.START, # Cambia la distribución para juntar las columnas
@@ -127,9 +130,16 @@ def submenu_Subgrupos(e):
 
 def mostrar_subgrupos(grupo_id, columna_subgrupos: ft.Column):
     ruta_BDapp = globals.ruta_BD
-    # Aquí deberías tener una función que obtenga los subgrupos basados en el grupo_id
-    subgrupos = obtener_datos_subgrupo(ruta_BDapp, grupo_id)
-    columna_subgrupos.controls = [ft.Text("Subgrupos:", weight=ft.FontWeight.BOLD, size=20)] + [ft.Text(subgrupo) for subgrupo in subgrupos]
+    # Asumimos que obtener_datos_subgrupo devuelve una lista de tuplas:
+    # [(codigo_subgrupo, nombre_subgrupo), ...]
+    subgrupos_tuplas = obtener_datos_subgrupo(ruta_BDapp, grupo_id)
+
+    subgrupos_formateados = [
+        ft.Text(f"{codigo}   {nombre.split(' - ')[-1].strip().upper() if ' - ' in nombre else nombre.upper()}")
+        for codigo, nombre in subgrupos_tuplas
+    ]
+
+    columna_subgrupos.controls = [ft.Text("Subgrupos:", weight=ft.FontWeight.BOLD, size=20)] + subgrupos_formateados
     columna_subgrupos.update()
 
 def submenu_Cuentas(e):

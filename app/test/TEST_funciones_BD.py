@@ -475,6 +475,6 @@ if __name__ == "__main__":
         mostrar_datos_cuentas(ruta_BDapp)
 
     
-    print(obtener_datos_grupo(ruta_BDapp))
+    #print(obtener_datos_grupo(ruta_BDapp))
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1))
