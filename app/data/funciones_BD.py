@@ -6,8 +6,6 @@ from datetime import date
 
 
 
-
-
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
 def crear_base_datos():
     ruta_BDapp = globals.ruta_BD  # Accede a la variable global
@@ -216,7 +214,6 @@ def obtener_datos_subgrupo(ruta_BDapp, grupo_id=1):
         print(f"Error al obtener datos de SUBGRUPO para el grupo {grupo_id}: {e}")
         return []
 
-
 def obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1):
     """
     Obtiene las columnas cod_3 y desc_3 de la tabla CUENTAS
@@ -247,7 +244,6 @@ def obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1):
     except sqlite3.Error as e:
         print(f"Error al obtener datos de CUENTAS para el grupo {grupo_id} y subgrupo {subgrupo_id}: {e}")
         return []
-
 
 # ---------------------------------------- FUNCIONES DE MOSTRAR DATOS ----------------------------------------
 def mostrar_datos_grupo(ruta_BDapp):
@@ -323,6 +319,7 @@ def mostrar_saldoInicio_cuentas(ruta_BDapp):
             conn.close()
 
 def ver_tablas_base_datos():
+    ruta_BDapp = globals.ruta_BD  # Accede a la variable global
     conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -336,6 +333,7 @@ def ver_tablas_base_datos():
     conn.close()
 
 # ---------------------------------------- FUNCIONES DE ELIMINAR DATOS ----------------------------------------
+
 
 # ---------------------------------------- FUNCIONES MOPDIFICAR DATOS ------------------------------
 

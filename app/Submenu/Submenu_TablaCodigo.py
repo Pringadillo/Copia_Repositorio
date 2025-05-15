@@ -5,12 +5,13 @@ import sqlite3
 import sys
 import os
 
-import globals
-from app.data.funciones_BD import mostrar_datos_grupo
+from app import globals
+from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo
 
-ruta_BDapp = globals.ruta_BD
+#ruta_BDapp = globals.ruta_BD
 
 def submenu_Grupos(e):
+    ruta_BDapp = globals.ruta_BD
     texto1 = ft.Row(
         [
             ft.Text(
@@ -26,13 +27,15 @@ def submenu_Grupos(e):
     )
 
     # Llama a ver_tabla_nivel1 para obtener los datos
-    datos_nivel1 = mostrar_datos_grupo(ruta_BDapp)
+    datos_nivel1 = obtener_datos_grupo(ruta_BDapp)
+    # Extrae solo el segundo elemento (el texto) de cada tupla
+    textos_nivel1 = [f"{item[0]}   {item[1]}" for item in datos_nivel1]
 
     # Convierte los datos en un solo texto para mostrar en texto2
     texto2 = ft.Row(
         [
             ft.Text(
-                "\n".join(datos_nivel1),  # Une las líneas con saltos de línea
+                "\n".join(textos_nivel1),  # Une la lista de textos
                 size=20,
                 weight=ft.FontWeight.NORMAL,
                 text_align=ft.TextAlign.LEFT,
@@ -72,8 +75,9 @@ def submenu_Grupos(e):
     return submenu_crear_codigo_container
     
 def submenu_Subgrupos(e):
+    ruta_BDapp = globals.ruta_BD
     # Llama a ver_tabla_nivel1 para obtener los datos    
-    opciones_nivel1 = mostrar_datos_grupo(ruta_BDapp)
+    opciones_nivel1 = obtener_datos_grupo(ruta_BDapp)
 
     desplegable_nivel1 = ft.Dropdown(
         label="Grupo",
@@ -152,6 +156,8 @@ def submenu_Subgrupos(e):
     return submenu_crear_codigo_container
 
 def submenu_Cuentas(e):
+    ruta_BDapp = globals.ruta_BD
+
     texto1 = ft.Row(
         [
             ft.Text(  # Corrección: El texto va como primer argumento posicional
@@ -189,6 +195,8 @@ def submenu_ver_codigo(e):
     e.page.update()
 
 def submenu_4_columnas(e):
+    ruta_BDapp = globals.ruta_BD
+
     texto1 = ft.Row(
         [
             ft.Text(

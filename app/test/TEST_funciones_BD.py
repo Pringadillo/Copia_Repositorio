@@ -2,7 +2,7 @@ import sqlite3
 import os
 from datetime import date
 
-empresa = "TEST_Empresa_1"
+empresa = "TEST_Empresa_10"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BDapp = f"./test/{BasedeDatos}"
 
@@ -475,6 +475,6 @@ if __name__ == "__main__":
         mostrar_datos_cuentas(ruta_BDapp)
 
     
-    #print(obtener_datos_grupo(ruta_BDapp))
+    print(obtener_datos_grupo(ruta_BDapp))
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1))
