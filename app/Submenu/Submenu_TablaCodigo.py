@@ -102,9 +102,9 @@ def submenu_Subgrupos(e):
 
     columna_botones = ft.Column(
         controls=[
-            ft.ElevatedButton("Crear"),
-            ft.ElevatedButton("Editar"),
-            ft.ElevatedButton("Eliminar"),
+            ft.ElevatedButton("Crear Subgrupo"),
+            ft.ElevatedButton("Editar Subgrupo"),
+            ft.ElevatedButton("Eliminar Subgrupo"),
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     )
