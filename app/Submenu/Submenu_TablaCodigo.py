@@ -6,7 +6,7 @@ import sys
 import os
 
 from app import globals
-from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo
+from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo
 
 #ruta_BDapp = globals.ruta_BD
 
@@ -107,6 +107,7 @@ def submenu_Subgrupos(e):
             ft.ElevatedButton("Eliminar Subgrupo"),
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=20,  # Añade un espacio vertical entre los botones
     )
 
     submenu_crear_codigo_container = ft.Container(
@@ -127,16 +128,18 @@ def submenu_Subgrupos(e):
 def mostrar_subgrupos(grupo_id, columna_subgrupos: ft.Column):
     ruta_BDapp = globals.ruta_BD
     # Aquí deberías tener una función que obtenga los subgrupos basados en el grupo_id
-    subgrupos = obtener_subgrupos_por_grupo(ruta_BDapp, grupo_id)
+    subgrupos = obtener_datos_subgrupo(ruta_BDapp, grupo_id)
     columna_subgrupos.controls = [ft.Text("Subgrupos:", weight=ft.FontWeight.BOLD, size=20)] + [ft.Text(subgrupo) for subgrupo in subgrupos]
     columna_subgrupos.update()
 
+'''
 # Placeholder para la función que obtendría los subgrupos de la base de datos
 def obtener_subgrupos_por_grupo(ruta_bd, grupo_id):
     # Aquí iría tu lógica para consultar la base de datos y obtener los subgrupos
     # relacionados con el grupo_id.
     # Por ahora, devolvemos una lista de ejemplo.
     return [f"Subgrupo A del Grupo {grupo_id}", f"Subgrupo B del Grupo {grupo_id}", f"Subgrupo C del Grupo {grupo_id}"]
+'''
 
 def submenu_Cuentas(e):
     ruta_BDapp = globals.ruta_BD
