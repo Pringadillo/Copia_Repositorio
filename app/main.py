@@ -50,7 +50,7 @@ if existe_base_de_datos(ruta_BDapp):
             print(f"Error al conectar a la base de datos: {e}")
 else:
         print(f"La base de datos '{ruta_BDapp}' NO EXISTE.")
-        funciones_BD.crear_base_datos(ruta_BDapp)
+        funciones_BD.crear_base_datos()
         funciones_BD.crear_tabla_GRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_SUBGRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_CUENTAS(ruta_BDapp)

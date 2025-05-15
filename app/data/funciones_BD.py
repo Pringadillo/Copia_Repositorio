@@ -1,15 +1,17 @@
 import sqlite3
 import flet as ft
 
-import app.globals as globals  # para pruebas se ha de comentar
+from app import globals
 from datetime import date
 
 
-ruta_BDapp = globals.ruta_BD
+
 
 
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
-def crear_base_datos(ruta_BDapp):
+def crear_base_datos():
+    ruta_BDapp = globals.ruta_BD  # Accede a la variable global
+
     conn = sqlite3.connect(ruta_BDapp)
     conn.commit()
     conn.close()
