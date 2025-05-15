@@ -132,15 +132,6 @@ def mostrar_subgrupos(grupo_id, columna_subgrupos: ft.Column):
     columna_subgrupos.controls = [ft.Text("Subgrupos:", weight=ft.FontWeight.BOLD, size=20)] + [ft.Text(subgrupo) for subgrupo in subgrupos]
     columna_subgrupos.update()
 
-'''
-# Placeholder para la función que obtendría los subgrupos de la base de datos
-def obtener_subgrupos_por_grupo(ruta_bd, grupo_id):
-    # Aquí iría tu lógica para consultar la base de datos y obtener los subgrupos
-    # relacionados con el grupo_id.
-    # Por ahora, devolvemos una lista de ejemplo.
-    return [f"Subgrupo A del Grupo {grupo_id}", f"Subgrupo B del Grupo {grupo_id}", f"Subgrupo C del Grupo {grupo_id}"]
-'''
-
 def submenu_Cuentas(e):
     ruta_BDapp = globals.ruta_BD
 
