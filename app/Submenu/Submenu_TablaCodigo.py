@@ -76,8 +76,14 @@ def submenu_Grupos(e):
     
 def submenu_Subgrupos(e):
     ruta_BDapp = globals.ruta_BD
-    # Llama a ver_tabla_nivel1 para obtener los datos    
-    opciones_nivel1 = obtener_datos_grupo(ruta_BDapp)
+    # Llama a obtener_datos_grupo para obtener los datos (lista de tuplas)
+    opciones_nivel1_tuplas = obtener_datos_grupo(ruta_BDapp)
+
+    # Transforma la lista de tuplas en una lista de objetos ft.dropdown.Option
+    opciones_nivel1 = [
+        ft.dropdown.Option(key=str(grupo_id), text=f"{grupo_id}  {nombre_grupo}")
+        for grupo_id, nombre_grupo in opciones_nivel1_tuplas
+    ]
 
     desplegable_nivel1 = ft.Dropdown(
         label="Grupo",
@@ -88,7 +94,7 @@ def submenu_Subgrupos(e):
 
     texto1 = ft.Row(
         [
-            ft.Text(  # Corrección: El texto va como primer argumento posicional
+            ft.Text(
                 "SUBGRUPOS DE CUENTAS",
                 size=30,
                 weight=ft.FontWeight.BOLD,
@@ -137,7 +143,7 @@ def submenu_Subgrupos(e):
         alignment=ft.MainAxisAlignment.CENTER,
     )
 
-    submenu_crear_codigo_container = ft.Container(  # Renombrado para claridad
+    submenu_crear_codigo_container = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
@@ -148,7 +154,7 @@ def submenu_Subgrupos(e):
                 texto4,
                 #desplegable_nivel3,
             ],
-            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+            alignment=ft.MainAxisAlignment.START,
         ),
         bgcolor=ft.colors.WHITE,
         alignment=ft.alignment.top_left,
