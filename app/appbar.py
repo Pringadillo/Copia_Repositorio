@@ -33,9 +33,9 @@ def crear_appbar(page):
                     content=ft.Row(
                         controls=[
                             ft.Icon(
-                                name=ft.icons.PERSON,  # Ícono de una persona
+                                name=ft.Icons.PERSON,  # Ícono de una persona
                                 size=50,  # Tamaño del ícono
-                                color=ft.colors.BLUE,  # Color del ícono
+                                color=ft.Colors.BLUE,  # Color del ícono
                             ),
                             ft.Text(
                                 usuarioapp,  # Nombre del usuario
@@ -56,7 +56,7 @@ def crear_appbar(page):
                     [
                         ft.TextButton(
                             text="Diario",
-                            icon=ft.icons.BOOK,  # Ícono para el botón "Diario"
+                            icon=ft.Icons.BOOK,  # Ícono para el botón "Diario"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -64,7 +64,7 @@ def crear_appbar(page):
                         ),
                         ft.TextButton(
                             text="Informes",
-                            icon=ft.icons.LIST,  # Ícono para el botón "Informes"
+                            icon=ft.Icons.LIST,  # Ícono para el botón "Informes"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -72,7 +72,7 @@ def crear_appbar(page):
                         ),                    
                         ft.TextButton(
                             text="Inversiones",
-                            icon=ft.icons.ATTACH_MONEY,  # Ícono para el botón "Inversiones"
+                            icon=ft.Icons.ATTACH_MONEY,  # Ícono para el botón "Inversiones"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -80,7 +80,7 @@ def crear_appbar(page):
                         ),
                                             ft.TextButton(
                             text="Tabla de Códigos",
-                            icon=ft.icons.ACCOUNT_TREE,  # Ícono para el botón "Tabla Código"
+                            icon=ft.Icons.ACCOUNT_TREE,  # Ícono para el botón "Tabla Código"
                             on_click=boton_click,
                             style=ft.ButtonStyle(
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -93,7 +93,7 @@ def crear_appbar(page):
                 # Botones Derecha
                 ft.TextButton(
                     text="Configuración",
-                    icon=ft.icons.SETTINGS,  # Ícono para el botón "Configuración"
+                    icon=ft.Icons.SETTINGS,  # Ícono para el botón "Configuración"
                     on_click=boton_click,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -101,7 +101,7 @@ def crear_appbar(page):
                 ),
                 ft.TextButton(
                     text="Salir",
-                    icon=ft.icons.EXIT_TO_APP_OUTLINED,  # Ícono para el botón "Salir"
+                    icon=ft.Icons.EXIT_TO_APP_OUTLINED,  # Ícono para el botón "Salir"
                     on_click=boton_click,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
