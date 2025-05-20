@@ -10,6 +10,13 @@ from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obte
 
 #ruta_BDapp = globals.ruta_BD
 
+
+def submenu_Grupos(e):
+    pass
+
+
+
+'''
 def submenu_Grupos(e):
     ruta_BDapp = globals.ruta_BD
     texto1 = ft.Row(
@@ -183,7 +190,7 @@ def submenu_ver_codigo(e):
 
 def submenu_4_columnas(e):
     ruta_BDapp = globals.ruta_BD
-
+    
     texto1 = ft.Row(
         [
             ft.Text(
@@ -272,3 +279,4 @@ def submenu_4_columnas(e):
         alignment=ft.alignment.top_left,  # Alineación del contenedor en la parte superior izquierda
     )
     return submenu_crear_codigo_container    
+'''

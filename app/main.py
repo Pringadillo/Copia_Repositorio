@@ -59,9 +59,6 @@ else:
 
     
 
-    
-
-
 
 
 
@@ -80,11 +77,12 @@ def main(page: ft.Page):
     # Crear la barra lateral izquierda
     barra_lateral_contenido = barra_lateral.crear_barra_lateral(page)
 
-    # Crear el contenido central
-    contenido = cuerpo.contenido_por_defecto  # Contenido a mostrar por defecto
-    contenido_central = cuerpo.crear_cuerpo(page, contenido)
-
-
+    globals.contenido_central_container = ft.Container(
+        content=cuerpo.contenido_por_defecto,
+        bgcolor=ft.Colors.LIGHT_BLUE_50,
+        padding=10,
+        expand=True,
+    )
 
     # Estructura principal de la página
     page.add(
@@ -92,14 +90,10 @@ def main(page: ft.Page):
             controls=[
                 ft.Container(
                     content=barra_lateral_contenido,
-                    width=250,  # Ancho de la barra lateral
+                    width=250,
                     bgcolor=ft.Colors.BLUE_GREY_50,
                 ),
-                ft.Container(
-                    content=contenido_central,
-                    expand=True,  # La columna central ocupa el espacio restante
-                    bgcolor=ft.Colors.WHITE,
-                ),
+                globals.contenido_central_container,
             ],
             expand=True,
         )

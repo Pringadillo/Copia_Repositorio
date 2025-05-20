@@ -7,38 +7,36 @@ import os
 
 import globals
 
+
 from app.Submenu.Submenu_TablaCodigo import submenu_Grupos, submenu_Subgrupos, submenu_Cuentas, submenu_4_columnas
 
+
+
 def menu_TablaCodigos():
-    # Contenedor dinámico para el contenido_cuerpo
-    contenido_cuerpo_container = ft.Container(
-        content=ft.Text("Seleccione una opción del submenú", size=30, text_align=ft.TextAlign.CENTER),
-        alignment=ft.alignment.top_center,
-        expand=True,  # Haz que el contenedor se expanda dentro de la Column
-    )
+
 
     def ver_4columnas(e):
         #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
         #e.page.update()
         contenido_verTablasCodigos = submenu_4_columnas(e.page)
-        contenido_cuerpo_container.content = contenido_verTablasCodigos
+        globals.contenido_central_container.content = contenido_verTablasCodigos
         e.page.update()
 
 
 
     def crear_Grupo(e):
         contenido_grupo = submenu_Grupos(e.page)
-        contenido_cuerpo_container.content = contenido_grupo
+        globals.contenido_central_container.content = contenido_grupo
         e.page.update()
 
     def crear_Subgrupo(e):
         #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR SUBGRUPOS", size=20)
         contenido_subgrupos = submenu_Subgrupos(e.page)
-        contenido_cuerpo_container.content = contenido_subgrupos
+        globals.contenido_central_container.content = contenido_subgrupos
         e.page.update()
 
     def crear_Cuenta(e):
-        contenido_cuerpo_container.content = ft.Text("desde menu CUENTAS", size=20)
+        globals.contenido_central_container.content = ft.Text("desde menu CUENTAS", size=20)
         #contenido_cuentas = submenu_Cuentas(e.page)
         #contenido_cuerpo_container.content = contenido_cuentas
         e.page.update()
@@ -89,13 +87,12 @@ def menu_TablaCodigos():
     cuerpo = ft.Column(
         controls=[
             submenu,  # Submenú siempre visible
-            contenido_cuerpo_container,
+            globals.contenido_central_container,
         ],
         expand=True,
         spacing=10,  # separacion entre el submenú y el contenido
 
     )
     return cuerpo
-
 
 

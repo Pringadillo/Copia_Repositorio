@@ -10,7 +10,7 @@ usuarioapp = globals.usuario  # Nombre del usuario
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla de Códigos":
-            page.controls[0].controls[1].content = CodigosTabla.menu_TablaCodigos()
+            globals.contenido_central_container.content = CodigosTabla.menu_TablaCodigos()
             #page.controls[0].controls[1].content = ft.Text("Contenido del TablaCodigos")
         elif e.control.text == "Diario":
             page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
@@ -78,7 +78,7 @@ def crear_appbar(page):
                                 text_style=ft.TextStyle(size=18, letter_spacing=2)
                             ),
                         ),
-                                            ft.TextButton(
+                        ft.TextButton(
                             text="Tabla de Códigos",
                             icon=ft.Icons.ACCOUNT_TREE,  # Ícono para el botón "Tabla Código"
                             on_click=boton_click,

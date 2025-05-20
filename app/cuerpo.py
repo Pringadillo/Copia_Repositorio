@@ -2,7 +2,7 @@ import flet as ft
 import datetime
 
 
-
+'''
 def crear_cuerpo(page, contenido):
     # Devuelve un contenedor con el contenido dinámico
     return ft.Container(
@@ -12,7 +12,7 @@ def crear_cuerpo(page, contenido):
         expand=True
     )
 
-
+'''
 #https://www.freepik.es/foto-gratis/casa-aislada-campo_10025444.htm
 #"https://via.placeholder.com/150"
 
