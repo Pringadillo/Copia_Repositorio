@@ -58,10 +58,6 @@ else:
         funciones_BD.insertar_datos_iniciales(ruta_BDapp)
 
     
-
-
-
-
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     
