@@ -22,16 +22,21 @@ def proves2():
 
     
     
-    texto1 = ft.Text("TABLA DE CÓDIGOS", size=20, weight=ft.FontWeight.BOLD)
-    texto2 = ft.Text("Contenido de la tabla de códigos", size=20, weight=ft.FontWeight.BOLD,text_align=ft.TextAlign.CENTER)
-    texto1_en_contenedor = ft.Container(
-        content=texto1,
+    aaa = ft.Text("TABLA DE CÓDIGOS", size=20, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER)
+    texto1 = ft.Container(
+        content=aaa,
         alignment=ft.alignment.center, # <--- Centra el contenido (texto1_content) dentro del Container
-        expand=True, # <--- Hace que el Container se expanda para ocupar el ancho disponible
+        #expand=True, # <--- Hace que el Container se expanda para ocupar el ancho disponible
         # Puedes añadir un color de fondo temporal para ver los límites del contenedor
         bgcolor=ft.Colors.BLUE_GREY_200
     )
-
+    texto2 = ft.Container(
+        content=aaa,
+        alignment=ft.alignment.center, # <--- Centra el contenido (texto1_content) dentro del Container
+        #expand=True, # <--- Hace que el Container se expanda para ocupar el ancho disponible
+        # Puedes añadir un color de fondo temporal para ver los límites del contenedor
+        bgcolor=ft.Colors.BLUE_GREY_200
+    )
 
 
     globals.contenido_central_container.content = ft.Container(
@@ -39,9 +44,9 @@ def proves2():
             controls=[
                 texto1,
                 texto2,
-                texto1_en_contenedor,
+
             ],
-            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+            #alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
         bgcolor=ft.Colors.WHITE,
 
