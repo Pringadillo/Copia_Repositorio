@@ -20,23 +20,73 @@ def proves2():
     Columna4 = ft.Column()
 
 
-    
-    
-    aaa = ft.Text("TABLA DE CÓDIGOS", size=20, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER)
+
     texto1 = ft.Container(
-        content=aaa,
+        content= ft.Text("TABLA DE CÓDIGOS", size=20, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
         alignment=ft.alignment.center, # <--- Centra el contenido (texto1_content) dentro del Container
         #expand=True, # <--- Hace que el Container se expanda para ocupar el ancho disponible
         # Puedes añadir un color de fondo temporal para ver los límites del contenedor
         bgcolor=ft.Colors.BLUE_GREY_200
     )
+
+
+
+
     texto2 = ft.Container(
-        content=aaa,
-        alignment=ft.alignment.center, # <--- Centra el contenido (texto1_content) dentro del Container
-        #expand=True, # <--- Hace que el Container se expanda para ocupar el ancho disponible
-        # Puedes añadir un color de fondo temporal para ver los límites del contenedor
-        bgcolor=ft.Colors.BLUE_GREY_200
-    )
+            content=ft.Row(
+                controls=[
+                    ft.Column(
+                        controls=[
+                            ft.Text("Título Columna 1", weight=ft.FontWeight.BOLD),
+                            ft.Text("Contenido de la columna 1. Puedes poner varios elementos aquí."),
+                        ],
+                        alignment=ft.MainAxisAlignment.START, # Align content within this column vertically
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, # Center content horizontally within this column
+                        expand=True # Make this column expand to take available width
+                    ),
+                    ft.VerticalDivider(), # Optional: Add a visual separator between columns
+                    ft.Column(
+                        controls=[
+                            ft.Text("Título Columna 2", weight=ft.FontWeight.BOLD),
+                            ft.Text("Contenido de la columna 2."),
+                        ],
+                        alignment=ft.MainAxisAlignment.START,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True
+                    ),
+                    ft.VerticalDivider(),
+                    ft.Column(
+                        controls=[
+                            ft.Text("Título Columna 3", weight=ft.FontWeight.BOLD),
+                            ft.Text("Contenido de la columna 3."),
+                        ],
+                        alignment=ft.MainAxisAlignment.START,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True
+                    ),
+                    ft.VerticalDivider(),
+                    ft.Column(
+                        controls=[
+                            ft.Text("Título Columna 4", weight=ft.FontWeight.BOLD),
+                            ft.Text("Contenido de la columna 4."),
+                        ],
+                        alignment=ft.MainAxisAlignment.START,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_AROUND, # Distribute space evenly around columns
+                vertical_alignment=ft.CrossAxisAlignment.START, # Align columns at the top
+                wrap=False, # Prevent columns from wrapping to the next line if space is limited
+                expand=True # Make the Row itself expand within the Container
+            ),
+            alignment=ft.alignment.center, # Center the Row within the Container
+            bgcolor=ft.Colors.BLUE_GREY_200,
+            padding=10, # Add some padding around the content
+            expand=True # Make the container itself expand
+        )
+
+    
 
 
     globals.contenido_central_container.content = ft.Container(
