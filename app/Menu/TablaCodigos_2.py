@@ -6,9 +6,16 @@ import sys
 import os
 
 import globals
+from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo
 
 def proves2():
     ruta_BDapp = globals.ruta_BD
+
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    datos_nivel1 = obtener_datos_grupo(ruta_BDapp)
+    # Extrae solo el segundo elemento (el texto) de cada tupla
+    textos_nivel1 = [f"{item[0]}   {item[1]}" for item in datos_nivel1]
+
 
     texto1 = ft.Container(
         content= ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
@@ -26,6 +33,7 @@ def proves2():
                         controls=[
                             ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER),
                             ft.Text("• Cuenta Corriente\n• Cuenta de Ahorro\n• Inversiones"),
+                            
                         ],
                         alignment=ft.MainAxisAlignment.START,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna
