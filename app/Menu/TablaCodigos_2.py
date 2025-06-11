@@ -32,8 +32,10 @@ def proves2():
                     content=ft.Column(
                         controls=[
                             ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER),
-                            ft.Text("• Cuenta Corriente\n• Cuenta de Ahorro\n• Inversiones"),
-                            
+                            ft.Container(
+                                content=ft.Text(textos_nivel1),
+                                #ft.Text("• Cuenta Corriente\n• Cuenta de Ahorro\n• Inversiones"),
+                            )
                         ],
                         alignment=ft.MainAxisAlignment.START,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna

@@ -332,6 +332,261 @@ def ver_tablas_base_datos():
         print("No hay tablas en la base de datos.")
     conn.close()
 
+
+
+
+def mostrar_cuentas_por_grupo(ruta_BDapp, grupo_id_buscado):
+    """
+    Muestra de forma jerárquica los subgrupos (nivel 2) y cuentas (nivel 3)
+    para un grupo_id específico, siguiendo el formato:
+    01 Titulo (Subgrupo)
+          01 Descripción (Cuenta Nivel 3)
+          02 Descripción (Cuenta Nivel 3)
+    02 Titulo (Subgrupo)
+          01 Descripción (Cuenta Nivel 3)
+    """
+    conn = None # Inicializar conn a None para el bloque finally
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+
+        # 1. Obtener todos los subgrupos (Nivel 2) para el grupo_id_buscado
+        # Aunque cod_2 y desc_2 vienen de CUENTAS, asumimos que representan
+        # el subgrupo. Lo ideal sería usar la tabla SUBGRUPO si existiera con más detalle.
+        cursor.execute("""
+            SELECT DISTINCT
+                subgrupo_id,
+                cod_2,
+                desc_2
+            FROM
+                CUENTAS
+            WHERE
+                grupo_id = ?
+            ORDER BY
+                subgrupo_id
+        """, (grupo_id_buscado,))
+        subgrupos = cursor.fetchall()
+
+        if not subgrupos:
+            print(f"No se encontraron subgrupos para el Grupo ID: {grupo_id_buscado}.")
+            return
+
+        #print(f"\n--- Cuentas para el Grupo: {grupo_id_buscado} ---")
+
+        # Iterar sobre cada subgrupo y luego buscar sus cuentas de nivel 3
+        for i, subgrupo in enumerate(subgrupos):
+            subgrupo_id = subgrupo[0]
+            cod_subgrupo = subgrupo[1] # Esto es cod_2 en tu tabla CUENTAS
+            desc_subgrupo = subgrupo[2] # Esto es desc_2 en tu tabla CUENTAS
+
+            # Formato para el título del subgrupo (Nivel 2)
+            # Usamos i + 1 para el índice secuencial (01, 02, etc.)
+            print(f"{i + 1:02d} {desc_subgrupo}") # O {cod_subgrupo} si prefieres el código
+
+            # 2. Obtener las cuentas de Nivel 3 para el subgrupo actual
+            cursor.execute("""
+                SELECT
+                    descripcion_n3, -- O desc_3, elige la que prefieras mostrar
+                    cod_3
+                FROM
+                    CUENTAS
+                WHERE
+                    grupo_id = ? AND subgrupo_id = ?
+                ORDER BY
+                    nivel3_id
+            """, (grupo_id_buscado, subgrupo_id))
+            cuentas_nivel3 = cursor.fetchall()
+
+            if not cuentas_nivel3:
+                print(f"      No se encontraron cuentas de nivel 3 para el subgrupo {cod_subgrupo}.")
+
+            # 3. Imprimir las cuentas de Nivel 3 con su formato
+            for j, cuenta_n3 in enumerate(cuentas_nivel3):
+                desc_n3 = cuenta_n3[0] # Usamos descripcion_n3
+                cod_full_n3 = cuenta_n3[1] # Esto es cod_3
+
+                # Formato para las cuentas de nivel 3 (con sangría)
+                # Usamos j + 1 para el índice secuencial (01, 02, etc.)
+                print(f"      {j + 1:02d} {desc_n3}") # O {cod_full_n3} si prefieres el código completo
+
+
+    except sqlite3.Error as e:
+        print(f"Error al mostrar cuentas por grupo: {e}")
+        # raise # Puedes descomentar esto si quieres que la excepción se propague
+
+    finally:
+        if conn:
+            conn.close()
+
+
+import sqlite3
+import os
+from datetime import date # Aunque no se usa directamente en esta función, se mantiene por si la necesitas en otras partes del código.
+
+def mostrar_cuentas_por_grupo2(ruta_BDapp, grupo_id_buscado):
+    """
+    Muestra de forma jerárquica los subgrupos (nivel 2) y cuentas (nivel 3)
+    para un grupo_id específico, siguiendo el formato:
+    01 Titulo (Subgrupo)
+        01 Descripción (Cuenta Nivel 3)
+        02 Descripción (Cuenta Nivel 3)
+    02 Titulo (Subgrupo)
+        01 Descripción (Cuenta Nivel 3)
+    """
+    conn = None # Inicializar conn a None para asegurar que se cierre en caso de error
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+
+        # 1. Obtener todos los subgrupos (Nivel 2) para el grupo_id_buscado
+        # Seleccionamos directamente 'descripcion_subgrupo' de la tabla SUBGRUPO para evitar el prefijo del grupo.
+        cursor.execute("""
+            SELECT
+                S.subgrupo_id,
+                S.cod_2,
+                S.descripcion_subgrupo
+            FROM
+                SUBGRUPO S
+            WHERE
+                S.grupo_id = ?
+            ORDER BY
+                S.subgrupo_id
+        """, (grupo_id_buscado,))
+        subgrupos = cursor.fetchall()
+
+        if not subgrupos:
+            print(f"No se encontraron subgrupos para el Grupo ID: {grupo_id_buscado}.")
+            return
+
+        # Iterar sobre cada subgrupo y luego buscar sus cuentas de nivel 3
+        for i, subgrupo in enumerate(subgrupos):
+            subgrupo_id = subgrupo[0]
+            cod_subgrupo = subgrupo[1]
+            # Usamos la descripción del subgrupo sin el prefijo del grupo
+            descripcion_subgrupo_limpia = subgrupo[2] 
+
+            # Formato para el título del subgrupo (Nivel 2)
+            print(f"{i + 1:02d} {descripcion_subgrupo_limpia}") 
+
+            # 2. Obtener las cuentas de Nivel 3 para el subgrupo actual
+            cursor.execute("""
+                SELECT
+                    descripcion_n3, 
+                    cod_3
+                FROM
+                    CUENTAS
+                WHERE
+                    grupo_id = ? AND subgrupo_id = ?
+                ORDER BY
+                    nivel3_id
+            """, (grupo_id_buscado, subgrupo_id))
+            cuentas_nivel3 = cursor.fetchall()
+
+            if not cuentas_nivel3:
+                print(f"       No se encontraron cuentas de nivel 3 para el subgrupo {cod_subgrupo}.")
+
+            # 3. Imprimir las cuentas de Nivel 3 con su formato
+            for j, cuenta_n3 in enumerate(cuentas_nivel3):
+                desc_n3 = cuenta_n3[0] 
+                cod_full_n3 = cuenta_n3[1] 
+
+                print(f"       {j + 1:02d} {desc_n3}") 
+
+
+    except sqlite3.Error as e:
+        print(f"Error al mostrar cuentas por grupo: {e}")
+        # Puedes descomentar 'raise' si quieres que la excepción se propague y el programa se detenga
+        # raise 
+    finally:
+        if conn:
+            conn.close()
+
+
+def obtener_cuentas_formateadas_para_flet(ruta_BDapp, grupo_id_buscado):
+    """
+    Obtiene y formatea de forma jerárquica los subgrupos (nivel 2) y cuentas (nivel 3)
+    para un grupo_id específico, retornando una lista de strings lista para Flet.
+
+    Formato:
+    01 Titulo (Subgrupo)
+        01 Descripción (Cuenta Nivel 3)
+        02 Descripción (Cuenta Nivel 3)
+    02 Titulo (Subgrupo)
+        01 Descripción (Cuenta Nivel 3)
+    """
+    conn = None # Inicializar conn a None para asegurar que se cierre en caso de error
+    output_lines = [] # Lista para almacenar las líneas de texto que se retornarán
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+
+        # 1. Obtener todos los subgrupos (Nivel 2) para el grupo_id_buscado
+        cursor.execute("""
+            SELECT
+                S.subgrupo_id,
+                S.cod_2,
+                S.descripcion_subgrupo
+            FROM
+                SUBGRUPO S
+            WHERE
+                S.grupo_id = ?
+            ORDER BY
+                S.subgrupo_id
+        """, (grupo_id_buscado,))
+        subgrupos = cursor.fetchall()
+
+        if not subgrupos:
+            output_lines.append(f"No se encontraron subgrupos para el Grupo ID: {grupo_id_buscado}.")
+            return output_lines # Retorna la lista con el mensaje de no encontrado
+
+        # Iterar sobre cada subgrupo y luego buscar sus cuentas de nivel 3
+        for i, subgrupo in enumerate(subgrupos):
+            subgrupo_id = subgrupo[0]
+            # cod_subgrupo = subgrupo[1] # No se usa en el output_lines final, pero se mantiene por si lo necesitas
+            descripcion_subgrupo_limpia = subgrupo[2]
+
+            # Añadir la línea del subgrupo a la lista
+            output_lines.append(f"{i + 1:02d} {descripcion_subgrupo_limpia}")
+
+            # 2. Obtener las cuentas de Nivel 3 para el subgrupo actual
+            cursor.execute("""
+                SELECT
+                    descripcion_n3,
+                    cod_3
+                FROM
+                    CUENTAS
+                WHERE
+                    grupo_id = ? AND subgrupo_id = ?
+                ORDER BY
+                    nivel3_id
+            """, (grupo_id_buscado, subgrupo_id))
+            cuentas_nivel3 = cursor.fetchall()
+
+            if not cuentas_nivel3:
+                # Si no hay cuentas de nivel 3, añadir un mensaje a la lista
+                output_lines.append(f"       No se encontraron cuentas de nivel 3 para el subgrupo {subgrupo_id}.") # Usamos subgrupo_id, si quieres cod_subgrupo, descomenta la línea de arriba
+
+            # 3. Añadir las cuentas de Nivel 3 a la lista
+            for j, cuenta_n3 in enumerate(cuentas_nivel3):
+                desc_n3 = cuenta_n3[0]
+                # cod_full_n3 = cuenta_n3[1] # No se usa en el output_lines final, pero se mantiene por si lo necesitas
+
+                output_lines.append(f"       {j + 1:02d} {desc_n3}")
+
+    except sqlite3.Error as e:
+        # En caso de error, añadir el mensaje de error a la lista de salida
+        output_lines.append(f"Error al obtener cuentas por grupo: {e}")
+    finally:
+        if conn:
+            conn.close()
+
+    return output_lines # ¡Esto es lo importante! Retorna la lista de strings.
+
+
+
+
+
 # ---------------------------------------- FUNCIONES DE ELIMINAR DATOS ----------------------------------------
 
 # ---------------------------------------- FUNCIONES MOPDIFICAR DATOS ------------------------------
@@ -478,3 +733,5 @@ if __name__ == "__main__":
     #print(obtener_datos_grupo(ruta_BDapp))
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1))
+    #mostrar_cuentas_por_grupo(ruta_BDapp, 1)
+    #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
