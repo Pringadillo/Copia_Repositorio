@@ -22,6 +22,16 @@ app/
 
 
 
+Los cambios de Tabla Codigos, realizarlos por configuración
+
+
+
+
+
+
+
+
+
     def insertar_datos_iniciales():
     """
     Inserta datos iniciales en la base de datos.

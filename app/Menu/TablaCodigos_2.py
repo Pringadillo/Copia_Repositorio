@@ -31,7 +31,7 @@ def proves2():
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text("CUENTAS FINANCIERAS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER),
+                            ft.Text(textos_nivel1[0], weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER),
                             ft.Container(
                                 content=ft.Text(textos_nivel1),
                                 #ft.Text("• Cuenta Corriente\n• Cuenta de Ahorro\n• Inversiones"),
@@ -52,7 +52,7 @@ def proves2():
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text("DEUDAS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
+                            ft.Text(textos_nivel1[1], weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
                             ft.Text("• Tarjeta de Crédito\n• Préstamo Hipotecario\n• Préstamo Personal"),
                         ],
                         alignment=ft.MainAxisAlignment.START,
@@ -70,7 +70,7 @@ def proves2():
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text("GASTOS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
+                            ft.Text(textos_nivel1[2], weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
                             ft.Text("• Alquiler/Hipoteca\n• Alimentación\n• Transporte\n• Servicios"),
                         ],
                         alignment=ft.MainAxisAlignment.START,
@@ -88,7 +88,7 @@ def proves2():
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text("INGRESOS", weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
+                            ft.Text(textos_nivel1[3], weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
                             ft.Text("• Salario\n• Freelance\n• Intereses/Dividendos"),
                         ],
                         alignment=ft.MainAxisAlignment.START,
