@@ -729,6 +729,6 @@ if __name__ == "__main__":
     
     #print(obtener_datos_grupo(ruta_BDapp))
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
-    #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1))
+    #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
     #mostrar_cuentas_por_grupo2(ruta_BDapp, 1)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
