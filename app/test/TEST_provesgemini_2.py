@@ -121,10 +121,8 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.START
 
 
-
-
     # Ejemplo de uso: Mostrar cuentas para GRUPO con grupo_id = 2 (Caixa Enginyers)
-    grupo_id_a_mostrar = 1
+    grupo_id_a_mostrar = 2
     controles_cuentas = mostrar_cuentas_por_grupo_flet(ruta_BDapp, grupo_id_a_mostrar)
 
     # Una columna de Flet para contener la jerarquía de cuentas
