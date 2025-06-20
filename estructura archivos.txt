@@ -136,3 +136,5 @@ Los cambios de Tabla Codigos, realizarlos por configuración
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
+
+

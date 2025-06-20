@@ -116,6 +116,8 @@ def mostrar_cuentas_por_grupo_flet(ruta_BDapp: str, grupo_id_buscado: int) -> li
             conn.close()
     return formatted_controls
 
+
+
 def main(page: ft.Page):
     page.title = "Contabilidad Doméstica"
     page.vertical_alignment = ft.MainAxisAlignment.START
