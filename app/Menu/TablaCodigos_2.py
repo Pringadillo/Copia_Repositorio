@@ -138,20 +138,12 @@ def proves3():
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
 
-    '''
-    # Llama a ver_tabla_nivel1 para obtener los datos
-    datos_nivel1 = obtener_datos_grupo(ruta_BDapp)
-    # Extrae solo el segundo elemento (el texto) de cada tupla
-    textos_nivel1 = [f"{item[0]}   {item[1]}" for item in datos_nivel1]
-    '''
-
     texto1 = ft.Container(
         content= ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
         alignment=ft.alignment.center,
         #bgcolor=ft.Colors.BLUE_GREY_200,
         margin=ft.margin.only(top=20) 
     )
-
     
     texto2 = ft.Container(
         content=ft.Row(
@@ -162,11 +154,13 @@ def proves3():
                         controls=controles_cuentas1,
                         spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
                         horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.LIGHT_BLUE_100,
                     padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10)
+                    border_radius=ft.border_radius.all(10),
                 ),
                 ft.VerticalDivider(),
                 
@@ -176,6 +170,8 @@ def proves3():
                         controls=controles_cuentas2,
                         spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
                         horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.RED_100,
@@ -190,6 +186,8 @@ def proves3():
                         controls=controles_cuentas3,
                         spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
                         horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.ORANGE_100,
@@ -204,6 +202,8 @@ def proves3():
                         controls=controles_cuentas4,
                         spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
                         horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.GREEN_100,
@@ -221,12 +221,11 @@ def proves3():
 
         padding=10,
         expand=True
+        
     )
 
 
     # ----------------------  Estructura principal -----------------
-
-    #texto2 = ft.Text("CONTENIDO TABLA DE CÓDIGOS")   
 
     globals.contenido_central_container.content = ft.Container(
         content=ft.Column(
