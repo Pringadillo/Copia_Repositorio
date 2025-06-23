@@ -11,3 +11,6 @@ ruta_BD = f"./data/{BasedeDatos}"
 usuario = "Usuario_1"  # Nombre del usuario
 
 contenido_central_container = None
+
+traspaso = 0  # Variable para controlar la conciliación
+

@@ -85,6 +85,145 @@ def crear_tabla_CUENTAS(ruta_BDapp):
             conn.close()
 
 
+def crear_tabla_PyG(ruta_BDapp):
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS PyG (
+                    grupo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    descripcion_PyG TEXT NOT NULL UNIQUE CHECK (descripcion_PyG = UPPER(descripcion_PyG))
+                )
+            """)
+            conn.commit()
+        print("Tabla PyG (Nivel 1) creada (si no existía).")
+    except sqlite3.Error as e:
+        print(f"Error al conectar o crear la tabla PyG: {e}")
+        raise
+
+def crear_tabla_Categorias(ruta_BDapp):
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS CATEGORIAS (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    PyG_id INTEGER NOT NULL,
+                    categoria_id INTEGER NOT NULL,
+                    cod_2 TEXT NOT NULL UNIQUE,
+                    desc_2 TEXT NOT NULL,
+                    -- Se eliminó descripcion_PyG por ser redundante
+                    -- Considera renombrar descripcion_subgrupo si es lo mismo que desc_2 o si necesita más claridad
+                    descripcion_subgrupo TEXT NOT NULL,
+                    FOREIGN KEY (PyG_id) REFERENCES PyG (grupo_id),
+                    UNIQUE (PyG_id, categoria_id)
+                )
+            """)
+            conn.commit()
+        print("Tabla CATEGORIAS (Nivel 2) creada (si no existía).")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla CATEGORIAS: {e}")
+        raise
+
+def crear_tabla_Subcategorias(ruta_BDapp):
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn: # Usamos 'with conn' para asegurar que la conexión se cierre automáticamente.
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS SUBCATEGORIAS (
+                    -- Columnas que referencian a los niveles superiores, con nombres consistentes
+                    PyG_id INTEGER NOT NULL,      -- Corresponde a grupo_id en PyG
+                    categoria_id INTEGER NOT NULL, -- Corresponde a categoria_id en CATEGORIAS
+                    
+                    -- Columnas originales de CUENTAS que se mantienen en SUBCATEGORIAS
+                    cod_2 TEXT NOT NULL,          -- Manteniendo por tu solicitud, aunque es redundante con CATEGORIAS
+                    desc_2 TEXT NOT NULL,         -- Manteniendo por tu solicitud, aunque es redundante con CATEGORIAS
+                    nivel3_id INTEGER NOT NULL,   -- Identificador para este nivel (Nivel 3)
+                    descripcion_n3 TEXT NOT NULL, -- Descripción del Nivel 3
+                    cod_3 TEXT NOT NULL UNIQUE,   -- Código único para la subcategoría
+                    desc_3 TEXT NOT NULL,         -- Descripción de la subcategoría
+
+                    -- Campos adicionales
+                    Saldo_inicial REAL NOT NULL DEFAULT 0,
+                    Fecha_Inicio TEXT NOT NULL DEFAULT (date('now')), -- Usar date('now') para la fecha actual
+
+                    -- Clave primaria compuesta, siguiendo el patrón de CUENTAS
+                    PRIMARY KEY (PyG_id, categoria_id, nivel3_id), 
+                    
+                    -- Clave foránea que referencia a la tabla CATEGORIAS
+                    FOREIGN KEY (PyG_id, categoria_id) REFERENCES CATEGORIAS(PyG_id, categoria_id)
+                )
+            """)
+            conn.commit()
+        print(f"Tabla SUBCATEGORIAS (Nivel 3) creada exitosamente en {ruta_BDapp}, con estructura similar a CUENTAS.")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla SUBCATEGORIAS: {e}")
+        raise
+
+
+
+'''
+def crear_tabla_Diario(ruta_BDapp):
+    """
+    Crea la tabla DIARIO si no existe, incluyendo IDs con FOREIGN KEYs para la integridad
+    y columnas de descripción para facilitar los informes, y la columna 'traspaso'.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS DIARIO (
+                    id_asiento INTEGER PRIMARY KEY AUTOINCREMENT,
+                    fecha_operacion TEXT NOT NULL, -- Formato esperado: 'DD/MM/AA'
+                    
+                    -- **Claves Foráneas para la estructura de Cuentas Contables (Balance)**
+                    grupo_id INTEGER NOT NULL,            -- ID del Grupo (referencia a GRUPO)
+                    subgrupo_id INTEGER NOT NULL,         -- ID del Subgrupo (referencia a SUBGRUPO)
+                    cuenta_id INTEGER NOT NULL,           -- ID de la Cuenta (referencia a CUENTAS)
+                    
+                    -- **Descripciones de la estructura de Cuentas Contables (para informes directos)**
+                    descripcion_grupo_contable TEXT NOT NULL,
+                    descripcion_subgrupo_contable TEXT NOT NULL,
+                    descripcion_cuenta_contable TEXT NOT NULL,
+                    
+                    -- **Claves Foráneas para la estructura de Pérdidas y Ganancias (PyG)**
+                    PyG_id INTEGER NOT NULL,              -- ID de PyG (referencia a PyG)
+                    categoria_id INTEGER NOT NULL,        -- ID de Categoría (referencia a CATEGORIAS)
+                    subcategoria_id INTEGER NOT NULL,     -- ID de Subcategoría (referencia a SUBCATEGORIAS)
+                    
+                    -- **Descripciones de la estructura de Pérdidas y Ganancias (para informes directos)**
+                    descripcion_PyG_analitica TEXT NOT NULL,
+                    descripcion_categoria_analitica TEXT NOT NULL,
+                    descripcion_subcategoria_analitica TEXT NOT NULL,
+                    
+                    descripcion_asiento TEXT,                  -- Descripción detallada del asiento
+                    importe_asiento REAL NOT NULL,             -- Importe del asiento (puede ser negativo)
+                    
+                    traspaso INTEGER DEFAULT 0,                -- Número sin decimales
+                    verificar INTEGER DEFAULT 0,               -- 0 (No) por defecto, 1 (Sí)
+                    fecha_introduccion_asiento TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
+                    
+                    -- **Definición de las FOREIGN KEYs**
+                    FOREIGN KEY (grupo_id) REFERENCES GRUPO (grupo_id), -- Suponiendo GRUPO tiene PK grupo_id
+                    FOREIGN KEY (grupo_id, subgrupo_id) REFERENCES SUBGRUPO (grupo_id, subgrupo_id), -- Suponiendo SUBGRUPO tiene PK compuesta
+                    FOREIGN KEY (grupo_id, subgrupo_id, cuenta_id) REFERENCES CUENTAS (grupo_id, subgrupo_id, cuenta_id), -- Suponiendo CUENTAS tiene PK compuesta
+                    
+                    FOREIGN KEY (PyG_id) REFERENCES PyG (grupo_id), -- PyG usa grupo_id como PK
+                    FOREIGN KEY (PyG_id, categoria_id) REFERENCES CATEGORIAS (PyG_id, categoria_id),
+                    FOREIGN KEY (PyG_id, categoria_id, subcategoria_id) REFERENCES SUBCATEGORIAS (PyG_id, categoria_id, subcategoria_id)
+                )
+            ''')
+            conn.commit()
+        print(f"Tabla DIARIO creada exitosamente en {ruta_BDapp} con IDs y descripciones, y FOREIGN KEYs.")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla DIARIO: {e}")
+        raise
+'''
+
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
     try:

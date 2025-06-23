@@ -110,7 +110,6 @@ def proves2():
         expand=True
     )
 
-
     globals.contenido_central_container.content = ft.Container(
         content=ft.Column(
             controls=[
@@ -223,7 +222,6 @@ def proves3():
         expand=True
         
     )
-
 
     # ----------------------  Estructura principal -----------------
 

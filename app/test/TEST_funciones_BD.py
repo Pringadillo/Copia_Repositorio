@@ -695,7 +695,8 @@ def obtener_cuentas_formateadas_para_flet(ruta_BDapp, grupo_id_buscado):
 
 
 def proves3():
-    
+        
+    ruta_BDapp = globals.ruta_BD
 
     # Llama a ver_tabla_nivel1 para obtener los datos
     controles_cuentas1 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 1)
@@ -703,56 +704,40 @@ def proves3():
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
 
-
-    texto1 = ft.Row(
-        [
-            ft.Text(
-                "TABLA DE CÓDIGOS",
-                size=30,
-                weight=ft.FontWeight.BOLD,
-                text_align=ft.TextAlign.CENTER,
-                color=ft.Colors.BLUE_900,
-            ),
-        ],
-        alignment=ft.MainAxisAlignment.CENTER,
-        height=100,
+    texto1 = ft.Container(
+        content= ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+        alignment=ft.alignment.center,
+        #bgcolor=ft.Colors.BLUE_GREY_200,
+        margin=ft.margin.only(top=20) 
     )
-
-
+    
     texto2 = ft.Container(
         content=ft.Row(
             controls=[
                 # Columna 1: Cuentas Financieras
                 ft.Container(
                     content=ft.Column(
-                        controls=[
-                            ft.Text(controles_cuentas1, weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER),
-                            ft.Container(
-                                content=ft.Text(controles_cuentas1),
-                                #ft.Text("• Cuenta Corriente\n• Cuenta de Ahorro\n• Inversiones"),
-                            )
-                        ],
-                        alignment=ft.MainAxisAlignment.START,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna
-                        run_spacing=5
+                        controls=controles_cuentas1,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.LIGHT_BLUE_100,
                     padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10)
+                    border_radius=ft.border_radius.all(10),
                 ),
                 ft.VerticalDivider(),
-
+                
                 # Columna 2: Deudas
                 ft.Container(
                     content=ft.Column(
-                        controls=[
-                            ft.Text(controles_cuentas2, weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
-                            #ft.Text("• Tarjeta de Crédito\n• Préstamo Hipotecario\n• Préstamo Personal"),
-                        ],
-                        alignment=ft.MainAxisAlignment.START,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna
-                        run_spacing=5
+                        controls=controles_cuentas2,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.RED_100,
@@ -764,13 +749,11 @@ def proves3():
                 # Columna 3: Gastos
                 ft.Container(
                     content=ft.Column(
-                        controls=[
-                            ft.Text(controles_cuentas3, weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
-                            #ft.Text("• Alquiler/Hipoteca\n• Alimentación\n• Transporte\n• Servicios"),
-                        ],
-                        alignment=ft.MainAxisAlignment.START,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna
-                        run_spacing=5
+                        controls=controles_cuentas3,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.ORANGE_100,
@@ -782,36 +765,34 @@ def proves3():
                 # Columna 4: Ingresos
                 ft.Container(
                     content=ft.Column(
-                        controls=[
-                            ft.Text(controles_cuentas4, weight=ft.FontWeight.BOLD, size=26, text_align=ft.TextAlign.CENTER), # <--- text_align para el título
-                            #ft.Text("• Salario\n• Freelance\n• Intereses/Dividendos"),
-                        ],
-                        alignment=ft.MainAxisAlignment.START,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER, # <--- Centra los elementos horizontalmente en esta columna
-                        run_spacing=5
+                        controls=controles_cuentas4,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
                     ),
                     expand=True,
                     bgcolor=ft.Colors.GREEN_100,
                     padding=ft.padding.all(10),
                     border_radius=ft.border_radius.all(10)
                 ),
+                
             ],
             alignment=ft.MainAxisAlignment.SPACE_EVENLY,
             vertical_alignment=ft.CrossAxisAlignment.START,
             wrap=False,
             expand=True
+
         ),
+
         padding=10,
         expand=True
+        
     )
 
+    # ----------------------  Estructura principal -----------------
 
-
-
-
-    
-    '''    # ----------------------  Estructura principal -----------------
-    contenido_central_container = ft.Container(
+    globals.contenido_central_container.content = ft.Container(
         content=ft.Column(
             controls=[
                 texto1,
@@ -822,10 +803,10 @@ def proves3():
         ),
         bgcolor=ft.Colors.WHITE,
 
-        )'''
+        )
     
-    return texto2
-
+    return globals.contenido_central_container.content
+    
 
 
 
@@ -980,4 +961,4 @@ if __name__ == "__main__":
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
     #mostrar_cuentas_por_grupo2(ruta_BDapp, 1)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
-    proves3() 
+
