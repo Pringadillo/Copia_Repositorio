@@ -85,6 +85,55 @@ def crear_tabla_CUENTAS(ruta_BDapp):
         if conn:
             conn.close()
 
+def crear_tabla_Diario(ruta_BDapp):
+    """
+    Crea la tabla DIARIO si no existe, con las columnas especificadas,
+    incluyendo IDs con FOREIGN KEYs para la integridad y la columna 'traspaso' y 'Revisado'.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS DIARIO (
+                    id_diario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    fechaValor TEXT NOT NULL, -- Formato esperado: 'DD/MM/AAAA'
+                    
+                    -- Claves Foráneas para la estructura de Cuentas Contables (Balance)
+                    Grupo_Balance INTEGER NOT NULL,       -- ID del Grupo (referencia a GRUPO)
+                    Subgrupo_Balance INTEGER NOT NULL,    -- ID del Subgrupo (referencia a SUBGRUPO)
+                    Cuenta_Balance INTEGER NOT NULL,      -- ID de la Cuenta (referencia a CUENTAS)
+                    
+                    -- Claves Foráneas para la estructura de Pérdidas y Ganancias (PyG)
+                    Grupo_PyG INTEGER NOT NULL,           -- ID de PyG (referencia a PyG)
+                    Categoria_PyG INTEGER NOT NULL,       -- ID de Categoría (referencia a CATEGORIAS)
+                    Subcategoria_PyG INTEGER NOT NULL,    -- ID de Subcategoría (referencia a SUBCATEGORIAS)
+                    
+                    descripcionDiario TEXT,             -- Descripción detallada del asiento
+                    importe REAL NOT NULL,              -- Importe del asiento (puede ser negativo, formato con separador de miles y 2 decimales se maneja en la aplicación)
+                    
+                    traspaso INTEGER DEFAULT 0,           -- Número entero para el traspaso
+                    Revisado INTEGER DEFAULT 0,           -- 0 (No) por defecto, 1 (Sí)
+                    fechaEntrada TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
+                    
+                    -- Definición de las FOREIGN KEYs
+                    FOREIGN KEY (Grupo_Balance) REFERENCES GRUPO (grupo_id),
+                    FOREIGN KEY (Grupo_Balance, Subgrupo_Balance) REFERENCES SUBGRUPO (grupo_id, subgrupo_id),
+                    FOREIGN KEY (Grupo_Balance, Subgrupo_Balance, Cuenta_Balance) REFERENCES CUENTAS (grupo_id, subgrupo_id, cuenta_id),
+                    
+                    FOREIGN KEY (Grupo_PyG) REFERENCES PyG (grupo_id), -- Asumiendo que PyG tiene 'grupo_id' como PK
+                    FOREIGN KEY (Grupo_PyG, Categoria_PyG) REFERENCES CATEGORIAS (PyG_id, categoria_id),
+                    FOREIGN KEY (Grupo_PyG, Categoria_PyG, Subcategoria_PyG) REFERENCES SUBCATEGORIAS (PyG_id, categoria_id, subcategoria_id)
+                )
+            ''')
+            conn.commit()
+        print(f"Tabla DIARIO creada/actualizada exitosamente en {ruta_BDapp} con la nueva estructura.")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla DIARIO: {e}")
+        raise
+
+
+
 
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
@@ -165,6 +214,46 @@ def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3, sal
         print(f"Error al insertar en CUENTAS (Nivel 3): {e}")
         raise
 
+def insertar_datos_Diario(ruta_BDapp, fechaValor, Grupo_Balance, Subgrupo_Balance, Cuenta_Balance,
+                          Grupo_PyG, Categoria_PyG, Subcategoria_PyG,
+                          descripcionDiario, importe, traspaso=0, Revisado=0):
+    """
+    Inserta un nuevo registro en la tabla DIARIO.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        fechaValor (str): La fecha de la operación (formato 'DD/MM/AAAA').
+        Grupo_Balance (int): ID del Grupo contable.
+        Subgrupo_Balance (int): ID del Subgrupo contable.
+        Cuenta_Balance (int): ID de la Cuenta contable.
+        Grupo_PyG (int): ID del Grupo de Pérdidas y Ganancias.
+        Categoria_PyG (int): ID de la Categoría de PyG.
+        Subcategoria_PyG (int): ID de la Subcategoría de PyG.
+        descripcionDiario (str): Descripción del asiento.
+        importe (float): Importe del asiento (puede ser negativo).
+        traspaso (int, optional): Número de traspaso. Por defecto es 0.
+        Revisado (int, optional): Estado de revisión (0=No, 1=Sí). Por defecto es 0.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO DIARIO (
+                    fechaValor, Grupo_Balance, Subgrupo_Balance, Cuenta_Balance,
+                    Grupo_PyG, Categoria_PyG, Subcategoria_PyG,
+                    descripcionDiario, importe, traspaso, Revisado
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (fechaValor, Grupo_Balance, Subgrupo_Balance, Cuenta_Balance,
+                  Grupo_PyG, Categoria_PyG, Subcategoria_PyG,
+                  descripcionDiario, importe, traspaso, Revisado))
+            conn.commit()
+        print(f"Registro insertado exitosamente en DIARIO para la fecha {fechaValor}.")
+    except sqlite3.Error as e:
+        print(f"Error al insertar el registro en DIARIO: {e}")
+        # Opcional: relanzar la excepción para manejo en un nivel superior
+        raise
+
 
 # ---------------------------------------- FUNCIONES OBTENER DATOS ----------------------------------------
 
@@ -214,7 +303,6 @@ def obtener_datos_subgrupo(ruta_BDapp, grupo_id=1):
     except sqlite3.Error as e:
         print(f"Error al obtener datos de SUBGRUPO para el grupo {grupo_id}: {e}")
         return []
-
 
 def obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1):
     """
@@ -691,9 +779,6 @@ def obtener_cuentas_formateadas_para_flet(ruta_BDapp, grupo_id_buscado):
 
     return output_lines # ¡Esto es lo importante! Retorna la lista de strings.
 
-
-
-
 def proves3():
         
     ruta_BDapp = globals.ruta_BD
@@ -807,7 +892,37 @@ def proves3():
     
     return globals.contenido_central_container.content
     
+def mostrar_datos_Diario(ruta_BDapp):
+    """
+    Muestra todos los registros de la tabla DIARIO.
 
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+    """
+    conn = None # Initialize conn to None
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM DIARIO;")
+        
+        # Obtener los nombres de las columnas para el encabezado
+        column_names = [description[0] for description in cursor.description]
+        print("\n--- Datos de la tabla DIARIO ---")
+        print(" | ".join(column_names))
+        print("-" * (sum(len(name) for name in column_names) + (len(column_names) - 1) * 3)) # Adjust width for separators
+
+        rows = cursor.fetchall()
+        if not rows:
+            print("No hay registros en la tabla DIARIO.")
+        else:
+            for row in rows:
+                print(" | ".join(map(str, row))) # Convert all elements to string for joining
+        print("------------------------------")
+    except sqlite3.Error as e:
+        print(f"Error al leer datos de DIARIO: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
 
@@ -959,6 +1074,36 @@ if __name__ == "__main__":
     #print(obtener_datos_grupo(ruta_BDapp))
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
-    #mostrar_cuentas_por_grupo2(ruta_BDapp, 1)
+    #mostrar_cuentas_por_grupo2(ruta_BDapp, 2)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
-
+    #ver_tablas_base_datos()
+    
+    insertar_datos_Diario(
+            ruta_BDapp=ruta_BDapp,
+            fechaValor='25/06/2025',
+            Grupo_Balance=1,        # Ejemplo de ID de grupo
+            Subgrupo_Balance=101,   # Ejemplo de ID de subgrupo
+            Cuenta_Balance=10101,   # Ejemplo de ID de cuenta
+            Grupo_PyG=1,            # Ejemplo de ID de grupo PyG
+            Categoria_PyG=101,      # Ejemplo de ID de categoría PyG
+            Subcategoria_PyG=10101, # Ejemplo de ID de subcategoría PyG
+            descripcionDiario='Compra de material de oficina',
+            importe=-150.75,
+            traspaso=0,
+            Revisado=0
+        )
+    insertar_datos_Diario(
+            ruta_BDapp=ruta_BDapp,
+            fechaValor='25/06/2025',
+            Grupo_Balance=2,
+            Subgrupo_Balance=201,
+            Cuenta_Balance=20101,
+            Grupo_PyG=4,
+            Categoria_PyG=401,
+            Subcategoria_PyG=40101,
+            descripcionDiario='Venta de productos',
+            importe=500.00,
+            traspaso=1,
+            Revisado=1
+        )
+    mostrar_datos_Diario(ruta_BDapp)
