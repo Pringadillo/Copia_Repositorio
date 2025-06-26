@@ -54,10 +54,11 @@ else:
         funciones_BD.crear_tabla_GRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_SUBGRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_CUENTAS(ruta_BDapp)
-        # insertar datos iniciales
         funciones_BD.insertar_datos_iniciales(ruta_BDapp)
+        funciones_BD.crear_tabla_Diario(ruta_BDapp)
 
-    
+#funciones_BD.ver_tablas_base_datos(ruta_BDapp)
+
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     

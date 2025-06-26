@@ -84,8 +84,6 @@ def crear_tabla_CUENTAS(ruta_BDapp):
         if conn:
             conn.close()
 
-
-
 def crear_tabla_Diario(ruta_BDapp):
     """
     Crea la tabla DIARIO si no existe, incluyendo IDs con FOREIGN KEYs para la integridad
@@ -227,8 +225,6 @@ def insertar_datos_cuenta(ruta_BDapp, grupo_id, subgrupo_id, descripcion_n3, sal
         raise
 
 
-def insertar_asiento_diario(ruta_BDapp):
-    pass
 
 
 # ---------------------------------------- FUNCIONES OBTENER DATOS ----------------------------------------
@@ -408,8 +404,8 @@ def mostrar_saldoInicio_cuentas(ruta_BDapp):
         if conn:
             conn.close()
 
-def ver_tablas_base_datos():
-    ruta_BDapp = globals.ruta_BD  # Accede a la variable global
+def ver_tablas_base_datos(ruta_BDapp):
+    #ruta_BDapp = globals.ruta_BD  # Accede a la variable global
     conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -661,28 +657,6 @@ def insertar_datos_iniciales(ruta_BDapp):
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
-
-
-
-def obtener_asientos_diario(ruta_BDapp):
-    """
-    Obtiene todos los registros de la tabla DIARIO.
-    """
-    datos = []
-    try:
-        conn = sqlite3.connect(ruta_BDapp)
-        conn.row_factory = sqlite3.Row # Permite acceder a las columnas por nombre
-        with conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM DIARIO ORDER BY fechaValor DESC, id_diario DESC") # Ordenar por fecha
-            datos = [dict(row) for row in cursor.fetchall()]
-    except sqlite3.Error as e:
-        print(f"Error al obtener datos de DIARIO: {e}")
-        # Manejo de errores: por ejemplo, retornar una lista vacía o levantar una excepción
-    return datos
-
-
-
 
 
 

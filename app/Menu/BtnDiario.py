@@ -1,7 +1,7 @@
 import flet as ft
 import datetime
 import sqlite3
-
+from datetime import datetime
 import sys
 import os
 
@@ -345,12 +345,47 @@ def boton_diario3():
         )
         e.page.update()
 
-    def mostrar_Asiento_Simple(e: ft.ControlEvent):
+    def insertar_Asiento_Simple(e: ft.ControlEvent):
+
+        crearAsientoSimple = ft.Column(
+            controls=[ ft.TextField(
+                        label="Ingrese la Fecha", # Cambiado a español
+                        hint_text="dd/mm/aa",  # Sigue siendo útil para recordar el formato
+                        #value=default_date_str,   # Establece el valor por defecto a la fecha de hoy
+                        width=200,
+                        keyboard_type=ft.KeyboardType.DATETIME, # Sugiere un teclado de fecha en móviles
+                        on_change=lambda e: print(f"Fecha ingresada: {e.control.value}")
+                        ),
+                    ft.Text("Grupo", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Subgrupo", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Cuenta", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Descripción", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Importe", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Grupo", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Subgrupo", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Cuenta", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Revisado", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Conciliado", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text("Fecha Creación", size=24, weight=ft.FontWeight.BOLD),]
+        )
+        
+        
+        ft.Text("columnas del asiento", size=24, weight=ft.FontWeight.BOLD)
+
         cuerpo_principal_diario.content = ft.Container(
-            content=ft.Text("Contenido: Formulario para Asiento Simple.", size=20, weight=ft.FontWeight.BOLD),
+            content=ft.Column(
+                [
+                    ft.Text("Crear Asiento Simple", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Divider(),
+                    crearAsientoSimple, # Esta 'tabla_container' está definida justo arriba
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=10,
+                expand=True  # La columna interior también debe expandirse
+            ),
             alignment=ft.alignment.center,
             padding=20,
-            bgcolor=ft.Colors.GREEN_50,
+            bgcolor=ft.Colors.WHITE,
             border_radius=ft.border_radius.all(10),
             expand=True
         )
@@ -404,7 +439,7 @@ def boton_diario3():
                 ),
                 ft.TextButton(
                     text="Asiento Simple",
-                    on_click=mostrar_Asiento_Simple, # Asignado a la función para actualizar
+                    on_click=insertar_Asiento_Simple, # Asignado a la función para actualizar
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
