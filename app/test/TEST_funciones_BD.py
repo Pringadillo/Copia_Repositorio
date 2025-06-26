@@ -1072,12 +1072,17 @@ if __name__ == "__main__":
 
     
     #print(obtener_datos_grupo(ruta_BDapp))
+    #mostrar_datos_grupo(ruta_BDapp)
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
     #mostrar_cuentas_por_grupo2(ruta_BDapp, 2)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
     #ver_tablas_base_datos()
-    
+    #mostrar_datos_Diario(ruta_BDapp)    
+
+
+
+    '''
     insertar_datos_Diario(
             ruta_BDapp=ruta_BDapp,
             fechaValor='25/06/2025',
@@ -1105,5 +1110,4 @@ if __name__ == "__main__":
             importe=500.00,
             traspaso=1,
             Revisado=1
-        )
-    mostrar_datos_Diario(ruta_BDapp)
+        )'''

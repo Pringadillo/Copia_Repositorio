@@ -7,27 +7,27 @@ import os
 
 
 from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet
-#from app.Menu.BtnDiario import boton__diario
+import globals
 
+'''
 
-ruta_BDapp = globals.ruta_BD
-
-
-def boton__diarioSimple(e):
+def boton_diario():
     """
     Función que se ejecuta al hacer clic en el botón "Diario".
     """
-    #ruta_BDapp = globals.ruta_BD
-    
-    '''
-    def ver_4columnas(e):
+
+    def Tabla_Diario(e):
         #contenido_cuerpo_container.content = ft.Text("menu MOSTRAR TABLA CÓDIGO", size=20)
-        #e.page.update()
-        contenido_verTablasCodigos = submenu_4_columnas(e.page)
-        globals.contenido_central_container.content = contenido_verTablasCodigos
+        cuerpo_diario = ft.Container(
+            content=ft.Text("Tabla Diario", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=10,
+            bgcolor=ft.Colors.LIGHT_BLUE_50,
+            border_radius=ft.border_radius.all(10)
+        )
+
         e.page.update()
-
-
+        return cuerpo_diario
 
     def crear_Grupo(e):
         contenido_grupo = submenu_Grupos(e.page)
@@ -45,13 +45,20 @@ def boton__diarioSimple(e):
         #contenido_cuentas = submenu_Cuentas(e.page)
         #contenido_cuerpo_container.content = contenido_cuentas
         e.page.update()
-        '''
+
 
     # -----------------------------------------  SUBMENU  -----------------------------------------
     # Definición de los botones del submenú    
     submenu = ft.Container(
         content=ft.Row(
             controls=[
+                ft.TextButton(
+                    text="Tabla Diario",
+                    #on_click=ver_4columnas,
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
                 ft.TextButton(
                     text="Asiento Simple",
                     #on_click=ver_4columnas,
@@ -60,21 +67,21 @@ def boton__diarioSimple(e):
                     ),
                 ),
                 ft.TextButton(
-                    text="Asiento Múltiple",
+                    text="Traspaso entre cuentas",
                     #on_click=crear_Grupo,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Importar datos Excel",
+                    text="Modificar Asiento ",
                     #on_click=crear_Subgrupo,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
                 ),
                 ft.TextButton(
-                    text="Modificar Asiento",
+                    text="Importar datos Excel",
                     #on_click=crear_Cuenta,
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
@@ -84,7 +91,7 @@ def boton__diarioSimple(e):
             alignment=ft.MainAxisAlignment.START,
             spacing=20,
         ),
-        bgcolor=ft.Colors.LIGHT_BLUE_50,
+        bgcolor=ft.Colors.WHITE,
         padding=10,
         border_radius=ft.border_radius.all(10),
     )
@@ -93,7 +100,7 @@ def boton__diarioSimple(e):
     globals.contenido_central_container.content = ft.Column(
         controls=[
             submenu,  # Submenú siempre visible
-            
+            cuerpo_diario # Contenido principal del diario
         ],
         expand=True,
         spacing=10,  # separacion entre el submenú y el contenido
@@ -101,130 +108,294 @@ def boton__diarioSimple(e):
     )
     return globals.contenido_central_container.content
 
-    
+'''
 
 
-def proves3():
-        
-    ruta_BDapp = globals.ruta_BD
-
-    # Llama a ver_tabla_nivel1 para obtener los datos
-    controles_cuentas1 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 1)
-    controles_cuentas2 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 2)
-    controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
-    controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
-
-    botonesDiario = ft.Container(
-        content= ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
-        alignment=ft.alignment.center,
-        #bgcolor=ft.Colors.BLUE_GREY_200,
-        margin=ft.margin.only(top=20) 
+'''    
+cuerpo_principal_diario = ft.Container(
+    content=ft.Text("Haz clic en una opción del submenú 'Diario'.", size=20, weight=ft.FontWeight.NORMAL),
+    alignment=ft.alignment.center,
+    padding=20,
+    bgcolor=ft.Colors.GREY_100,
+    border_radius=ft.border_radius.all(10),
+    expand=True # Permite que ocupe el espacio disponible
     )
-    
-    contenidoDiario = ft.Container(
+'''
+# --- Funciones de la UI ---
+
+def boton_diario2():
+    """
+    Función que configura la sección "Diario" de la aplicación,
+    incluyendo su submenú y el área de contenido principal que se actualiza.
+    """
+    cuerpo_principal_diario=ft.Container()
+
+
+    # --- Funciones para actualizar el contenido principal ---
+    # Estas funciones serán los 'on_click' de los botones del submenú.
+    # Ahora modifican el 'content' de 'cuerpo_principal_diario' directamente.
+
+    def mostrar_Tabla_Diario(e: ft.ControlEvent):
+        # Actualiza el contenido del contenedor principal del diario
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Tabla Diario cargada con datos...", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.LIGHT_BLUE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update() # Es crucial actualizar la página para que se vean los cambios
+
+    def mostrar_Asiento_Simple(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Formulario para Asiento Simple.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.GREEN_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Traspaso_Cuentas(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Interfaz para Traspaso entre Cuentas.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.ORANGE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Modificar_Asiento(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Herramienta para Modificar Asiento.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.PURPLE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Importar_Excel(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Sección para Importar datos Excel.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.YELLOW_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+
+    # ----------------------------------------- SUBMENÚ -----------------------------------------
+    # Definición de los botones del submenú con sus handlers
+    submenu = ft.Container(
         content=ft.Row(
             controls=[
-                # Columna 1: Cuentas Financieras
-                ft.Container(
-                    content=ft.Column(
-                        controls=controles_cuentas1,
-                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
-                        horizontal_alignment=ft.CrossAxisAlignment.START,
-                        scroll=ft.ScrollMode.AUTO, 
-                        expand=True,
+                ft.TextButton(
+                    text="Tabla Diario",
+                    on_click=mostrar_Tabla_Diario, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
-                    expand=True,
-                    bgcolor=ft.Colors.LIGHT_BLUE_100,
-                    padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10),
                 ),
-                ft.VerticalDivider(),
-                
-                # Columna 2: Deudas
-                ft.Container(
-                    content=ft.Column(
-                        controls=controles_cuentas2,
-                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
-                        horizontal_alignment=ft.CrossAxisAlignment.START,
-                        scroll=ft.ScrollMode.AUTO, 
-                        expand=True,
+                ft.TextButton(
+                    text="Asiento Simple",
+                    on_click=mostrar_Asiento_Simple, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
-                    expand=True,
-                    bgcolor=ft.Colors.RED_100,
-                    padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10)
                 ),
-                ft.VerticalDivider(),
-
-                # Columna 3: Gastos
-                ft.Container(
-                    content=ft.Column(
-                        controls=controles_cuentas3,
-                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
-                        horizontal_alignment=ft.CrossAxisAlignment.START,
-                        scroll=ft.ScrollMode.AUTO, 
-                        expand=True,
+                ft.TextButton(
+                    text="Traspaso entre cuentas", # Texto en varias líneas
+                    on_click=mostrar_Traspaso_Cuentas, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
-                    expand=True,
-                    bgcolor=ft.Colors.ORANGE_100,
-                    padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10)
                 ),
-                ft.VerticalDivider(),
-
-                # Columna 4: Ingresos
-                ft.Container(
-                    content=ft.Column(
-                        controls=controles_cuentas4,
-                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
-                        horizontal_alignment=ft.CrossAxisAlignment.START,
-                        scroll=ft.ScrollMode.AUTO, 
-                        expand=True,
+                ft.TextButton(
+                    text="Modificar Asiento", # Texto en varias líneas
+                    on_click=mostrar_Modificar_Asiento, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
                     ),
-                    expand=True,
-                    bgcolor=ft.Colors.GREEN_100,
-                    padding=ft.padding.all(10),
-                    border_radius=ft.border_radius.all(10)
                 ),
-                
+                ft.TextButton(
+                    text="Importar datos Excel", # Texto en varias líneas
+                    on_click=mostrar_Importar_Excel, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
             ],
-            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
-            vertical_alignment=ft.CrossAxisAlignment.START,
-            wrap=False,
-            expand=True
-
-        ),
-
-        padding=10,
-        expand=True
-        
-    )
-
-    # ----------------------  Estructura principal -----------------
-
-    globals.contenido_central_container.content = ft.Container(
-        content=ft.Column(
-            controls=[
-                botonesDiario,
-                contenidoDiario,
-
-            ],
-            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+            alignment=ft.MainAxisAlignment.START,
+            spacing=20, # Espacio entre los botones
         ),
         bgcolor=ft.Colors.WHITE,
+        padding=10,
+        border_radius=ft.border_radius.all(10),
+    )
 
-        )
+    # ---------------------- Estructura principal del "Diario" -----------------
+    # Se establece el contenido de 'contenido_central_container'
+    globals.contenido_central_container.content = ft.Column(
+        controls=[
+            submenu, # El submenú siempre está en la parte superior
+            cuerpo_principal_diario # Esta área se actualizará dinámicamente
+        ],
+        expand=True, # La columna se expande para ocupar el espacio disponible
+        spacing=10, # Separación entre el submenú y el contenido principal
+    )
     
+    # Retorna el contenido del contenedor central.
+    # Cuando esta función es llamada (por ejemplo, desde un botón principal "Diario"),
+    # establecerá el contenido de contenido_central_container.
     return globals.contenido_central_container.content
+
+
+
+def boton_diario3():
+    """
+    Función que configura la sección "Diario" de la aplicación,
+    incluyendo su submenú y el área de contenido principal que se actualiza.
+    """
+    cuerpo_principal_diario=ft.Container()
+
+
+    # --- Funciones para actualizar el contenido principal ---
+    # Estas funciones serán los 'on_click' de los botones del submenú.
+    # Ahora modifican el 'content' de 'cuerpo_principal_diario' directamente.
+
+    def mostrar_Tabla_Diario(e: ft.ControlEvent):
+        # Actualiza el contenido del contenedor principal del diario
+
+        datos_tabla_diario = ""
+        ver_la_tabla_diario= ""
+
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Tabla Diario cargada con datos...", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.LIGHT_BLUE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update() # Es crucial actualizar la página para que se vean los cambios
+
+    def mostrar_Asiento_Simple(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Formulario para Asiento Simple.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.GREEN_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Traspaso_Cuentas(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Interfaz para Traspaso entre Cuentas.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.ORANGE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Modificar_Asiento(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Herramienta para Modificar Asiento.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.PURPLE_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+    def mostrar_Importar_Excel(e: ft.ControlEvent):
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Text("Contenido: Sección para Importar datos Excel.", size=20, weight=ft.FontWeight.BOLD),
+            alignment=ft.alignment.center,
+            padding=20,
+            bgcolor=ft.Colors.YELLOW_50,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+
+    # ----------------------------------------- SUBMENÚ -----------------------------------------
+    # Definición de los botones del submenú con sus handlers
+    submenu = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.TextButton(
+                    text="Tabla Diario",
+                    on_click=mostrar_Tabla_Diario, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Asiento Simple",
+                    on_click=mostrar_Asiento_Simple, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Traspaso entre cuentas", # Texto en varias líneas
+                    on_click=mostrar_Traspaso_Cuentas, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Modificar Asiento", # Texto en varias líneas
+                    on_click=mostrar_Modificar_Asiento, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+                ft.TextButton(
+                    text="Importar datos Excel", # Texto en varias líneas
+                    on_click=mostrar_Importar_Excel, # Asignado a la función para actualizar
+                    style=ft.ButtonStyle(
+                        text_style=ft.TextStyle(size=18, letter_spacing=2)
+                    ),
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.START,
+            spacing=20, # Espacio entre los botones
+        ),
+        bgcolor=ft.Colors.WHITE,
+        padding=10,
+        border_radius=ft.border_radius.all(10),
+    )
+
+    # ---------------------- Estructura principal del "Diario" -----------------
+    # Se establece el contenido de 'contenido_central_container'
+    globals.contenido_central_container.content = ft.Column(
+        controls=[
+            submenu, # El submenú siempre está en la parte superior
+            cuerpo_principal_diario # Esta área se actualizará dinámicamente
+        ],
+        expand=True, # La columna se expande para ocupar el espacio disponible
+        spacing=10, # Separación entre el submenú y el contenido principal
+    )
     
-
-
-
-
-
-
-
-
+    # Retorna el contenido del contenedor central.
+    # Cuando esta función es llamada (por ejemplo, desde un botón principal "Diario"),
+    # establecerá el contenido de contenido_central_container.
+    return globals.contenido_central_container.content
 
 
 
