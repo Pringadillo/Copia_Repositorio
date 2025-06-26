@@ -925,9 +925,24 @@ def mostrar_datos_Diario(ruta_BDapp):
             conn.close()
 
 
+def obtener_asientos_diario(ruta_BDapp):
+    """
+    Obtiene todos los registros de la tabla DIARIO.
+    devuelve una lista de diccionarios, donde cada diccionario representa una fila de la tabla DIARIO. 
 
-
-
+    """
+    datos = []
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        conn.row_factory = sqlite3.Row # Permite acceder a las columnas por nombre
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM DIARIO ORDER BY fechaValor DESC, id_diario DESC") # Ordenar por fecha
+            datos = [dict(row) for row in cursor.fetchall()]
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de DIARIO: {e}")
+        # Manejo de errores: por ejemplo, retornar una lista vacía o levantar una excepción
+    return datos
 # ---------------------------------------- FUNCIONES DE ELIMINAR DATOS ----------------------------------------
 
 # ---------------------------------------- FUNCIONES MOPDIFICAR DATOS ------------------------------
@@ -1070,6 +1085,7 @@ if __name__ == "__main__":
         mostrar_datos_subgrupo(ruta_BDapp)
         mostrar_datos_cuentas(ruta_BDapp)
 
+
     
     #print(obtener_datos_grupo(ruta_BDapp))
     #mostrar_datos_grupo(ruta_BDapp)
@@ -1078,7 +1094,8 @@ if __name__ == "__main__":
     #mostrar_cuentas_por_grupo2(ruta_BDapp, 2)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
     #ver_tablas_base_datos()
-    #mostrar_datos_Diario(ruta_BDapp)    
+    #mostrar_datos_Diario(ruta_BDapp)   
+    #print(obtener_asientos_diario(ruta_BDapp))
 
 
 

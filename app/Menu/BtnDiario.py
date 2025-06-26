@@ -6,7 +6,7 @@ import sys
 import os
 
 
-from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet
+from app.data.funciones_BD import *
 import globals
 
 '''
@@ -271,21 +271,79 @@ def boton_diario3():
     # Estas funciones serán los 'on_click' de los botones del submenú.
     # Ahora modifican el 'content' de 'cuerpo_principal_diario' directamente.
 
-    def mostrar_Tabla_Diario(e: ft.ControlEvent):
-        # Actualiza el contenido del contenedor principal del diario
+    def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
+        ruta_BDapp= globals.ruta_BD
+        asientos = obtener_asientos_diario(ruta_BDapp)
+        
+        if not asientos:
+            # Si no hay datos, se actualiza el contenido del contenedor principal
+            cuerpo_principal_diario.content = ft.Container(
+                content=ft.Text("No hay datos en el diario para mostrar.", text_align=ft.TextAlign.CENTER),
+                alignment=ft.alignment.center,
+                #padding=20,
+                expand=True
+            )
+            e.page.update()
+            return
 
-        datos_tabla_diario = ""
-        ver_la_tabla_diario= ""
+        # Obtenemos los nombres de las columnas de la primera fila (diccionario)
+        column_names = list(asientos[0].keys())
 
+        # Creamos las DataColumnas
+        columns = []
+        for col_name in column_names:
+            columns.append(
+                ft.DataColumn(
+                    ft.Text(col_name, weight=ft.FontWeight.BOLD),
+                    on_sort=lambda e: print(f"Ordenando por {e.column}"), # Puedes implementar lógica de ordenamiento aquí
+                )
+            )
+
+        # Creamos las DataFilas
+        rows = []
+        for asiento in asientos:
+            cells = []
+            for col_name in column_names:
+                cells.append(ft.DataCell(ft.Text(str(asiento[col_name]))))
+            rows.append(ft.DataRow(cells=cells))
+
+
+        # Creamos el contenedor que envolverá la tabla
+        tabla_container = ft.DataTable(
+                columns=columns,
+                rows=rows,
+                sort_column_index=0,  # Columna por defecto para ordenar (ej. la primera)
+                sort_ascending=True,  # Orden ascendente por defecto
+                heading_row_color=ft.Colors.BLUE_GREY_100,
+                data_row_color={"hovered": ft.Colors.BLUE_GREY_50},
+                border=ft.border.all(1, ft.Colors.GREY_300),
+                column_spacing=20,
+                horizontal_margin=10,
+                divider_thickness=1,
+        )
+        
+        # La parte que necesitaba la corrección de indentación para estar dentro de la función.
+        # Necesitarás asegurarte de que 'cuerpo_principal_diario' sea accesible en este alcance.
+        # Esto implica que 'cuerpo_principal_diario' debe ser una variable global,
+        # o pasada como argumento a esta función, o que esta función sea un método de una clase.
         cuerpo_principal_diario.content = ft.Container(
-            content=ft.Text("Contenido: Tabla Diario cargada con datos...", size=20, weight=ft.FontWeight.BOLD),
+            content=ft.Column(
+                [
+                    ft.Text("Libro Diario", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Divider(),
+                    tabla_container, # Esta 'tabla_container' está definida justo arriba
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=10,
+                expand=True  # La columna interior también debe expandirse
+            ),
             alignment=ft.alignment.center,
             padding=20,
-            bgcolor=ft.Colors.LIGHT_BLUE_50,
+            bgcolor=ft.Colors.WHITE,
             border_radius=ft.border_radius.all(10),
             expand=True
         )
-        e.page.update() # Es crucial actualizar la página para que se vean los cambios
+        e.page.update()
 
     def mostrar_Asiento_Simple(e: ft.ControlEvent):
         cuerpo_principal_diario.content = ft.Container(

@@ -313,7 +313,23 @@ def obtener_datos_cuentas(ruta_BDapp, grupo_id=1, subgrupo_id=1):
 
 
 def obtener_asientos_diario(ruta_BDapp):
-    pass
+    """
+    Obtiene todos los registros de la tabla DIARIO.
+    devuelve una lista de diccionarios, donde cada diccionario representa una fila de la tabla DIARIO. 
+
+    """
+    datos = []
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        conn.row_factory = sqlite3.Row # Permite acceder a las columnas por nombre
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM DIARIO ORDER BY fechaValor DESC, id_diario DESC") # Ordenar por fecha
+            datos = [dict(row) for row in cursor.fetchall()]
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de DIARIO: {e}")
+        # Manejo de errores: por ejemplo, retornar una lista vacía o levantar una excepción
+    return datos
 
 
 
@@ -405,10 +421,6 @@ def ver_tablas_base_datos():
     else:
         print("No hay tablas en la base de datos.")
     conn.close()
-
-
-def mostrar_asientos_diario(ruta_BDapp):
-    pass
 
 
 
@@ -652,7 +664,22 @@ def insertar_datos_iniciales(ruta_BDapp):
 
 
 
-
+def obtener_asientos_diario(ruta_BDapp):
+    """
+    Obtiene todos los registros de la tabla DIARIO.
+    """
+    datos = []
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        conn.row_factory = sqlite3.Row # Permite acceder a las columnas por nombre
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM DIARIO ORDER BY fechaValor DESC, id_diario DESC") # Ordenar por fecha
+            datos = [dict(row) for row in cursor.fetchall()]
+    except sqlite3.Error as e:
+        print(f"Error al obtener datos de DIARIO: {e}")
+        # Manejo de errores: por ejemplo, retornar una lista vacía o levantar una excepción
+    return datos
 
 
 
