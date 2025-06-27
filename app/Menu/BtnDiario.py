@@ -322,10 +322,7 @@ def boton_diario3():
                 divider_thickness=1,
         )
         
-        # La parte que necesitaba la corrección de indentación para estar dentro de la función.
-        # Necesitarás asegurarte de que 'cuerpo_principal_diario' sea accesible en este alcance.
-        # Esto implica que 'cuerpo_principal_diario' debe ser una variable global,
-        # o pasada como argumento a esta función, o que esta función sea un método de una clase.
+
         cuerpo_principal_diario.content = ft.Container(
             content=ft.Column(
                 [
@@ -349,29 +346,131 @@ def boton_diario3():
 
         crearAsientoSimple = ft.Column(
             controls=[ ft.TextField(
-                        label="Ingrese la Fecha", # Cambiado a español
-                        hint_text="dd/mm/aa",  # Sigue siendo útil para recordar el formato
-                        #value=default_date_str,   # Establece el valor por defecto a la fecha de hoy
-                        width=200,
-                        keyboard_type=ft.KeyboardType.DATETIME, # Sugiere un teclado de fecha en móviles
-                        on_change=lambda e: print(f"Fecha ingresada: {e.control.value}")
+                            label="Fecha de la operación", 
+                            hint_text="dd/mm/aa",  # formato
+                            #value=default_date_str,   # Establece el valor por defecto a la fecha de hoy
+                            width=200, # Ancho del campo de fecha
+                            keyboard_type=ft.KeyboardType.DATETIME, # Sugiere un teclado de fecha en móviles
+                            #on_change=lambda e: print(f"Fecha ingresada: {e.control.value}") #imprime en consola la fecha ingresada
                         ),
-                    ft.Text("Grupo", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Subgrupo", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Cuenta", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Descripción", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Importe", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Grupo", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Subgrupo", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Cuenta", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Revisado", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Conciliado", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Text("Fecha Creación", size=24, weight=ft.FontWeight.BOLD),]
+                        ft.Row(
+                            controls=[
+                                ft.Dropdown(
+                                    label="Grupo",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                                ft.Dropdown(
+                                    label="Subrupo",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                                                                ft.Dropdown(
+                                    label="Cuenta",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                            ],
+                            spacing=20, # Espacio entre los desplegables
+                            alignment=ft.MainAxisAlignment.START,
+                        ),
+                        ft.TextField(
+                            label="Descripción",
+                            hint_text="Introduce la descripción del asiento",
+                            multiline=True, # Permite múltiples líneas
+                            min_lines=1,    # Altura mínima de 2 líneas
+                            max_lines=1,    # Altura máxima de 5 líneas
+                            width=400,      # Ancho del campo
+                            border_radius=ft.border_radius.all(8) # Borde redondeado
+                        ),
+                        ft.Row(
+                            controls=[
+                                ft.TextField(
+                                    label="Importe",
+                                    width=200,
+                                    keyboard_type=ft.KeyboardType.NUMBER, # Permite números y el signo menos
+                                    value="0.00", # Valor inicial
+                                    text_align=ft.TextAlign.RIGHT, # Alinea el texto a la derecha
+                                ),
+                                ft.Checkbox(label="Traspaso"),
+                                ft.TextField(
+                                    label="Número Traspaso",
+                                    #hint_text="Ej: 123, -45",
+                                    keyboard_type=ft.KeyboardType.NUMBER, # Sugiere un teclado numérico
+                                    input_filter=ft.InputFilter(allow=True, regex_string=r"^[0-9-]*$", replacement_string=""), # Permite solo números y el signo menos
+                                    max_length=10, # Limita la longitud máxima si lo deseas
+                                    width=250,
+                                    text_align=ft.TextAlign.RIGHT,
+                                    ),
+                            ],
+                            spacing=20,
+                            alignment=ft.MainAxisAlignment.START,
+                        ),
+                        ft.Row(
+                            controls=[
+                                ft.Dropdown(
+                                    label="Grupo",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                                ft.Dropdown(
+                                    label="Subrupo",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                                                                ft.Dropdown(
+                                    label="Cuenta",  # This acts like the "Grupo" text
+                                    options=[ft.dropdown.Option("Opción 1"),
+                                            ft.dropdown.Option("Opción 2"),],
+                                    width=200,  # You can adjust the width as needed
+                                    #height=50,
+                                    text_size=16, # Adjust text size for the dropdown
+                                ),
+                            ],
+                            spacing=20, # Espacio entre los desplegables
+                            alignment=ft.MainAxisAlignment.START,
+                        ),
+                        ft.Row(
+                            controls=[
+                                
+
+                                ft.TextField(
+                                    label="Fecha Creación",
+                                    read_only=True,
+                                    value=datetime.now().strftime("%d/%m/%Y %H:%M"),
+                                    width=200
+                                ),
+                            ],
+                            spacing=20,
+                            alignment=ft.MainAxisAlignment.START,
+                        ),
+                        ft.Row(
+                            controls=[
+                                ft.Checkbox(label="Guardar"),
+                                ft.Checkbox(label="Cancelar"),
+                            ],
+                            spacing=20,
+                            alignment=ft.MainAxisAlignment.END,
+                        ),
+                ],
+                #spacing=10, #separación entre los controles   
         )
         
-        
-        ft.Text("columnas del asiento", size=24, weight=ft.FontWeight.BOLD)
-
         cuerpo_principal_diario.content = ft.Container(
             content=ft.Column(
                 [
@@ -381,6 +480,7 @@ def boton_diario3():
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=10,
+                
                 expand=True  # La columna interior también debe expandirse
             ),
             alignment=ft.alignment.center,
