@@ -13,7 +13,7 @@ def crear_appbar(page):
         if e.control.text == "Tabla de Códigos":
             globals.contenido_central_container.content = TablaCodigos_2.proves3()
         elif e.control.text == "Diario":
-            globals.contenido_central_container.content = Btn_Diario.boton_diario3()
+            globals.contenido_central_container.content = Btn_Diario.boton_diario4()
             #page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")
         elif e.control.text == "Informes":
             page.controls[0].controls[1].content = ft.Text("Contenido del INFORMES")
