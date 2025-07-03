@@ -670,7 +670,7 @@ def boton_diario4():
 
     def insertar_Asiento_Simple(e: ft.ControlEvent):
 
-        crearAsientoSimple = ft.Column(        # container
+        crearAsientoSimple_1 = ft.Column(        # container
             controls=[ ft.TextField(
                             label="Fecha de la operación", 
                             hint_text="dd/mm/aa",  # formato
@@ -680,7 +680,6 @@ def boton_diario4():
                             #on_change=lambda e: print(f"Fecha ingresada: {e.control.value}") #imprime en consola la fecha ingresada
                         ),
 
-                        
                         ft.Row(
                             controls=[
                                 ft.Dropdown(
@@ -710,6 +709,7 @@ def boton_diario4():
                             ],
                             spacing=20, # Espacio entre los desplegables
                             alignment=ft.MainAxisAlignment.START,
+                            
                         ),
                         ft.TextField(
                             label="Descripción",
@@ -796,28 +796,77 @@ def boton_diario4():
                             alignment=ft.MainAxisAlignment.END,
                         ),
                 ],
-                #spacing=10, #separación entre los controles   
+                #spacing=10, #separación entre los controles  
+                expand=True,  # Permite que la columna ocupe todo el espacio disponible
+
+
         )
         
+        crearAsientoSimple = ft.Container(
+            content=crearAsientoSimple_1,  # Aquí se usa el container definido arriba
+            margin=ft.margin.only(left=50),
+            bgcolor=ft.Colors.WHITE,
+            border_radius=ft.border_radius.all(10),
+            expand=True  # Permite que el contenedor ocupe todo el espacio disponible
+        )
+
+
+        '''
         cuerpo_principal_diario.content = ft.Container(
             content=ft.Column(
-                [
-                    ft.Text("Crear Asiento Simple", size=24, weight=ft.FontWeight.BOLD),
-                    ft.Divider(),
-                    crearAsientoSimple, # Esta 'tabla_container' está definida justo arriba
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                spacing=10,
+                    controls =[
+                                ft.Text("Crear Asiento Simple", size=24, weight=ft.FontWeight.BOLD),
+                                ft.Divider(),
+                                ft.Container(
+                                    content= ft.Column(
+                                        controls=[crearAsientoSimple,],  # Aquí se usa el container definido arriba
+                                        margin=ft.margin.only(right=100),
+                                        bgcolor=ft.Colors.WHITE,
+                                        border_radius=ft.border_radius.all(10),
+                                        expand=True  # Permite que el contenedor ocupe todo el espacio disponible
+                                    ),
+                                ),
+                            ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=10,
                 
-                expand=True  # La columna interior también debe expandirse
-            ),
+                    expand=True  # La columna interior también debe expandirse
+                    ),
             alignment=ft.alignment.center,
             padding=20,
+            #margin=ft.margin.only(right=1000),
             bgcolor=ft.Colors.WHITE,
             border_radius=ft.border_radius.all(10),
             expand=True
         )
         e.page.update()
+        '''
+
+        cuerpo_principal_diario.content = ft.Container(
+            content=ft.Column(  # 'content' debe ser un solo control, en este caso, un ft.Column
+                [
+                    ft.Text("Crear Asiento Simple", size=24, weight=ft.FontWeight.BOLD),
+                    ft.Divider(),
+                    crearAsientoSimple, # Asumiendo que 'crearAsientoSimple' es un control de Flet válido (ej. un ft.Container, ft.Column, ft.Row, etc.)
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=10,
+                expand=True  # La columna interior también debe expandirse
+            ),
+            alignment=ft.alignment.center,
+            padding=20,
+            margin=ft.margin.only(left=10), # margen izquierdo de TODO el contenedor
+            bgcolor=ft.Colors.WHITE,
+            border_radius=ft.border_radius.all(10),
+            expand=True
+        )
+        e.page.update()
+
+
+
+
+
+
 
     def mostrar_Traspaso_Cuentas(e: ft.ControlEvent):
         cuerpo_principal_diario.content = ft.Container(
