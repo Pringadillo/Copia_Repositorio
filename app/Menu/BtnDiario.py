@@ -677,7 +677,7 @@ def boton_diario4():
                             #value=default_date_str,   # Establece el valor por defecto a la fecha de hoy
                             width=200, # Ancho del campo de fecha
                             keyboard_type=ft.KeyboardType.DATETIME, # Sugiere un teclado de fecha en móviles
-                            #on_change=lambda e: print(f"Fecha ingresada: {e.control.value}") #imprime en consola la fecha ingresada
+                            #on_change=lambda e: print(f"Fecha ingresada: {e.control.value}") #imprime en consola la fecha 
                         ),
 
                         ft.Row(
@@ -796,7 +796,7 @@ def boton_diario4():
                             alignment=ft.MainAxisAlignment.END,
                         ),
                 ],
-                #spacing=10, #separación entre los controles  
+                spacing=10, #separación entre los controles                  
                 expand=True,  # Permite que la columna ocupe todo el espacio disponible
 
 
@@ -804,43 +804,13 @@ def boton_diario4():
         
         crearAsientoSimple = ft.Container(
             content=crearAsientoSimple_1,  # Aquí se usa el container definido arriba
-            margin=ft.margin.only(left=50),
+            margin=ft.margin.only(left=50, top=20),
             bgcolor=ft.Colors.WHITE,
+            padding=20,
             border_radius=ft.border_radius.all(10),
             expand=True  # Permite que el contenedor ocupe todo el espacio disponible
         )
 
-
-        '''
-        cuerpo_principal_diario.content = ft.Container(
-            content=ft.Column(
-                    controls =[
-                                ft.Text("Crear Asiento Simple", size=24, weight=ft.FontWeight.BOLD),
-                                ft.Divider(),
-                                ft.Container(
-                                    content= ft.Column(
-                                        controls=[crearAsientoSimple,],  # Aquí se usa el container definido arriba
-                                        margin=ft.margin.only(right=100),
-                                        bgcolor=ft.Colors.WHITE,
-                                        border_radius=ft.border_radius.all(10),
-                                        expand=True  # Permite que el contenedor ocupe todo el espacio disponible
-                                    ),
-                                ),
-                            ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    spacing=10,
-                
-                    expand=True  # La columna interior también debe expandirse
-                    ),
-            alignment=ft.alignment.center,
-            padding=20,
-            #margin=ft.margin.only(right=1000),
-            bgcolor=ft.Colors.WHITE,
-            border_radius=ft.border_radius.all(10),
-            expand=True
-        )
-        e.page.update()
-        '''
 
         cuerpo_principal_diario.content = ft.Container(
             content=ft.Column(  # 'content' debe ser un solo control, en este caso, un ft.Column
