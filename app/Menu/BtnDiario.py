@@ -10,7 +10,9 @@ from app.data.funciones_BD import *
 import globals
 
 ruta_BDapp = globals.ruta_BD
-
+lista_Grupos=[]
+lista_Subgrupos = []
+lista_Cuentas =[]
 
 # --- Funciones de la UI ---
 
@@ -835,7 +837,35 @@ def boton_diario5():
     """
     cuerpo_principal_diario=ft.Container()
 
- 
+    # Definimos los Dropdowns para poder manipularlos
+    dd_grupo = ft.Dropdown(
+        label="Grupo",
+        width=200,
+        text_size=16,
+        options=[], # Inicialmente vacío, se llenará al seleccionar un grupo
+        hint_text="Elige Grupo",        
+    )
+
+    dd_subgrupo = ft.Dropdown(
+        label="Subgrupo",
+        width=200,
+        text_size=16,
+        options=[], # Inicialmente vacío, se llenará al seleccionar un grupo
+        disabled=True, # Inicialmente deshabilitado hasta que se seleccione un grupo
+        hint_text="Elige Subgrupo",
+    )
+
+    dd_cuenta = ft.Dropdown(
+        label="Cuenta",
+        width=200,
+        text_size=16,
+        options=[], # Inicialmente vacío, se llenará al seleccionar un grupo
+        disabled=True, # Inicialmente deshabilitado hasta que se seleccione un grupo
+        hint_text="Elige Cuenta",
+    )
+
+
+
     def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
         ruta_BDapp= globals.ruta_BD
         asientos = obtener_asientos_diario(ruta_BDapp)
@@ -908,31 +938,103 @@ def boton_diario5():
         e.page.update()
 
     def insertar_Asiento_Simple(e: ft.ControlEvent):
-        def cambia_Grupo(e: ft.ControlEvent):
-            """
-            Función que se ejecuta cuando se cambia el grupo en el Dropdown.
-            Actualiza las opciones del subgrupo y cuenta basándose en el grupo seleccionado.
-            """
-            ruta_BDapp = globals.ruta_BD
-            lista_Grupos=[]
-            lista_Subgrupos = []
-            lista_Cuentas =[]
+        ruta_BDapp = globals.ruta_BD
 
-            Grupos = obtener_datos_grupo(ruta_BDapp)
-            for item in Grupos:
-                lista_Grupos.append(ft.dropdown.Option(item))
+        def cambia_Grupo(event: ft.ControlEvent):
+            seleccion_completa_grupo = event.control.value # Ej. "1 - Activo"
+            grupo_id = None
 
-            grupo_seleccionado = e.control.value
-            Subgrupos = obtener_datos_subgrupo(ruta_BDapp, grupo=grupo_seleccionado)
-            for item in Subgrupos:
-                lista_Subgrupos.append(ft.dropdown.Option(item))
+            dd_subgrupo.options.clear()
+            dd_subgrupo.value = None
+            dd_cuenta.options.clear()
+            dd_cuenta.value = None
+            dd_subgrupo.disabled = True # Deshabilita subgrupo hasta que se seleccione un grupo válido
+            dd_cuenta.disabled = True   # Deshabilita cuenta hasta que se seleccione un subgrupo válido
 
-            cuenta_seleccionada = ""
-            Cuentas = obtener_datos_cuentas(ruta_BDapp, grupo_id=grupo_seleccionado, subgrupo_id=cuenta_seleccionada)
-            for item in Cuentas:
-                lista_Cuentas.append(ft.dropdown.Option(item))
+            #print(f"Grupo seleccionado: {seleccion_completa_grupo}")
+            
+            if seleccion_completa_grupo and seleccion_completa_grupo != "Elige Grupo":
+                try:
+                    # Extraer el ID de la cadena. Esto asume el formato "ID - Nombre"
+                    grupo_id = int(seleccion_completa_grupo.split(' - ')[0]) 
+                    #print(f"Grupo ID: {grupo_id}")
+                    # Guarda el grupo_id seleccionado directamente en la propiedad 'data' del control
+                    event.control.data = grupo_id
+                    # Obtener subgrupos basados en el grupo_id
+                    seleccion_subgrupo = obtener_datos_subgrupo(ruta_BDapp, grupo_id=grupo_id)
+                    #print(seleccion_completa_subgrupo)
 
-            e.page.update()
+                    # Llenar el Dropdown de subgrupos
+                    subgrupo_id = []
+
+                    for id_val, nombre_completo in seleccion_subgrupo:
+                        nombre_corto = nombre_completo.split(' - ')[-1] if ' - ' in nombre_completo else nombre_completo
+                        texto_visible = f"{id_val} {nombre_corto}"
+                        opcion = ft.dropdown.Option(
+                                text=texto_visible,
+                                data=id_val # Guardamos solo el ID como valor
+                            )
+                        subgrupo_id.append(opcion)
+
+                    dd_subgrupo.options.extend(subgrupo_id) # ¡Añade las opciones al dropdown de subgrupos!
+                    dd_subgrupo.disabled = False # Habilita el dropdown de subgrupos
+
+                except ValueError:
+                    grupo_id = None # Si no se puede parsear, no es un ID válido
+                    event.control.data = None # Limpia el dato si es inválido
+
+           
+            e.page.update()  # Actualiza la página una vez después de todos los cambios
+
+
+
+        def cambia_Subgrupo(event: ft.ControlEvent):
+            # 1. Obtener los IDs seleccionados
+            # El ID del grupo seleccionado lo recuperamos de la propiedad 'data' del dd_grupo
+            grupo_seleccionado_id = dd_grupo.data 
+            # El ID del subgrupo seleccionado viene en la propiedad 'data' de la opción seleccionada
+            subgrupo_seleccionado_id = event.control.data 
+
+            # 2. Limpiar y deshabilitar el dropdown de Cuentas
+            dd_cuenta.options.clear()
+            dd_cuenta.value = None
+            dd_cuenta.disabled = True # Deshabilita la cuenta hasta que haya un subgrupo válido
+
+            # 3. Comprobar que ambos IDs son válidos antes de obtener las cuentas
+            if grupo_seleccionado_id is not None and subgrupo_seleccionado_id is not None:
+                # Llamar a la función para obtener las cuentas
+                cuentas = obtener_datos_cuentas(
+                    ruta_BDapp, 
+                    grupo_id=grupo_seleccionado_id, 
+                    subgrupo_id=subgrupo_seleccionado_id
+                )
+                
+                # 4. Llenar el dropdown de Cuentas con las opciones obtenidas
+                for cuenta_texto in cuentas:
+                    dd_cuenta.options.append(ft.dropdown.Option(cuenta_texto))
+                
+                # 5. Habilitar el dropdown de Cuentas
+                dd_cuenta.disabled = False 
+            
+            e.page.update() # Actualiza la página una vez después de todos los cambios
+
+        
+        grupos_iniciales = obtener_datos_grupo(ruta_BDapp)
+        dd_grupo.options.clear()
+        dd_grupo.options.append(ft.dropdown.Option("Elige Grupo", data=None)) # Opción por defecto
+
+        for id, nombre in grupos_iniciales:
+            dd_grupo.options.append(ft.dropdown.Option(f"{id} - {nombre}", data=id)) # Guarda el ID en 'data'
+
+        # Asignar controladores de eventos
+        dd_grupo.on_change = cambia_Grupo
+        dd_subgrupo.on_change = cambia_Subgrupo
+
+        # Asegura que los dropdowns de subgrupo y cuenta estén deshabilitados al inicio
+        dd_subgrupo.disabled = True
+        dd_cuenta.disabled = True
+
+
 
 
 
@@ -948,35 +1050,15 @@ def boton_diario5():
 
                         ft.Row(
                             controls=[
-                                ft.Dropdown(
-                                    label="Grupo",  # This acts like the "Grupo" text
-                                    options=lista_Grupos,
-                                    width=200,  # You can adjust the width as needed
-                                    #height=50,
-                                    text_size=16, # Adjust text size for the dropdown
-                                    on_change= cambia_Grupo
-                                ),
-                                ft.Dropdown(
-                                    label="Subrupo",  # This acts like the "Grupo" text
-                                    options=[ft.dropdown.Option("Opción 1"),
-                                            ft.dropdown.Option("Opción 2"),],
-                                    width=200,  # You can adjust the width as needed
-                                    #height=50,
-                                    text_size=16, # Adjust text size for the dropdown
-                                ),
-                                                                ft.Dropdown(
-                                    label="Cuenta",  # This acts like the "Grupo" text
-                                    options=[ft.dropdown.Option("Opción 1"),
-                                            ft.dropdown.Option("Opción 2"),],
-                                    width=200,  # You can adjust the width as needed
-                                    #height=50,
-                                    text_size=16, # Adjust text size for the dropdown
-                                ),
+                                # ¡IMPORTANTE! Usamos las instancias de Dropdown definidas al principio
+                                dd_grupo,
+                                dd_subgrupo,
+                                dd_cuenta,
                             ],
-                            spacing=20, # Espacio entre los desplegables
+                            spacing=20,
                             alignment=ft.MainAxisAlignment.START,
-                            
                         ),
+
                         ft.TextField(
                             label="Descripción",
                             hint_text="Introduce la descripción del asiento",
@@ -1019,7 +1101,7 @@ def boton_diario5():
                                     text_size=16, # Adjust text size for the dropdown
                                 ),
                                 ft.Dropdown(
-                                    label="Subrupo",  # This acts like the "Grupo" text
+                                    label="Subgrupo",  # This acts like the "Grupo" text
                                     options=[ft.dropdown.Option("Opción 1"),
                                             ft.dropdown.Option("Opción 2"),],
                                     width=200,  # You can adjust the width as needed
