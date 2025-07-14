@@ -1024,7 +1024,11 @@ def boton_diario5():
             # obtener las cuentas basadas en el subgrupo_id
             if cuentas_id is not None and cuentas_id != "Elige Cuenta":
                 print(f"pasa el criterio Elige subgrupo: {cuentas_id}")
-
+                dd_cuenta.options.clear() 
+                flet_options = [ft.dropdown.Option(key=codigo, text=descripcion) 
+                for codigo, descripcion in cuentas_id]
+                dd_cuenta.options.extend(flet_options) 
+                dd_cuenta.disabled = False
 
 
             else: 
