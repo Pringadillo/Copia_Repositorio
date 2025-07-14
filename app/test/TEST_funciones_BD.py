@@ -954,6 +954,8 @@ def inicio_Base_datos():
     crear_tabla_GRUPO(ruta_BDapp)
     crear_tabla_SUBGRUPO(ruta_BDapp)
     crear_tabla_CUENTAS(ruta_BDapp)
+    crear_tabla_Diario(ruta_BDapp)
+
 
 def insertar_datos_iniciales():
     # ... (igual que tu función actual, usando ruta_BDapp en todas las llamadas)
@@ -1007,7 +1009,7 @@ def insertar_datos_iniciales():
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Renta Variable")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "ETF")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Fondos Inv.")  
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada")
     insertar_datos_cuenta(ruta_BDapp, 1, 5, "Renta Variable")
     insertar_datos_cuenta(ruta_BDapp, 1, 5, "ETF")
     insertar_datos_cuenta(ruta_BDapp, 1, 6, "Cta.Cte.")
@@ -1090,7 +1092,7 @@ if __name__ == "__main__":
     #print(obtener_datos_grupo(ruta_BDapp))
     #mostrar_datos_grupo(ruta_BDapp)
     #print(obtener_datos_subgrupo(ruta_BDapp, grupo_id=1))
-    print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
+    #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))
     #mostrar_cuentas_por_grupo2(ruta_BDapp, 2)
     #print(obtener_cuentas_formateadas_para_flet(ruta_BDapp, 1))
     #ver_tablas_base_datos()

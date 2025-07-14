@@ -23,6 +23,7 @@ def crear_tabla_GRUPO(ruta_BDapp):
                 CREATE TABLE IF NOT EXISTS GRUPO (
                     grupo_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     descripcion_grupo TEXT NOT NULL UNIQUE CHECK (descripcion_grupo = UPPER(descripcion_grupo))
+                    tipo_cuenta TEXT NOT NULL CHECK (tipo_cuenta IN ('BALANCE', 'PyG'))
                 )
             """)
             conn.commit()
@@ -146,6 +147,7 @@ def crear_tabla_Diario(ruta_BDapp):
 
 
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
+'''
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
     try:
         conn = sqlite3.connect(ruta_BDapp)
@@ -159,6 +161,49 @@ def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
     except sqlite3.IntegrityError as e:
         print(f"Error al insertar en GRUPO (Nivel 1): {e}")
         raise
+'''
+        
+
+def insertar_datos_grupo(ruta_BDapp, descripcion_grupo, tipo_cuenta):
+    """
+    Inserta un nuevo grupo en la tabla GRUPO.
+
+    Args:
+        ruta_BDapp (str): La ruta completa al archivo de la base de datos SQLite.
+        descripcion_grupo (str): La descripción del grupo (ej. 'ACTIVOS', 'INGRESOS').
+                                 Se convertirá automáticamente a mayúsculas.
+        tipo_cuenta (str): El tipo de cuenta al que pertenece el grupo ('BALANCE' o 'PyG').
+                           Se validará contra estos dos valores.
+
+    Returns:
+        bool: True si el grupo se insertó correctamente, False en caso contrario.
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+
+        # Convertir la descripción a mayúsculas para cumplir con la restricción CHECK
+        descripcion_grupo_upper = descripcion_grupo.upper()
+
+        cursor.execute("""
+            INSERT INTO GRUPO (descripcion_grupo, tipo_cuenta)
+            VALUES (?, ?)
+        """, (descripcion_grupo_upper, tipo_cuenta))
+        conn.commit()
+        print(f"Grupo '{descripcion_grupo_upper}' ({tipo_cuenta}) insertado correctamente.")
+        return True
+    except sqlite3.IntegrityError as e:
+        # Este error se dispara si UNIQUE o CHECK falla (ej. descripción duplicada, tipo_cuenta inválido)
+        print(f"Error de integridad al insertar grupo (podría ser duplicado o tipo_cuenta inválido): {e}")
+        return False
+    except sqlite3.Error as e:
+        print(f"Error al insertar grupo: {e}")
+        return False
+    finally:
+        if conn:
+            conn.close()
+
 
 def insertar_datos_subgrupo(ruta_BDapp, grupo_id, descripcion_subgrupo):
     try:
@@ -559,12 +604,12 @@ def insertar_datos_iniciales(ruta_BDapp):
     """
 
     # Insertar datos en GRUPO (Nivel 1)
-    insertar_datos_grupo(ruta_BDapp, "Cuentas Financieras")
-    insertar_datos_grupo(ruta_BDapp, "Deudas")
-    insertar_datos_grupo(ruta_BDapp, "Gastos")
-    insertar_datos_grupo(ruta_BDapp, "Ingresos")
+    insertar_datos_grupo(ruta_BDapp, "Cuentas Financieras", "Balance")
+    insertar_datos_grupo(ruta_BDapp, "Deudas", "Balance")
+    insertar_datos_grupo(ruta_BDapp, "Gastos", "PyG")
+    insertar_datos_grupo(ruta_BDapp, "Ingresos", "PyG")
 
-    # Insertar datos en CUENTAS (Nivel 2)
+    # Insertar datos en SUBGRUPO (Nivel 2)
     insertar_datos_subgrupo(ruta_BDapp, 1, "Efectivo")
     insertar_datos_subgrupo(ruta_BDapp, 1, "Caixa Enginyers")
     insertar_datos_subgrupo(ruta_BDapp, 1, "Self Bank")
@@ -603,7 +648,7 @@ def insertar_datos_iniciales(ruta_BDapp):
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Renta Variable")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "ETF")
     insertar_datos_cuenta(ruta_BDapp, 1, 4, "Fondos Inv.")  
-    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada.")
+    insertar_datos_cuenta(ruta_BDapp, 1, 5, "Cta.Remunerada")
     insertar_datos_cuenta(ruta_BDapp, 1, 5, "Renta Variable")
     insertar_datos_cuenta(ruta_BDapp, 1, 5, "ETF")
     insertar_datos_cuenta(ruta_BDapp, 1, 6, "Cta.Cte.")
@@ -662,21 +707,37 @@ def insertar_datos_iniciales(ruta_BDapp):
 
 
 
-def insertar_asiento_Diario (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion):
+def insertar_asiento_Diario(fecha, grupo1, subgrupo1, cuenta1, descripcion, importe, grupo2, subgrupo2, cuenta2, traspaso, numero_traspaso, fecha_creacion=None):
     """
     Inserta un asiento en la tabla DIARIO.
-    Esta función es un ejemplo y debe adaptarse a tus necesidades específicas.
+
+    Args:
+        fecha (str): La fecha del asiento (ej. 'YYYY-MM-DD').
+        grupo1 (str): El grupo de la primera cuenta.
+        subgrupo1 (str): El subgrupo de la primera cuenta.
+        cuenta1 (str): La primera cuenta contable.
+        descripcion (str): La descripción del asiento.
+        importe (float): El importe del asiento.
+        grupo2 (str): El grupo de la segunda cuenta.
+        subgrupo2 (str): El subgrupo de la segunda cuenta.
+        cuenta2 (str): La segunda cuenta contable.
+        traspaso (bool): Indica si es un traspaso (True/False).
+        numero_traspaso (str): El número de traspaso, si aplica.
+        fecha_creacion (str, opcional): La fecha de creación del registro (ej. 'YYYY-MM-DD HH:MM:SS').
+                                        Por defecto, se usa la marca de tiempo actual si no se proporciona.
+    Returns:
+        bool: True si el asiento se insertó correctamente, False en caso contrario.
     """
-    ruta_BDapp = globals.ruta_BD  # Accede a la variable global
+    ruta_BDapp = globals.ruta_BD
     conn = None
 
     try:
         conn = sqlite3.connect(ruta_BDapp)
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO asientos (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion))
+            INSERT INTO asientos (fecha, grupo1, subgrupo1, cuenta1, descripcion, importe, grupo2, subgrupo2, cuenta2, traspaso, numero_traspaso, fecha_creacion)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (fecha, grupo1, subgrupo1, cuenta1, descripcion, importe, grupo2, subgrupo2, cuenta2, traspaso, numero_traspaso, fecha_creacion))
         conn.commit()
         print("Asiento guardado en la base de datos.")
         return True
@@ -687,6 +748,15 @@ def insertar_asiento_Diario (fecha, grupo, subgrupo, cuenta, descripcion, import
         if conn:
             conn.close()
 
-    # Aquí deberías implementar la lógica para insertar un asiento en la tabla DIARIO
-    pass  # Reemplaza esto con tu implementación real
 
+def cancelar_asiento_diario():
+    """
+    Cierra/cancela insertar asiento simple.
+
+    Args:
+        asiento_id (int): El ID del asiento a cancelar.
+
+    Returns:
+        bool: True si el asiento se canceló correctamente, False en caso contrario.
+    """
+    pass

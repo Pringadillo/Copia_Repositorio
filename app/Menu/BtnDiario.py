@@ -1054,7 +1054,8 @@ def boton_diario5():
             numero_traspaso = e.control.parent.controls[6].value
             fecha_creacion = e.control.parent.controls[7].value        
 
-
+        def cancelar_asiento(e: ft.ControlEvent):
+            pass
         
         grupos_iniciales = obtener_datos_grupo(ruta_BDapp)
         dd_grupo.options.clear()
