@@ -937,6 +937,7 @@ def boton_diario5():
         )
         e.page.update()
 
+
     def insertar_Asiento_Simple(e: ft.ControlEvent):
         ruta_BDapp = globals.ruta_BD
 
@@ -950,7 +951,7 @@ def boton_diario5():
             dd_cuenta.value = None
             dd_subgrupo.disabled = True # Deshabilita subgrupo hasta que se seleccione un grupo válido
             dd_cuenta.disabled = True   # Deshabilita cuenta hasta que se seleccione un subgrupo válido
-
+            
             #print(f"Grupo seleccionado: {seleccion_completa_grupo}")
             
             if seleccion_completa_grupo and seleccion_completa_grupo != "Elige Grupo":
@@ -989,39 +990,58 @@ def boton_diario5():
 
 
         def cambia_Subgrupo(event: ft.ControlEvent):
-            # 1. Obtener los IDs seleccionados
-            # El ID del grupo seleccionado lo recuperamos de la propiedad 'data' del dd_grupo
-            grupo_seleccionado_id = dd_grupo.data 
-            # El ID del subgrupo seleccionado viene en la propiedad 'data' de la opción seleccionada
-            subgrupo_seleccionado_id = event.control.data 
+            #buscamos el valor del boton subgrupo
+            seleccion_completa_subgrupo = event.control.value # Ej. "2 - Caja"
+            #transformar el valor a un ID numérico
+            valor_extraido = (seleccion_completa_subgrupo.split('.')[-1].strip())
+            subgrupo_id = int(valor_extraido.split(' ')[0].strip())          
+            grupo_id = dd_grupo.data  
 
-            # 2. Limpiar y deshabilitar el dropdown de Cuentas
+            # para controlar las variables
+            #print(f"seleccion_completa_subgrupo: {seleccion_completa_subgrupo}")
+            #print(f"grupo_id: {grupo_id}")
+            #print(f"subgrupo_id: {subgrupo_id}")
+
+            #limpiar los datos del dropdown de cuenta
             dd_cuenta.options.clear()
             dd_cuenta.value = None
-            dd_cuenta.disabled = True # Deshabilita la cuenta hasta que haya un subgrupo válido
+            dd_cuenta.disabled = True # Deshabilita cuenta hasta que se seleccione un subgrupo válido
 
-            # 3. Comprobar que ambos IDs son válidos antes de obtener las cuentas
-            if grupo_seleccionado_id is not None and subgrupo_seleccionado_id is not None:
-                # Llamar a la función para obtener las cuentas
-                cuentas = obtener_datos_cuentas(
-                    ruta_BDapp, 
-                    grupo_id=grupo_seleccionado_id, 
-                    subgrupo_id=subgrupo_seleccionado_id
-                )
+            # Llenar el Dropdown de Cuenta
+            cuentas_id =[]
+            seleccion_cuentas = obtener_datos_cuentas(ruta_BDapp, grupo_id=grupo_id, subgrupo_id=subgrupo_id)
+            #print(f"seleccion_cuentas: {seleccion_cuentas}")
+            for la_cuenta in seleccion_cuentas:
+                codigo_completo = la_cuenta[0]
+                #print(f"El código completo es: {codigo_completo}")
+                descripcion_cuenta = la_cuenta[1].split(' - ')[-1]
+                #print(f"La descripción de la cuenta es: {descripcion_cuenta}")
+                cuentas_id.append((codigo_completo, descripcion_cuenta))
+                #print(f"Cuenta añadida: {cuentas_id}")
                 
-                # 4. Llenar el dropdown de Cuentas con las opciones obtenidas
-                for cuenta_texto in cuentas:
-                    dd_cuenta.options.append(ft.dropdown.Option(cuenta_texto))
+
+
+            # obtener las cuentas basadas en el subgrupo_id
+            if cuentas_id is not None and cuentas_id != "Elige Cuenta":
+                print(f"pasa el criterio Elige subgrupo: {cuentas_id}")
+
+
+
+            else: 
+                print("Falla algo")
+                # Asegurarse de que la cuenta esté deshabilitada y vacía si el subgrupo no es válido
+                dd_cuenta.value = None
+                dd_cuenta.disabled = True
                 
-                # 5. Habilitar el dropdown de Cuentas
-                dd_cuenta.disabled = False 
-            
-            e.page.update() # Actualiza la página una vez después de todos los cambios
+            event.page.update() # Actualiza la página una vez después de todos los cambios
+
 
         
         grupos_iniciales = obtener_datos_grupo(ruta_BDapp)
         dd_grupo.options.clear()
         dd_grupo.options.append(ft.dropdown.Option("Elige Grupo", data=None)) # Opción por defecto
+        dd_subgrupo.options.append(ft.dropdown.Option("Elige subgrupo", data=None)) # Opción por defecto
+        dd_cuenta.options.append(ft.dropdown.Option("Elige cuenta", data=None)) # Opción por defecto
 
         for id, nombre in grupos_iniciales:
             dd_grupo.options.append(ft.dropdown.Option(f"{id} - {nombre}", data=id)) # Guarda el ID en 'data'
