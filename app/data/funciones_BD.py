@@ -662,5 +662,31 @@ def insertar_datos_iniciales(ruta_BDapp):
 
 
 
+def insertar_asiento_Diario (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion):
+    """
+    Inserta un asiento en la tabla DIARIO.
+    Esta función es un ejemplo y debe adaptarse a tus necesidades específicas.
+    """
+    ruta_BDapp = globals.ruta_BD  # Accede a la variable global
+    conn = None
 
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO asientos (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (fecha, grupo, subgrupo, cuenta, descripcion, importe, traspaso, numero_traspaso, fecha_creacion))
+        conn.commit()
+        print("Asiento guardado en la base de datos.")
+        return True
+    except sqlite3.Error as e:
+        print(f"Error al insertar asiento: {e}")
+        return False
+    finally:
+        if conn:
+            conn.close()
+
+    # Aquí deberías implementar la lógica para insertar un asiento en la tabla DIARIO
+    pass  # Reemplaza esto con tu implementación real
 

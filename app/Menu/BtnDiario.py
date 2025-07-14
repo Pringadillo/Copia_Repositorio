@@ -1041,6 +1041,19 @@ def boton_diario5():
                 
             event.page.update() # Actualiza la página una vez después de todos los cambios
 
+        def guardar_asiento(e: ft.ControlEvent):
+            # Aquí puedes implementar la lógica para guardar el asiento
+            # Por ejemplo, podrías recoger los valores de los campos y guardarlos en la base de datos
+            fecha = e.control.parent.controls[0].value
+            grupo = dd_grupo.value
+            subgrupo = dd_subgrupo.value
+            cuenta = dd_cuenta.value
+            descripcion = e.control.parent.controls[3].value
+            importe = e.control.parent.controls[4].value 
+            traspaso = e.control.parent.controls[5].value 
+            numero_traspaso = e.control.parent.controls[6].value
+            fecha_creacion = e.control.parent.controls[7].value        
+
 
         
         grupos_iniciales = obtener_datos_grupo(ruta_BDapp)
@@ -1112,6 +1125,7 @@ def boton_diario5():
                                     max_length=10, # Limita la longitud máxima si lo deseas
                                     width=250,
                                     text_align=ft.TextAlign.RIGHT,
+                                    disabled=True, # Deshabilitado hasta que se seleccione un traspaso
                                     ),
                             ],
                             spacing=20,
@@ -1147,14 +1161,13 @@ def boton_diario5():
                             alignment=ft.MainAxisAlignment.START,
                         ),
                         ft.Row(
-                            controls=[
-                                
-
+                            controls=[                                
                                 ft.TextField(
                                     label="Fecha Creación",
                                     read_only=True,
                                     value=datetime.now().strftime("%d/%m/%Y %H:%M"),
-                                    width=200
+                                    width=200,
+                                    disabled=True, # Deshabilitado para evitar edición
                                 ),
                             ],
                             spacing=20,
@@ -1162,11 +1175,17 @@ def boton_diario5():
                         ),
                         ft.Row(
                             controls=[
-                                ft.Checkbox(label="Guardar"),
-                                ft.Checkbox(label="Cancelar"),
+                                ft.ElevatedButton(
+                                    text="Guardar",
+                                    on_click=guardar_asiento # Asigna la función a on_click
+                                ),
+                                ft.ElevatedButton(
+                                    text="Cancelar",
+                                    on_click=cancelar_asiento # Asigna la función a on_click
+                                ),
                             ],
                             spacing=20,
-                            alignment=ft.MainAxisAlignment.END,
+                            alignment=ft.MainAxisAlignment.CENTER, # Alinea los checkboxes al centro
                         ),
                 ],
                 spacing=10, #separación entre los controles                  
