@@ -848,7 +848,7 @@ def boton_diario5():
 
     dd_subgrupo = ft.Dropdown(
         label="Subgrupo",
-        width=200,
+        width=250,
         text_size=16,
         options=[], # Inicialmente vacío, se llenará al seleccionar un grupo
         disabled=True, # Inicialmente deshabilitado hasta que se seleccione un grupo
@@ -857,7 +857,7 @@ def boton_diario5():
 
     dd_cuenta = ft.Dropdown(
         label="Cuenta",
-        width=200,
+        width=300,
         text_size=16,
         options=[], # Inicialmente vacío, se llenará al seleccionar un grupo
         disabled=True, # Inicialmente deshabilitado hasta que se seleccione un grupo
@@ -1032,7 +1032,6 @@ def boton_diario5():
                     
                 dd_cuenta.options.extend(flet_options) 
                 dd_cuenta.disabled = False
-
 
             else: 
                 print("Falla algo")
