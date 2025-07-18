@@ -11,7 +11,7 @@ usuarioapp = globals.usuario  # Nombre del usuario
 def crear_appbar(page):
     def boton_click(e):
         if e.control.text == "Tabla de Códigos":
-            globals.contenido_central_container.content = TablaCodigos_2.proves3()
+            globals.contenido_central_container.content = TablaCodigos_2.proves5()
         elif e.control.text == "Diario":
             globals.contenido_central_container.content = Btn_Diario.boton_diario5()
             #page.controls[0].controls[1].content = ft.Text("Contenido del DIARIO")

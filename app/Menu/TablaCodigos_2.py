@@ -241,8 +241,348 @@ def proves3():
     return globals.contenido_central_container.content
     
 
+def proves4():
+        
+    ruta_BDapp = globals.ruta_BD
+
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    controles_cuentas1 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 1)
+    controles_cuentas2 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 2)
+    controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
+    controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
+
+    # funciones de la configuracion de la tabla
+    def open_rename_dialog(e):
+        pass
+
+    def open_create_subgroup_dialog(e):
+        pass
+
+    def open_create_group_dialog(e):
+        pass
+
+    def open_create_cuenta_dialog(e):
+        pass
+
+    def close_dialog(e):
+        pass
 
 
+
+
+
+    texto1 = ft.Container(
+        content= ft.Row(  
+            controls=[
+                ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                ft.PopupMenuButton(
+                    items=[
+                        ft.PopupMenuItem(
+                            text="Renombrar Código",
+                            icon=ft.Icons.EDIT,
+                            on_click=open_rename_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Grupo",
+                            icon=ft.Icons.CREATE_NEW_FOLDER,
+                            on_click=open_create_group_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Subgrupo",
+                            icon=ft.Icons.CREATE_NEW_FOLDER_OUTLINED,
+                            on_click=open_create_subgroup_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Cuenta",
+                            icon=ft.Icons.ACCOUNT_TREE_OUTLINED,
+                            on_click=open_create_cuenta_dialog
+                        ),
+                    ],
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),  # Icono de menú
+                            ft.Text("Configuraciones Tabla", size=16)  # Texto del menú
+                        ],
+                        spacing=5, # Espacio entre el icono y el texto
+                        
+                    ),
+                    tooltip="Configuraciones para la Tabla",
+                ),
+                
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,  
+            spacing=150,  # Espacio entre el título y el menú
+        ),
+    )
+
+    
+    texto2 = ft.Container(
+        content=ft.Row(
+            controls=[
+                # Columna 1: Cuentas Financieras
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas1,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.LIGHT_BLUE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10),
+                ),
+                ft.VerticalDivider(),
+                
+                # Columna 2: Deudas
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas2,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.RED_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 3: Gastos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas3,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.ORANGE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 4: Ingresos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas4,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.GREEN_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                
+            ],
+            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+            wrap=False,
+            expand=True
+
+        ),
+
+        padding=10,
+        expand=True
+        
+    )
+
+    # ----------------------  Estructura principal -----------------
+
+    globals.contenido_central_container.content = ft.Container(
+        content=ft.Column(
+            controls=[
+                texto1,
+                texto2,
+
+            ],
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+        ),
+        bgcolor=ft.Colors.WHITE,
+
+        )
+    
+    return globals.contenido_central_container.content
+   
+def proves5():
+        
+    ruta_BDapp = globals.ruta_BD
+
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    controles_cuentas1 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 1)
+    controles_cuentas2 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 2)
+    controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
+    controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
+
+    # funciones de la configuracion de la tabla
+    def open_rename_dialog(e):
+        pass
+
+    def open_create_subgroup_dialog(e):
+        pass
+
+    def open_create_group_dialog(e):
+        pass
+
+    def open_create_cuenta_dialog(e):
+        pass
+
+    def close_dialog(e):
+        pass
+
+
+
+
+
+    texto1 = ft.Container(
+        content= ft.Row(  
+            controls=[
+                ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                ft.PopupMenuButton(
+                    items=[
+                        ft.PopupMenuItem(
+                            text="Renombrar Código",
+                            icon=ft.Icons.EDIT,
+                            on_click=open_rename_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Grupo",
+                            icon=ft.Icons.CREATE_NEW_FOLDER,
+                            on_click=open_create_group_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Subgrupo",
+                            icon=ft.Icons.CREATE_NEW_FOLDER_OUTLINED,
+                            on_click=open_create_subgroup_dialog
+                        ),
+                        ft.PopupMenuItem(
+                            text="Crear Cuenta",
+                            icon=ft.Icons.ACCOUNT_TREE_OUTLINED,
+                            on_click=open_create_cuenta_dialog
+                        ),
+                    ],
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),  # Icono de menú
+                            ft.Text("Configuraciones Tabla", size=16)  # Texto del menú
+                        ],
+                        spacing=5, # Espacio entre el icono y el texto
+                        
+                    ),
+                    tooltip="Configuraciones para la Tabla",
+                ),
+                
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,  
+            spacing=150,  # Espacio entre el título y el menú
+        ),
+    )
+
+    
+    texto2 = ft.Container(
+        content=ft.Row(
+            controls=[
+                # Columna 1: Cuentas Financieras
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas1,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.LIGHT_BLUE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10),
+                ),
+                ft.VerticalDivider(),
+                
+                # Columna 2: Deudas
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas2,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.RED_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 3: Gastos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas3,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.ORANGE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 4: Ingresos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas4,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.GREEN_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                
+            ],
+            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+            wrap=False,
+            expand=True
+
+        ),
+
+        padding=10,
+        expand=True
+        
+    )
+
+    # ----------------------  Estructura principal -----------------
+
+    globals.contenido_central_container.content = ft.Container(
+        content=ft.Column(
+            controls=[
+                texto1,
+                texto2,
+
+            ],
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+        ),
+        bgcolor=ft.Colors.WHITE,
+
+        )
+    
+    return globals.contenido_central_container.content
+   
 
 
 
