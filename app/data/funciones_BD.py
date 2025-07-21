@@ -147,21 +147,7 @@ def crear_tabla_Diario(ruta_BDapp):
 
 
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
-'''
-def insertar_datos_grupo(ruta_BDapp, descripcion_grupo):
-    try:
-        conn = sqlite3.connect(ruta_BDapp)
-        with conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO GRUPO (descripcion_grupo) VALUES (?)
-            """, (descripcion_grupo.upper(),))
-            conn.commit()
-        print(f"Insertado en GRUPO (Nivel 1): descripcion_grupo='{descripcion_grupo.upper()}'")
-    except sqlite3.IntegrityError as e:
-        print(f"Error al insertar en GRUPO (Nivel 1): {e}")
-        raise
-'''
+
         
 
 def insertar_datos_grupo(ruta_BDapp, descripcion_grupo, tipo_cuenta):

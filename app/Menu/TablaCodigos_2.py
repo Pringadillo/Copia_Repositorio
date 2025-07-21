@@ -412,6 +412,7 @@ def proves4():
     
     return globals.contenido_central_container.content
    
+
 def proves5():
         
     ruta_BDapp = globals.ruta_BD
@@ -423,68 +424,58 @@ def proves5():
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
 
     # funciones de la configuracion de la tabla
-    def open_rename_dialog(e):
+    def crear_codigo(e):
         pass
 
-    def open_create_subgroup_dialog(e):
+
+
+    def modificar_codigo(e):
         pass
 
-    def open_create_group_dialog(e):
-        pass
-
-    def open_create_cuenta_dialog(e):
+    def bloquear_codigo(e):
         pass
 
     def close_dialog(e):
         pass
 
 
-
-
-
     texto1 = ft.Container(
         content= ft.Row(  
             controls=[
                 ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
-                ft.PopupMenuButton(
-                    items=[
-                        ft.PopupMenuItem(
-                            text="Renombrar Código",
-                            icon=ft.Icons.EDIT,
-                            on_click=open_rename_dialog
-                        ),
-                        ft.PopupMenuItem(
-                            text="Crear Grupo",
-                            icon=ft.Icons.CREATE_NEW_FOLDER,
-                            on_click=open_create_group_dialog
-                        ),
-                        ft.PopupMenuItem(
-                            text="Crear Subgrupo",
-                            icon=ft.Icons.CREATE_NEW_FOLDER_OUTLINED,
-                            on_click=open_create_subgroup_dialog
-                        ),
-                        ft.PopupMenuItem(
-                            text="Crear Cuenta",
-                            icon=ft.Icons.ACCOUNT_TREE_OUTLINED,
-                            on_click=open_create_cuenta_dialog
+                        ft.PopupMenuButton(
+                            items=[
+                                ft.PopupMenuItem(
+                                    text="Crear Código",
+                                    icon=ft.Icons.ADD,
+                                    on_click=crear_codigo
+                                ),
+                                ft.PopupMenuItem(
+                                    text="Modificar Código",
+                                    icon=ft.Icons.EDIT,
+                                    on_click=modificar_codigo
+                                ),
+                                ft.PopupMenuItem(
+                                    text="Bloquear Código",
+                                    icon=ft.Icons.DELETE_OUTLINE,
+                                    on_click=bloquear_codigo
+                                ),
+                            ],
+                            content=ft.Row(
+                                controls=[
+                                    ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),  # Icono de menú
+                                    ft.Text("Configurar Tabla Códigos", size=16)  # Texto del menú
+                                ],
+                                spacing=5, # Espacio entre el icono y el texto
+                                
+                            ),
+                            tooltip="Configurar los códigos de la Tabla",
                         ),
                     ],
-                    content=ft.Row(
-                        controls=[
-                            ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),  # Icono de menú
-                            ft.Text("Configuraciones Tabla", size=16)  # Texto del menú
-                        ],
-                        spacing=5, # Espacio entre el icono y el texto
-                        
-                    ),
-                    tooltip="Configuraciones para la Tabla",
+                    alignment=ft.MainAxisAlignment.CENTER,  
+                    spacing=150,  # Espacio entre el título y el menú
                 ),
-                
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,  
-            spacing=150,  # Espacio entre el título y el menú
-        ),
-    )
+            )
 
     
     texto2 = ft.Container(
@@ -583,6 +574,3 @@ def proves5():
     
     return globals.contenido_central_container.content
    
-
-
-
