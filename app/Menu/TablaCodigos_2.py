@@ -427,18 +427,21 @@ def proves5():
     def crear_codigo(e):
         pass
 
-
-
     def modificar_codigo(e):
         pass
 
     def bloquear_codigo(e):
         pass
 
-    def close_dialog(e):
-        pass
+    def close_dialog(page:ft.Page):
+        page.dialog.open = False
+        page.update()
 
 
+
+
+
+    # Fila superior de Tabla Códigos
     texto1 = ft.Container(
         content= ft.Row(  
             controls=[
@@ -477,7 +480,7 @@ def proves5():
                 ),
             )
 
-    
+    # Cuerpo de Tabla Códigos
     texto2 = ft.Container(
         content=ft.Row(
             controls=[
@@ -564,7 +567,6 @@ def proves5():
             controls=[
                 texto1,
                 texto2,
-
             ],
             alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),

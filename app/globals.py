@@ -1,6 +1,3 @@
-import flet as ft
-
-
 
 
 # Variables Globales

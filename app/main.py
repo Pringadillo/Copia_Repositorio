@@ -63,11 +63,7 @@ else:
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
     
-    # Crear e inicializar el SnackBar
-    page.snack_bar = ft.SnackBar(
-        content=ft.Text(""),
-        action="Cerrar"
-    )
+    
 
     # Crear la AppBar
     page.appbar = appbar.crear_appbar(page)  # Contenido definido en appbar.py

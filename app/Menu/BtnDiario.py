@@ -864,8 +864,6 @@ def boton_diario5():
         hint_text="Elige Cuenta",
     )
 
-
-
     def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
         ruta_BDapp= globals.ruta_BD
         asientos = obtener_asientos_diario(ruta_BDapp)
@@ -987,8 +985,6 @@ def boton_diario5():
            
             e.page.update()  # Actualiza la página una vez después de todos los cambios
 
-
-
         def cambia_Subgrupo(event: ft.ControlEvent):
             #buscamos el valor del boton subgrupo
             seleccion_completa_subgrupo = event.control.value # Ej. "2 - Caja"
@@ -1074,11 +1070,8 @@ def boton_diario5():
         dd_subgrupo.disabled = True
         dd_cuenta.disabled = True
 
-
-
-
-
-        crearAsientoSimple_1 = ft.Column(        # container
+        # Dispocición de las ventanas de datos
+        crearAsientoSimple_1 = ft.Column(        
             controls=[ ft.TextField(
                             label="Fecha de la operación", 
                             hint_text="dd/mm/aa",  # formato
@@ -1087,7 +1080,6 @@ def boton_diario5():
                             keyboard_type=ft.KeyboardType.DATETIME, # Sugiere un teclado de fecha en móviles
                             #on_change=lambda e: print(f"Fecha ingresada: {e.control.value}") #imprime en consola la fecha 
                         ),
-
                         ft.Row(
                             controls=[
                                 # ¡IMPORTANTE! Usamos las instancias de Dropdown definidas al principio
@@ -1098,7 +1090,6 @@ def boton_diario5():
                             spacing=20,
                             alignment=ft.MainAxisAlignment.START,
                         ),
-
                         ft.TextField(
                             label="Descripción",
                             hint_text="Introduce la descripción del asiento",
@@ -1191,10 +1182,9 @@ def boton_diario5():
                 ],
                 spacing=10, #separación entre los controles                  
                 expand=True,  # Permite que la columna ocupe todo el espacio disponible
-
-
         )
         
+        # traspasar el contenido al container
         crearAsientoSimple = ft.Container(
             content=crearAsientoSimple_1,  # Aquí se usa el container definido arriba
             margin=ft.margin.only(left=50, top=20),
@@ -1204,7 +1194,7 @@ def boton_diario5():
             expand=True  # Permite que el contenedor ocupe todo el espacio disponible
         )
 
-
+        # diseño de la página dinámica de la app, con crearAsientSimple
         cuerpo_principal_diario.content = ft.Container(
             content=ft.Column(  # 'content' debe ser un solo control, en este caso, un ft.Column
                 [
@@ -1271,7 +1261,7 @@ def boton_diario5():
         content=ft.Row(
             controls=[
                 ft.TextButton(
-                    text="Tabla Diario",
+                    text="Diario",
                     on_click=mostrar_Tabla_Diario, # Asignado a la función para actualizar
                     style=ft.ButtonStyle(
                         text_style=ft.TextStyle(size=18, letter_spacing=2)
