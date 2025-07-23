@@ -54,8 +54,13 @@ else:
         funciones_BD.crear_tabla_GRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_SUBGRUPO(ruta_BDapp)
         funciones_BD.crear_tabla_CUENTAS(ruta_BDapp)
-        funciones_BD.insertar_datos_iniciales(ruta_BDapp)
-        funciones_BD.crear_tabla_Diario(ruta_BDapp)
+        funciones_BD.crear_tabla_DIARIO(ruta_BDapp)
+        funciones_BD.insertar_datos_iniciales_grupos(ruta_BDapp)
+        funciones_BD.insertar_datos_iniciales_subgrupos(ruta_BDapp)
+        funciones_BD.insertar_datos_iniciales_cuentas(ruta_BDapp)
+        funciones_BD.
+
+
         
 
 #funciones_BD.ver_tablas_base_datos(ruta_BDapp)

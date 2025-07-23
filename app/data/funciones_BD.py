@@ -2,12 +2,12 @@ import sqlite3
 import flet as ft
 
 from app import globals
-from datetime import date
-
+from datetime import datetime
+import pandas as pd
 
 
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
-def crear_base_datos():
+def crear_base_datos(ruta_BDapp):
     conn = sqlite3.connect(ruta_BDapp)
     conn.commit()
     conn.close()
@@ -92,6 +92,7 @@ def crear_tabla_CUENTAS(ruta_BDapp):
 def crear_tabla_DIARIO(ruta_BDapp):
     """
     Crea la tabla DIARIO si no existe, con las columnas especificadas.
+    Ahora incluye la columna 'Concepto' de tipo TEXT antes de 'importe'.
     Esta versión no incluye claves foráneas para simplificar el inicio desde cero,
     enfocándose solo en las columnas solicitadas.
     """
@@ -103,15 +104,16 @@ def crear_tabla_DIARIO(ruta_BDapp):
                 CREATE TABLE IF NOT EXISTS DIARIO (
                     diario_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     fecha TEXT NOT NULL, -- Formato esperado: 'DD/MM/AA'
-                    grupo_balance TEXT NOT NULL,
-                    subgrupo_balance TEXT NOT NULL,
-                    cuenta_balance TEXT NOT NULL,
+                    grupo_balance INTEGER NOT NULL,
+                    subgrupo_balance INTEGER NOT NULL,
+                    cuenta_balance INTEGER NOT NULL,
+                    Concepto TEXT, -- Nueva columna Concepto
                     importe REAL NOT NULL, -- REAL para números con decimales y negativos
                     traspaso INTEGER DEFAULT 0, -- 0 para 'no', 1 para 'sí'
                     n_traspaso INTEGER, -- Números positivos sin decimales (NULL si no hay traspaso)
-                    grupo_PyG TEXT NOT NULL,
-                    subgrupo_PyG TEXT NOT NULL,
-                    cuenta_PyG TEXT NOT NULL,
+                    grupo_PyG INTEGER NOT NULL,
+                    subgrupo_PyG INTEGER NOT NULL,
+                    cuenta_PyG INTEGER NOT NULL,
                     auditado INTEGER DEFAULT 0, -- 0 para 'no', 1 para 'sí'
                     fecha_registro TEXT NOT NULL DEFAULT (date('now')) -- Fecha actual por defecto
                 )
@@ -121,6 +123,7 @@ def crear_tabla_DIARIO(ruta_BDapp):
     except sqlite3.Error as e:
         print(f"Error al crear la tabla DIARIO: {e}")
         raise
+
 
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
 
@@ -307,60 +310,62 @@ def insertar_datos_cuenta(ruta_BDapp: str, grupo_id: int, cod_2_subgrupo_input: 
         raise
 
 def insertar_datos_diario(
-    ruta_BDapp: str,
     fecha: str,
-    grupo_balance: str,
-    subgrupo_balance: str,
-    cuenta_balance: str,
+    grupo_balance: int,
+    subgrupo_balance: int,
+    cuenta_balance: int,
     importe: float,
-    grupo_PyG: str, # Parámetro obligatorio movido antes de los opcionales
-    subgrupo_PyG: str, # Parámetro obligatorio movido antes de los opcionales
-    cuenta_PyG: str, # Parámetro obligatorio movido antes de los opcionales
-    traspaso: int = 0, # 0 para 'no', 1 para 'sí'
-    n_traspaso: int = None, # NULL por defecto
-    auditado: int = 0 # 0 para 'no', 1 para 'sí'
+    grupo_PyG: int,
+    subgrupo_PyG: int,
+    cuenta_PyG: int,
+    concepto: str = None,
+    traspaso: int = 0,
+    n_traspaso: int = None,
+    auditado: int = 0
 ):
     """
     Inserta un nuevo registro en la tabla DIARIO.
 
     Args:
-        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
         fecha (str): La fecha del asiento (formato 'DD/MM/AA').
-        grupo_balance (str): El nombre del grupo de balance.
-        subgrupo_balance (str): El nombre del subgrupo de balance.
-        cuenta_balance (str): El nombre de la cuenta de balance.
+        grupo_balance (int): El ID del grupo de balance.
+        subgrupo_balance (int): El ID del subgrupo de balance.
+        cuenta_balance (int): El ID de la cuenta de balance.
         importe (float): El importe del asiento (acepta decimales y negativos).
+        grupo_PyG (int): El ID del grupo de Pérdidas y Ganancias.
+        subgrupo_PyG (int): El ID del subgrupo de Pérdidas y Ganancias.
+        cuenta_PyG (int): El ID de la cuenta de Pérdidas y Ganancias.
+        concepto (str): Descripción del concepto del asiento (opcional).
         traspaso (int): Indicador de traspaso (0=No, 1=Sí). Por defecto 0.
         n_traspaso (int): Número de traspaso (opcional). Por defecto None.
-        grupo_PyG (str): El nombre del grupo de Pérdidas y Ganancias.
-        subgrupo_PyG (str): El nombre del subgrupo de Pérdidas y Ganancias.
-        cuenta_PyG (str): El nombre de la cuenta de Pérdidas y Ganancias.
         auditado (int): Indicador de auditoría (0=No, 1=Sí). Por defecto 0.
+        (La ruta de la base de datos se toma de globals.ruta_BD)
     """
     try:
-        conn = sqlite3.connect(ruta_BDapp)
+        conn = sqlite3.connect(globals.ruta_BD) # Usa globals.ruta_BD aquí
         with conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
                 INSERT INTO DIARIO (
                     fecha, grupo_balance, subgrupo_balance, cuenta_balance,
-                    importe, traspaso, n_traspaso,
+                    Concepto, importe, traspaso, n_traspaso,
                     grupo_PyG, subgrupo_PyG, cuenta_PyG, auditado, fecha_registro
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     fecha, grupo_balance, subgrupo_balance, cuenta_balance,
-                    importe, traspaso, n_traspaso,
+                    concepto, importe,
+                    traspaso, n_traspaso,
                     grupo_PyG, subgrupo_PyG, cuenta_PyG, auditado,
-                    datetime.date.today().strftime('%Y-%m-%d') # Formato YYYY-MM-DD para la fecha de registro
+                    datetime.date.today().strftime('%Y-%m-%d')
                 )
             )
             conn.commit()
         print(f"Registro insertado exitosamente en DIARIO.")
     except sqlite3.Error as e:
         print(f"Error al insertar datos en la tabla DIARIO: {e}")
-        raise
+
 
 # ---------------------------------------- FUNCIONES OBTENER DATOS ----------------------------------------
 
@@ -1299,7 +1304,7 @@ def inicio_Base_datos():
     #crear_tabla_CUENTAS(ruta_BDapp)
     #crear_tabla_Diario(ruta_BDapp)
 
-def insertar_datos_iniciales():
+def insertar_datos_iniciales(ruta_BDapp):
     # ... (igual que tu función actual, usando ruta_BDapp en todas las llamadas)
 
     """
@@ -1414,7 +1419,7 @@ def insertar_datos_iniciales():
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
 
 # Insertar datos en GRUPO (Nivel 1)
-def insertar_datos_iniciales_grupos():
+def insertar_datos_iniciales_grupos(ruta_BDapp):
     insertar_datos_grupo(ruta_BDapp, "Cuentas Financieras", "Balance")
     insertar_datos_grupo(ruta_BDapp, "Deudas", "Balance")
     insertar_datos_grupo(ruta_BDapp, "Gastos", "PyG")
@@ -1440,6 +1445,7 @@ def insertar_datos_iniciales_subgrupos(ruta_BDapp):
     insertar_datos_subgrupo(ruta_BDapp, 1, 10, "StockCrowd")
     insertar_datos_subgrupo(ruta_BDapp, 1, 11, "Mintos")
     insertar_datos_subgrupo(ruta_BDapp, 1, 12, "Bestinver")
+    insertar_datos_subgrupo(ruta_BDapp, 1, 13, "Inversiones Empresas")
 
     # Grupo 2
     insertar_datos_subgrupo(ruta_BDapp, 2, 1, "Deudas Bancarias")
@@ -1457,7 +1463,7 @@ def insertar_datos_iniciales_subgrupos(ruta_BDapp):
     insertar_datos_subgrupo(ruta_BDapp, 4, 3, "Otros Ingresos")
 
 # Insertar datos en CUENTAS (Nivel 3)
-def insertar_datos_iniciales_cuentas():
+def insertar_datos_iniciales_cuentas(ruta_BDapp):
     insertar_datos_cuenta(ruta_BDapp, 1, 1, "Carlos")
     insertar_datos_cuenta(ruta_BDapp, 1, 1, "Montse")    
     insertar_datos_cuenta(ruta_BDapp, 1, 2, "Cta.Cte.")
@@ -1490,16 +1496,18 @@ def insertar_datos_iniciales_cuentas():
     insertar_datos_cuenta(ruta_BDapp, 1, 11, "Crowfunding") 
     insertar_datos_cuenta(ruta_BDapp, 1, 12, "Plan Pensiones")
     insertar_datos_cuenta(ruta_BDapp, 1, 12, "Fondos Inv.")
-    #insertar_datos_cuenta(ruta_BDapp, 1, 13, "CapitalCell")
-    #insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cebiotec")    
-    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Roger")
-    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Enric")
-    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Enaire 0%")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "CapitalCell")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Cebiotec")  
+    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Enaire 0%")
+    insertar_datos_cuenta(ruta_BDapp, 2, 1, "Banco A")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Roger")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Enric")
     insertar_datos_cuenta(ruta_BDapp, 2, 3, "Inversiones JMG")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Avis")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Tata")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Albert")
-    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Joan Moises")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Avis")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Tata")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Albert")
+    insertar_datos_cuenta(ruta_BDapp, 2, 2, "Joan Moises")
+    insertar_datos_cuenta(ruta_BDapp, 2, 3, "Inversiones JMG")
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comida")
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Agua")
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Luz")
@@ -1507,16 +1515,19 @@ def insertar_datos_iniciales_cuentas():
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Teléfono/Internet")
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Limpieza")
     insertar_datos_cuenta(ruta_BDapp, 3, 1, "Comunidad Vecinos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Otros Gastos Fijos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Ropa")
+    insertar_datos_cuenta(ruta_BDapp, 3, 1, "Resto Gastos Fijos")
     insertar_datos_cuenta(ruta_BDapp, 3, 2, "Salud")
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Ropa")
     insertar_datos_cuenta(ruta_BDapp, 3, 2, "Transporte")
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Tomar algo fuera") 
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Necesarios")
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "NO Necesarios")
     insertar_datos_cuenta(ruta_BDapp, 3, 2, "Seguros")
     insertar_datos_cuenta(ruta_BDapp, 3, 2, "Impuestos")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Vacaciones")
-    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Otros Gastos Variables")
-    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Gastos Extraordinarios")
-    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Otros Gastos Extraordinarios")
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Escapadas FindeSemana")
+    insertar_datos_cuenta(ruta_BDapp, 3, 2, "Vacaciones")    
+    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Extraordinarios previstos")
+    insertar_datos_cuenta(ruta_BDapp, 3, 3, "Extraordinarios NO previstos")
     insertar_datos_cuenta(ruta_BDapp, 3, 3, "Cuadrar Saldos")
     insertar_datos_cuenta(ruta_BDapp, 4, 1, "Montse")
     insertar_datos_cuenta(ruta_BDapp, 4, 1, "Carlos")
@@ -1528,8 +1539,79 @@ def insertar_datos_iniciales_cuentas():
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
 
+# insertar SALDOS iniciales
+
+def insertar_saldos_iniciales_desde_excel(ruta_BDapp: str, ruta_excel: str, sheet_name: str = 0):
+    """
+    Inserta SALDOS iniciales en la tabla DIARIO desde un archivo Excel.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        ruta_excel (str): La ruta al archivo Excel (.xlsx, .xls).
+        sheet_name (str or int): El nombre de la hoja o su índice (por defecto 0 para la primera hoja).
+    """
+    print(f"\n--- Insertando saldos iniciales desde Excel: '{ruta_excel}' ---")
+    try:
+        # Leer el archivo Excel en un DataFrame de pandas
+        df = pd.read_excel(ruta_excel, sheet_name=sheet_name)
+        print(f"Se han leído {len(df)} filas del archivo Excel.")
+
+        # Iterar sobre las filas del DataFrame e insertar en la base de datos
+        for index, row in df.iterrows():
+            try:
+                # Convertir los valores a los tipos esperados por insertar_datos_diario
+                # Se asume que los nombres de las columnas en Excel coinciden con los parámetros de la función
+                # Se manejan valores NaN/None para n_traspaso
+                n_traspaso_val = int(row['n_traspaso']) if pd.notna(row.get('n_traspaso')) else None
+                traspaso_val = int(row.get('traspaso', 0)) # Usar 0 si no está presente
+                auditado_val = int(row.get('auditado', 0)) # Usar 0 si no está presente
+                concepto_val = str(row['Concepto']) if pd.notna(row.get('Concepto')) else None # Nuevo: Concepto
+
+                insertar_datos_diario(
+                    ruta_BDapp=ruta_BDapp,
+                    fecha=str(row['fecha']), # Asegurar que la fecha sea string
+                    grupo_balance=int(row['grupo_balance']),
+                    subgrupo_balance=int(row['subgrupo_balance']),
+                    cuenta_balance=int(row['cuenta_balance']),
+                    importe=float(row['importe']),
+                    grupo_PyG=int(row['grupo_PyG']),
+                    subgrupo_PyG=int(row['subgrupo_PyG']),
+                    cuenta_PyG=int(row['cuenta_PyG']),
+                    traspaso=traspaso_val,
+                    n_traspaso=n_traspaso_val,
+                    auditado=auditado_val,
+                    concepto=concepto_val # Nuevo: Concepto
+                )
+            except KeyError as ke:
+                print(f"Error: Columna '{ke}' no encontrada en el archivo Excel en la fila {index + 1}. Asegúrate de que los nombres de las columnas coincidan.")
+                continue # Saltar esta fila y continuar con la siguiente
+            except ValueError as ve:
+                print(f"Error de tipo de dato en la fila {index + 1}: {ve}. Asegúrate de que los datos sean numéricos donde se espera.")
+                continue
+            except Exception as e:
+                print(f"Fallo al insertar la fila {index + 1} desde Excel: {e}")
+                continue # Continuar con la siguiente fila a pesar del error
+
+        print("--- Inserción de saldos iniciales desde Excel completada ---")
+
+    except FileNotFoundError:
+        print(f"Error: El archivo Excel no se encontró en la ruta: '{ruta_excel}'")
+    except pd.errors.EmptyDataError:
+        print(f"Error: El archivo Excel está vacío o la hoja especificada está vacía.")
+    except Exception as e:
+        print(f"Error general al leer el archivo Excel: {e}")
+
+
+
+
+
+
+
+
+
+
 # Insertar datos iniciales en el DIARIO
-def insertar_datos_iniciales_diario(ruta_BDapp: str):
+def insertar_ejemplo_datos_iniciales_diario(ruta_BDapp: str):
     """
     Inserta 5 asientos de ejemplo en la tabla DIARIO.
 
