@@ -9,6 +9,11 @@ BasedeDatos = f"bd_{empresa}.db"
 ruta_BDapp = f"./test/{BasedeDatos}"
 
 
+
+
+
+
+
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
 def crear_base_datos():
     conn = sqlite3.connect(ruta_BDapp)
@@ -16,24 +21,31 @@ def crear_base_datos():
     conn.close()
 
 def crear_tabla_GRUPO(ruta_BDapp):
+    """
+    Crea la tabla 'GRUPO' (Nivel 1) en la base de datos SQLite si no existe.
+    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
             cursor = conn.cursor()
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS GRUPO ( -- ¡Aquí faltaba el paréntesis de apertura!
+                CREATE TABLE IF NOT EXISTS GRUPO (
                     grupo_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    desc_grupo TEXT NOT NULL UNIQUE CHECK (desc_grupo = UPPER(desc_grupo)), -- Corregido el nombre de la columna en el CHECK
+                    desc_grupo TEXT NOT NULL UNIQUE CHECK (desc_grupo = UPPER(desc_grupo)),
                     tipo_grupo TEXT NOT NULL CHECK (tipo_grupo IN ('Balance', 'PyG'))
                 )
             """)
             conn.commit()
-        print("Tabla GRUPO (Nivel 1) creada.")
+        print("Tabla GRUPO (Nivel 1) creada correctamente.")
     except sqlite3.Error as e:
         print(f"Error al conectar o crear la tabla GRUPO: {e}")
         raise
 
 def crear_tabla_SUBGRUPO(ruta_BDapp):
+    """
+    Crea la tabla 'SUBGRUPO' (Nivel 2) en la base de datos SQLite si no existe.
+    Establece la relación con la tabla GRUPO.
+    """
     try:
         conn = sqlite3.connect(ruta_BDapp)
         with conn:
@@ -45,44 +57,41 @@ def crear_tabla_SUBGRUPO(ruta_BDapp):
                     cod_2 TEXT NOT NULL,
                     desc_subgrupo TEXT NOT NULL,
                     FOREIGN KEY (grupo_id) REFERENCES GRUPO (grupo_id),
-                    UNIQUE (grupo_id, cod_2),       -- <--- THIS MUST BE HERE
+                    UNIQUE (grupo_id, cod_2),
                     UNIQUE (grupo_id, desc_subgrupo)
                 )
             """)
             conn.commit()
-        print("Tabla SUBGRUPO (Nivel 2) creada.")
+        print("Tabla SUBGRUPO (Nivel 2) creada correctamente.")
     except sqlite3.Error as e:
         print(f"Error al crear la tabla SUBGRUPO: {e}")
         raise
 
 def crear_tabla_CUENTAS(ruta_BDapp):
     """
-    Crea la tabla 'CUENTAS' (Nivel 3) en la base de datos SQLite if no existe.
+    Crea la tabla 'CUENTAS' (Nivel 3) en la base de datos SQLite si no existe.
     Establece la relación con la tabla SUBGRUPO y asegura la coherencia
     con la estructura de datos jerárquica.
     """
     try:
         conn = sqlite3.connect(ruta_BDapp)
-        with conn:  # Use 'with conn:' for automatic connection closing
+        with conn:
             cursor = conn.cursor()
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS CUENTAS (
                     grupo_id INTEGER NOT NULL,
                     subgrupo_id INTEGER NOT NULL,
-                    -- Removed cod_2 TEXT and desc_2 TEXT as they are redundant;
-                    -- retrieve them via JOIN with SUBGRUPO when needed.
-                    cuentas_id INTEGER NOT NULL,           -- Unique ID for the Nivel 3 account within its (grupo_id, subgrupo_id) context
-                    descripcion_n3 TEXT NOT NULL,         -- Description for the Nivel 3 account
-                    cod_3 TEXT NOT NULL UNIQUE,           -- Full unique code for the Nivel 3 account (e.g., "1.1.001")
-                    
+                    cuentas_id INTEGER NOT NULL,
+                    descripcion_n3 TEXT NOT NULL,
+                    cod_3 TEXT NOT NULL UNIQUE,
+
                     PRIMARY KEY (grupo_id, subgrupo_id, cuentas_id),
-                    
-                    FOREIGN KEY (grupo_id, subgrupo_id) 
+
+                    FOREIGN KEY (grupo_id, subgrupo_id)
                         REFERENCES SUBGRUPO(grupo_id, subgrupo_id)
                 )
             """)
             conn.commit()
-        # Corrected print statement: Removed "con los campos Saldo_inicial y Fecha_Inicio"
         print(f"Tabla CUENTAS (Nivel 3) creada correctamente en {ruta_BDapp}.")
     except sqlite3.Error as e:
         print(f"Error al crear la tabla CUENTAS: {e}")
@@ -90,10 +99,11 @@ def crear_tabla_CUENTAS(ruta_BDapp):
 
 
 
+
 def crear_tabla_Diario(ruta_BDapp):
     """
     Crea la tabla DIARIO si no existe, con las columnas especificadas,
-    incluyendo IDs con FOREIGN KEYs para la integridad y la columna 'traspaso' y 'Revisado'.
+    incluyendo IDs con FOREIGN KEYs para la integridad y las nuevas columnas.
     """
     try:
         conn = sqlite3.connect(ruta_BDapp)
@@ -103,30 +113,35 @@ def crear_tabla_Diario(ruta_BDapp):
                 CREATE TABLE IF NOT EXISTS DIARIO (
                     id_diario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     fechaValor TEXT NOT NULL, -- Formato esperado: 'DD/MM/AAAA'
-                    
+
                     -- Claves Foráneas para la estructura de Cuentas Contables (Balance)
-                    Grupo_Balance INTEGER NOT NULL,       -- ID del Grupo (referencia a GRUPO)
-                    Subgrupo_Balance INTEGER NOT NULL,    -- ID del Subgrupo (referencia a SUBGRUPO)
-                    Cuenta_Balance INTEGER NOT NULL,      -- ID de la Cuenta (referencia a CUENTAS)
-                    
+                    Grupo_Balance INTEGER NOT NULL,
+                    Subgrupo_Balance INTEGER NOT NULL,
+                    Cuenta_Balance INTEGER NOT NULL,
+
                     -- Claves Foráneas para la estructura de Pérdidas y Ganancias (PyG)
-                    Grupo_PyG INTEGER NOT NULL,           -- ID de PyG (referencia a PyG)
-                    Categoria_PyG INTEGER NOT NULL,       -- ID de Categoría (referencia a CATEGORIAS)
-                    Subcategoria_PyG INTEGER NOT NULL,    -- ID de Subcategoría (referencia a SUBCATEGORIAS)
-                    
-                    descripcionDiario TEXT,             -- Descripción detallada del asiento
-                    importe REAL NOT NULL,              -- Importe del asiento (puede ser negativo, formato con separador de miles y 2 decimales se maneja en la aplicación)
-                    
-                    traspaso INTEGER DEFAULT 0,           -- Número entero para el traspaso
-                    Revisado INTEGER DEFAULT 0,           -- 0 (No) por defecto, 1 (Sí)
-                    fechaEntrada TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
-                    
-                    -- Definición de las FOREIGN KEYs
+                    -- NOTA: Estas FKs asumen la existencia de tablas PyG, CATEGORIAS, SUBCATEGORIAS
+                    -- con las PRIMARY KEYs adecuadas.
+                    Grupo_PyG INTEGER NOT NULL,
+                    Categoria_PyG INTEGER NOT NULL,
+                    Subcategoria_PyG INTEGER NOT NULL,
+
+                    descripcionDiario TEXT,
+                    importe REAL NOT NULL,
+
+                    traspaso INTEGER DEFAULT 0, -- 0 (No) por defecto, 1 (Sí)
+                    n_traspaso TEXT,           -- Número de traspaso, por defecto NULL
+                    validado INTEGER DEFAULT 0, -- 0 (No) por defecto, 1 (Sí). Renombrado de 'Revisado'
+                    conciliado INTEGER,         -- Número de conciliación
+                    fecha_registro_asiento TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
+
+                    -- Definición de las FOREIGN KEYs para Balance
                     FOREIGN KEY (Grupo_Balance) REFERENCES GRUPO (grupo_id),
                     FOREIGN KEY (Grupo_Balance, Subgrupo_Balance) REFERENCES SUBGRUPO (grupo_id, subgrupo_id),
-                    FOREIGN KEY (Grupo_Balance, Subgrupo_Balance, Cuenta_Balance) REFERENCES CUENTAS (grupo_id, subgrupo_id, cuenta_id),
-                    
-                    FOREIGN KEY (Grupo_PyG) REFERENCES PyG (grupo_id), -- Asumiendo que PyG tiene 'grupo_id' como PK
+                    FOREIGN KEY (Grupo_Balance, Subgrupo_Balance, Cuenta_Balance) REFERENCES CUENTAS (grupo_id, subgrupo_id, cuentas_id),
+
+                    -- Definición de las FOREIGN KEYs para PyG (asumiendo sus tablas y PKs)
+                    FOREIGN KEY (Grupo_PyG) REFERENCES PyG (grupo_id),
                     FOREIGN KEY (Grupo_PyG, Categoria_PyG) REFERENCES CATEGORIAS (PyG_id, categoria_id),
                     FOREIGN KEY (Grupo_PyG, Categoria_PyG, Subcategoria_PyG) REFERENCES SUBCATEGORIAS (PyG_id, categoria_id, subcategoria_id)
                 )
@@ -201,7 +216,7 @@ def insertar_datos_grupo(ruta_BDapp, desc_grupo, tipo_grupo): # ¡Cambiado aquí
 
             # 2. Si no existe, proceder con la inserción
             cursor.execute("""
-                INSERT INTO GRUPO (desc_grupo, tipo_grupo) VALUES (?, ?) -- ¡Cambiado aquí!
+                INSERT INTO GRUPO (desc_grupo, tipo_grupo) VALUES (?, ?) 
             """, (desc_grupo_upper, tipo_grupo))
             conn.commit()
             print(f"Insertado en GRUPO (Nivel 1): desc_grupo='{desc_grupo_upper}', tipo_grupo='{tipo_grupo}'") # ¡Cambiado aquí!
@@ -641,7 +656,36 @@ def mostrar_datos_subgrupo(ruta_BDapp: str, grupo_id: int = None):
               f"{registro.get('desc_subgrupo', ''):<30}")
     print("-" * 75) # Separador visual final
 
+def obtener_grupos_por_tipo(ruta_BDapp, tipo):
+    """
+    Obtiene los grupos de la tabla GRUPO según el tipo especificado ('Balance' o 'PyG').
+    Devuelve una lista de tuplas, donde cada tupla contiene (grupo_id, desc_grupo).
 
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        tipo (str): El tipo de grupo a filtrar ('Balance' o 'PyG').
+
+    Returns:
+        list: Una lista de tuplas, donde cada tupla es (grupo_id, desc_grupo).
+              Devuelve una lista vacía ([]) si no se encuentran resultados o si hay un error.
+    """
+    resultados = []
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT grupo_id, desc_grupo FROM GRUPO WHERE tipo_grupo = ?", (tipo,))
+            rows = cursor.fetchall()
+
+            if rows:
+                for row in rows:
+                    resultados.append((row[0], row[1])) # Añade la tupla (id, descripcion) directamente
+            # No se imprime nada en la consola si hay o no resultados
+        return resultados
+    except sqlite3.Error as e:
+        # Se sigue imprimiendo el error en caso de fallo de la base de datos
+        print(f"Error al leer la tabla GRUPO por tipo: {e}")
+        return [] # Devuelve una lista vacía en caso de error
 
 
 def mostrar_datos_cuentas(ruta_BDapp: str, grupo_id: int = None, subgrupo_id: int = None):
@@ -1548,11 +1592,16 @@ if __name__ == "__main__":
         #mostrar_datos_subgrupo(ruta_BDapp)
         #mostrar_datos_cuentas(ruta_BDapp)
 
+
     #crear_base_datos()
     #crear_tabla_GRUPO(ruta_BDapp)
+    #crear_tabla_BALANCE(ruta_BDapp)
+    #crear_tabla_PYG(ruta_BDapp)
     #crear_tabla_SUBGRUPO(ruta_BDapp)
     #crear_tabla_CUENTAS(ruta_BDapp)
     #ver_tablas_BD(ruta_BDapp)
+    #cuentas_Balance= obtener_grupos_por_tipo3(ruta_BDapp, tipo="Balance")
+    #cuentas_PyG= obtener_grupos_por_tipo3(ruta_BDapp, tipo="PyG")
 
     #insertar_datos_iniciales_grupos()
     #insertar_datos_iniciales_subgrupos(ruta_BDapp)
@@ -1564,7 +1613,10 @@ if __name__ == "__main__":
     #mostrar_datos_subgrupo(ruta_BDapp)
 
     #print(obtener_datos_cuentas( ruta_BDapp))
-    mostrar_datos_cuentas(ruta_BDapp)
+    #mostrar_datos_cuentas(ruta_BDapp)
+    print(obtener_grupos_por_tipo(ruta_BDapp, tipo="PyG"))
+
+
 
 
     #print(obtener_datos_cuentas(ruta_BDapp, grupo_id=2, subgrupo_id=1))

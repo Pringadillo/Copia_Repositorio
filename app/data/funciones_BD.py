@@ -124,7 +124,7 @@ def crear_tabla_Diario(ruta_BDapp):
                     
                     traspaso INTEGER DEFAULT 0,                -- Número sin decimales
                     verificar INTEGER DEFAULT 0,               -- 0 (No) por defecto, 1 (Sí)
-                    fecha_introduccion_asiento TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
+                    fecha_registro_asiento TEXT NOT NULL DEFAULT (date('now')), -- Fecha de registro del asiento
                     
                     -- **Definición de las FOREIGN KEYs**
                     FOREIGN KEY (grupo_id) REFERENCES GRUPO (grupo_id), -- Suponiendo GRUPO tiene PK grupo_id

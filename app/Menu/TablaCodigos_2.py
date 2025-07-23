@@ -441,7 +441,7 @@ def proves5():
 
 
 
-    # Fila superior de Tabla Códigos
+    # Fila superior de Tabla Códigos, el submenu
     texto1 = ft.Container(
         content= ft.Row(  
             controls=[
