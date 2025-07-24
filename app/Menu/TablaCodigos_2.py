@@ -6,7 +6,7 @@ import sys
 import os
 
 import globals
-from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet
+from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet, mostrar_cuentas_por_grupo_flet2
 
 def proves2():
     ruta_BDapp = globals.ruta_BD
@@ -418,10 +418,10 @@ def proves5():
     ruta_BDapp = globals.ruta_BD
 
     # Llama a ver_tabla_nivel1 para obtener los datos
-    controles_cuentas1 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 1)
-    controles_cuentas2 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 2)
-    controles_cuentas3 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 3)
-    controles_cuentas4 = mostrar_cuentas_por_grupo_flet(ruta_BDapp, 4)
+    controles_cuentas1 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 1)
+    controles_cuentas2 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 2)
+    controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3)
+    controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4)
 
     # funciones de la configuracion de la tabla
     def crear_codigo(e):

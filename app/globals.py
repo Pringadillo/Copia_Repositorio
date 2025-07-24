@@ -7,10 +7,11 @@ BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
 usuario = "Usuario_1"  # Nombre del usuario
 
+
 contenido_central_container = None
 cuerpo_principal_diario = None
 
-traspaso = 0  # Variable para controlar la conciliación
+
 
 
 

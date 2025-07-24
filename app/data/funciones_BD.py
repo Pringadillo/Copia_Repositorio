@@ -12,6 +12,61 @@ def crear_base_datos(ruta_BDapp):
     conn.commit()
     conn.close()
 
+def crear_tabla_EMPRESA(ruta_BDapp: str):  # falta columna ruta_logo
+    """
+    Crea la tabla 'EMPRESA' en la base de datos SQLite si no existe.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS EMPRESA (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    empresa_id TEXT NOT NULL UNIQUE,
+                    desc_empresa TEXT NOT NULL UNIQUE
+                )
+            ''')
+            conn.commit()
+        print(f"Tabla EMPRESA creada/actualizada exitosamente en {ruta_BDapp}.")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla EMPRESA: {e}")
+        raise
+
+def crear_tabla_USUARIOS(ruta_BDapp: str): # faltaria columna ruta_foto
+    """
+    Crea la tabla 'USUARIOS' en la base de datos SQLite si no existe.
+    Incluye validaciones para mail y teléfono, y una clave foránea a EMPRESA.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS USUARIOS (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nombre TEXT NOT NULL,
+                    apellidos TEXT NOT NULL,
+                    nombre_acceso TEXT NOT NULL UNIQUE,
+                    empresa_id TEXT NOT NULL,
+                    mail TEXT NOT NULL CHECK (mail LIKE '%@%'),
+                    telefono TEXT NOT NULL CHECK (LENGTH(telefono) = 9 AND REPLACE(telefono, ' ', '') = telefono AND typeof(telefono) = 'text'),
+                    contraseña TEXT NOT NULL,
+                    FOREIGN KEY (empresa_id) REFERENCES EMPRESA (empresa_id)
+                )
+            ''')
+            conn.commit()
+        print(f"Tabla USUARIOS creada/actualizada exitosamente en {ruta_BDapp}.")
+    except sqlite3.Error as e:
+        print(f"Error al crear la tabla USUARIOS: {e}")
+        raise
+
 def crear_tabla_GRUPO(ruta_BDapp):
     """
     Crea la tabla 'GRUPO' (Nivel 1) en la base de datos SQLite si no existe.
@@ -126,6 +181,80 @@ def crear_tabla_DIARIO(ruta_BDapp):
 
 
 # ---------------------------------------- FUNCIONES DE INSERTAR DATOS ----------------------------------------
+
+def insertar_datos_empresa(ruta_BDapp: str, empresa_id: str, desc_empresa: str):
+    """
+    Inserta un nuevo registro en la tabla 'EMPRESA'.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        empresa_id (str): El identificador único de la empresa.
+        desc_empresa (str): La descripción o nombre de la empresa.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT OR IGNORE INTO EMPRESA (empresa_id, desc_empresa)
+                VALUES (?, ?)
+                """,
+                (empresa_id, desc_empresa)
+            )
+            conn.commit()
+            # Verificar si se insertó una nueva fila (es decir, no fue ignorada)
+            if cursor.rowcount > 0:
+                print(f"Empresa '{desc_empresa}' (ID: {empresa_id}) insertada exitosamente.")
+            else:
+                print(f"Empresa '{desc_empresa}' (ID: {empresa_id}) ya existe (por ID o descripción), no se insertó.")
+    except sqlite3.Error as e:
+        print(f"Error al insertar datos en la tabla EMPRESA: {e}")
+        raise
+
+def insertar_datos_usuario(
+    ruta_BDapp: str,
+    nombre: str,
+    apellidos: str,
+    nombre_acceso: str,
+    empresa_id: str,
+    mail: str,
+    telefono: str,
+    contraseña: str
+    ):
+    """
+    Inserta un nuevo registro en la tabla 'USUARIOS'.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        nombre (str): Nombre del usuario.
+        apellidos (str): Apellidos del usuario.
+        nombre_acceso (str): Nombre de usuario para el acceso (debe ser único).
+        empresa_id (str): ID de la empresa a la que pertenece el usuario (clave foránea).
+        mail (str): Correo electrónico del usuario (debe contener '@').
+        telefono (str): Número de teléfono del usuario (9 dígitos, sin espacios).
+        contraseña (str): Contraseña del usuario.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO USUARIOS (
+                    nombre, apellidos, nombre_acceso, empresa_id, mail, telefono, contraseña
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (nombre, apellidos, nombre_acceso, empresa_id, mail, telefono, contraseña)
+            )
+            conn.commit()
+            print(f"Usuario '{nombre_acceso}' insertado exitosamente.")
+    except sqlite3.IntegrityError as e:
+        print(f"Error de integridad al insertar usuario '{nombre_acceso}': {e}. "
+              "Asegúrate de que 'nombre_acceso' sea único y 'empresa_id' exista en la tabla EMPRESA.")
+    except sqlite3.Error as e:
+        print(f"Error al insertar datos en la tabla USUARIOS: {e}")
+        raise
 
 def insertar_datos_grupo(ruta_BDapp, desc_grupo, tipo_grupo): # ¡Cambiado aquí!
     """
@@ -368,6 +497,60 @@ def insertar_datos_diario(
 
 
 # ---------------------------------------- FUNCIONES OBTENER DATOS ----------------------------------------
+
+def mostrar_datos_empresa(ruta_BDapp: str):
+    """
+    Muestra todos los registros de la tabla 'EMPRESA'.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM EMPRESA")
+            rows = cursor.fetchall()
+
+            if rows:
+                print("\n--- Contenido de la tabla EMPRESA ---")
+                print(f"{'id':<5} | {'empresa_id':<12} | {'desc_empresa':<30}")
+                print("-" * 50)
+                for row in rows:
+                    print(f"{row[0]:<5} | {row[1]:<12} | {row[2]:<30}")
+            else:
+                print("\nLa tabla EMPRESA está vacía.")
+        return rows
+    except sqlite3.Error as e:
+        print(f"Error al leer la tabla EMPRESA: {e}")
+        return None
+
+def mostrar_datos_usuario(ruta_BDapp: str):
+    """
+    Muestra todos los registros de la tabla 'USUARIOS'.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+    """
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, nombre, apellidos, nombre_acceso, empresa_id, mail, telefono FROM USUARIOS") # No mostrar contraseña
+            rows = cursor.fetchall()
+
+            if rows:
+                print("\n--- Contenido de la tabla USUARIOS ---")
+                print(f"{'id':<5} | {'nombre':<15} | {'apellidos':<20} | {'nombre_acceso':<15} | {'empresa_id':<12} | {'mail':<25} | {'telefono':<10}")
+                print("-" * 110)
+                for row in rows:
+                    print(f"{row[0]:<5} | {row[1]:<15} | {row[2]:<20} | {row[3]:<15} | {row[4]:<12} | {row[5]:<25} | {row[6]:<10}")
+            else:
+                print("\nLa tabla USUARIOS está vacía.")
+        return rows
+    except sqlite3.Error as e:
+        print(f"Error al leer la tabla USUARIOS: {e}")
+        return None
 
 def obtener_datos_grupo(ruta_BDapp):
     """
@@ -675,7 +858,6 @@ def obtener_grupos_por_tipo(ruta_BDapp, tipo):
         print(f"Error al leer la tabla GRUPO por tipo: {e}")
         return [] # Devuelve una lista vacía en caso de error
 
-
 def mostrar_datos_cuentas(ruta_BDapp: str, grupo_id: int = None, subgrupo_id: int = None):
     """
     Muestra el contenido de la tabla CUENTAS (Nivel 3) en la consola.
@@ -751,7 +933,7 @@ def mostrar_saldoInicio_cuentas(ruta_BDapp):
         if conn:
             conn.close()
 
-def ver_tablas_base_datos():
+def ver_tablas_base_datos(ruta_BDapp):
     conn = sqlite3.connect(ruta_BDapp)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -882,6 +1064,125 @@ def mostrar_cuentas_por_grupo_flet(ruta_BDapp: str, grupo_id_buscado: int) -> li
     # Ya no se necesita un bloque 'finally' explícito para cerrar 'conn' 
     # porque 'with conn:' se encarga de ello.
     return formatted_controls
+
+def mostrar_cuentas_por_grupo_flet2(ruta_BDapp: str, grupo_id_buscado: int) -> list[ft.Control]:
+    """
+    Muestra de forma jerárquica los subgrupos (Nivel 2) y cuentas (Nivel 3)
+    para un grupo_id específico, formateado para Flet.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        grupo_id_buscado (int): El ID del grupo a buscar.
+
+    Returns:
+        list[ft.Control]: Una lista de controles Flet (ft.Text, ft.Divider) que representan
+                          la jerarquía de subgrupos y cuentas.
+    """
+    formatted_controls = []
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn: # Usa 'with' para asegurar que la conexión se cierre automáticamente
+            conn.row_factory = sqlite3.Row # Permite acceder a las columnas por nombre
+            cursor = conn.cursor()
+
+            # Opcional: Obtener la descripción del GRUPO principal para mostrarla al inicio
+            # Asegúrate de que el nombre de la columna 'desc_grupo' coincide con tu esquema
+            cursor.execute("SELECT desc_grupo FROM GRUPO WHERE grupo_id = ?", (grupo_id_buscado,))
+            grupo_data = cursor.fetchone()
+
+            if grupo_data:
+                # CORRECCIÓN: Usar 'desc_grupo' en lugar de 'descripcion_grupo'
+                formatted_controls.append(
+                    ft.Text(f"{str(grupo_id_buscado).zfill(2)} {grupo_data['desc_grupo']}",
+                            size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_GREY_900)
+                )
+                formatted_controls.append(ft.Divider()) # Separador visual
+            else:
+                formatted_controls.append(ft.Text(f"¡Oops! No se encontró el Grupo ID: {grupo_id_buscado}",
+                                                  color=ft.Colors.RED_500, size=16))
+                return formatted_controls # Si no hay grupo, salimos temprano.
+
+            # 1. Obtener todos los subgrupos (Nivel 2) para el grupo_id_buscado
+            cursor.execute("""
+                SELECT
+                    S.subgrupo_id,
+                    S.cod_2,
+                    S.desc_subgrupo -- CORRECCIÓN: Usar 'desc_subgrupo'
+                FROM
+                    SUBGRUPO S
+                WHERE
+                    S.grupo_id = ?
+                ORDER BY
+                    S.cod_2
+            """, (grupo_id_buscado,))
+            subgrupos = cursor.fetchall()
+
+            if not subgrupos:
+                formatted_controls.append(
+                    ft.Text(f"   No se encontraron subgrupos para el Grupo ID: {grupo_id_buscado}.",
+                            size=14, color=ft.colors.GREY_600)
+                )
+
+            # Iterar sobre cada subgrupo y luego buscar sus cuentas de nivel 3
+            for subgrupo in subgrupos:
+                # Acceso por nombre de columna (gracias a conn.row_factory)
+                subgrupo_id = subgrupo['subgrupo_id']
+                cod_subgrupo_completo = subgrupo['cod_2']
+                # CORRECCIÓN: Usar 'desc_subgrupo' en lugar de 'descripcion_subgrupo'
+                descripcion_subgrupo = subgrupo['desc_subgrupo']
+
+                # Formato para el título del subgrupo (Nivel 2)
+                formatted_controls.append(
+                    ft.Text(f"   {cod_subgrupo_completo} {descripcion_subgrupo}",
+                            size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_GREY_700)
+                )
+
+                # 2. Obtener las cuentas de Nivel 3 para el subgrupo actual
+                cursor.execute("""
+                    SELECT
+                        C.cuentas_id, -- CORRECCIÓN: Usar 'cuentas_id'
+                        C.descripcion_n3,
+                        C.cod_3
+                    FROM
+                        CUENTAS C
+                    WHERE
+                        C.grupo_id = ? AND C.subgrupo_id = ?
+                    ORDER BY
+                        C.cod_3
+                """, (grupo_id_buscado, subgrupo_id))
+                cuentas_nivel3 = cursor.fetchall()
+
+                if not cuentas_nivel3:
+                    formatted_controls.append(
+                        ft.Text(f"       No hay cuentas asociadas al subgrupo {cod_subgrupo_completo}.",
+                                size=14, color=ft.Colors.GREY_500)
+                    )
+
+                # 3. Añadir las cuentas de Nivel 3 con su formato
+                for cuenta_n3 in cuentas_nivel3:
+                    # Acceso por nombre de columna
+                    # CORRECCIÓN: 'cuentas_id' es el nombre correcto si lo necesitas
+                    # cuentas_id = cuenta_n3['cuentas_id']
+                    descripcion_n3 = cuenta_n3['descripcion_n3']
+                    cod_full_n3 = cuenta_n3['cod_3']
+
+                    # Formato para la cuenta (Nivel 3)
+                    formatted_controls.append(
+                        ft.Text(f"     {cod_full_n3} {descripcion_n3}", # Ajustado la indentación
+                                size=14, color=ft.Colors.BLUE_GREY_500)
+                    )
+
+            # Un divisor final para separar la información de un grupo si hay más elementos después.
+            formatted_controls.append(ft.Divider())
+
+    except sqlite3.Error as e:
+        formatted_controls.append(
+            ft.Text(f"Error de base de datos al mostrar cuentas: {e}",
+                    color=ft.Colors.RED_500, size=16)
+        )
+    return formatted_controls
+
 
 def mostrar_cuentas_por_grupo(ruta_BDapp: str, grupo_id_buscado: int):
     """
@@ -1179,10 +1480,200 @@ def mostrar_datos_Diario(ruta_BDapp):
 
 # ---------------------------------------- FUNCIONES DE ELIMINAR DATOS ----------------------------------------
 
+def eliminar_datos_empresa(ruta_BDapp: str, empresa_id: str = None, id: int = None):
+    """
+    Elimina registros de la tabla 'EMPRESA' por empresa_id o por id.
+    Se debe proporcionar al menos uno de los dos parámetros.
 
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        empresa_id (str, optional): El identificador único de la empresa a eliminar.
+        id (int, optional): El ID de clave principal de la empresa a eliminar.
+    """
+    if empresa_id is None and id is None:
+        print("Error: Debes proporcionar al menos 'empresa_id' o 'id' para eliminar un registro.")
+        return
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            if empresa_id:
+                cursor.execute("DELETE FROM EMPRESA WHERE empresa_id = ?", (empresa_id,))
+                if cursor.rowcount > 0:
+                    print(f"Empresa con empresa_id '{empresa_id}' eliminada exitosamente.")
+                else:
+                    print(f"No se encontró ninguna empresa con empresa_id '{empresa_id}'.")
+            elif id:
+                cursor.execute("DELETE FROM EMPRESA WHERE id = ?", (id,))
+                if cursor.rowcount > 0:
+                    print(f"Empresa con id '{id}' eliminada exitosamente.")
+                else:
+                    print(f"No se encontró ninguna empresa con id '{id}'.")
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error al eliminar datos de la tabla EMPRESA: {e}")
+        raise
+
+def eliminar_datos_usuario(ruta_BDapp: str, nombre_acceso: str = None, id: int = None):
+    """
+    Elimina registros de la tabla 'USUARIOS' por nombre_acceso o por id.
+    Se debe proporcionar al menos uno de los dos parámetros.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        nombre_acceso (str, optional): El nombre de acceso del usuario a eliminar.
+        id (int, optional): El ID de clave principal del usuario a eliminar.
+    """
+    if nombre_acceso is None and id is None:
+        print("Error: Debes proporcionar al menos 'nombre_acceso' o 'id' para eliminar un registro.")
+        return
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            if nombre_acceso:
+                cursor.execute("DELETE FROM USUARIOS WHERE nombre_acceso = ?", (nombre_acceso,))
+                if cursor.rowcount > 0:
+                    print(f"Usuario con nombre de acceso '{nombre_acceso}' eliminado exitosamente.")
+                else:
+                    print(f"No se encontró ningún usuario con nombre de acceso '{nombre_acceso}'.")
+            elif id:
+                cursor.execute("DELETE FROM USUARIOS WHERE id = ?", (id,))
+                if cursor.rowcount > 0:
+                    print(f"Usuario con id '{id}' eliminado exitosamente.")
+                else:
+                    print(f"No se encontró ningún usuario con id '{id}'.")
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error al eliminar datos de la tabla USUARIOS: {e}")
+        raise
 
 
 # ---------------------------------------- FUNCIONES MODIFICAR DATOS ------------------------------
+
+def modificar_datos_empresa(ruta_BDapp: str, new_desc_empresa: str, empresa_id: str = None, id: int = None):
+    """
+    Modifica la descripción de una empresa en la tabla 'EMPRESA' por empresa_id o por id.
+    Se debe proporcionar al menos uno de los dos parámetros de identificación.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        new_desc_empresa (str): La nueva descripción o nombre de la empresa.
+        empresa_id (str, optional): El identificador único de la empresa a modificar.
+        id (int, optional): El ID de clave principal de la empresa a modificar.
+    """
+    if empresa_id is None and id is None:
+        print("Error: Debes proporcionar al menos 'empresa_id' o 'id' para modificar un registro.")
+        return
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            if empresa_id:
+                cursor.execute("UPDATE EMPRESA SET desc_empresa = ? WHERE empresa_id = ?", (new_desc_empresa, empresa_id))
+                if cursor.rowcount > 0:
+                    print(f"Empresa con empresa_id '{empresa_id}' modificada exitosamente. Nueva descripción: '{new_desc_empresa}'.")
+                else:
+                    print(f"No se encontró ninguna empresa con empresa_id '{empresa_id}'.")
+            elif id:
+                cursor.execute("UPDATE EMPRESA SET desc_empresa = ? WHERE id = ?", (new_desc_empresa, id))
+                if cursor.rowcount > 0:
+                    print(f"Empresa con id '{id}' modificada exitosamente. Nueva descripción: '{new_desc_empresa}'.")
+                else:
+                    print(f"No se encontró ninguna empresa con id '{id}'.")
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error al modificar datos en la tabla EMPRESA: {e}")
+        raise
+
+def modificar_datos_usuario(
+    ruta_BDapp: str,
+    nombre_acceso: str = None, # Identificador principal para la modificación
+    id: int = None, # Identificador alternativo para la modificación
+    new_nombre: str = None,
+    new_apellidos: str = None,
+    new_empresa_id: str = None,
+    new_mail: str = None,
+    new_telefono: str = None,
+    new_contraseña: str = None
+    ):
+    """
+    Modifica datos de un usuario en la tabla 'USUARIOS' por nombre_acceso o por id.
+    Se debe proporcionar al menos uno de los parámetros de identificación
+    y al menos un nuevo valor para modificar.
+
+    Args:
+        ruta_BDapp (str): La ruta al archivo de la base de datos SQLite.
+        nombre_acceso (str, optional): El nombre de acceso del usuario a modificar.
+        id (int, optional): El ID de clave principal del usuario a modificar.
+        new_nombre (str, optional): Nuevo nombre.
+        new_apellidos (str, optional): Nuevos apellidos.
+        new_empresa_id (str, optional): Nuevo ID de empresa.
+        new_mail (str, optional): Nuevo correo electrónico.
+        new_telefono (str, optional): Nuevo número de teléfono.
+        new_contraseña (str, optional): Nueva contraseña.
+    """
+    if nombre_acceso is None and id is None:
+        print("Error: Debes proporcionar 'nombre_acceso' o 'id' para modificar un registro.")
+        return
+
+    updates = []
+    params = []
+
+    if new_nombre is not None:
+        updates.append("nombre = ?")
+        params.append(new_nombre)
+    if new_apellidos is not None:
+        updates.append("apellidos = ?")
+        params.append(new_apellidos)
+    if new_empresa_id is not None:
+        updates.append("empresa_id = ?")
+        params.append(new_empresa_id)
+    if new_mail is not None:
+        updates.append("mail = ?")
+        params.append(new_mail)
+    if new_telefono is not None:
+        updates.append("telefono = ?")
+        params.append(new_telefono)
+    if new_contraseña is not None:
+        updates.append("contraseña = ?")
+        params.append(new_contraseña)
+
+    if not updates:
+        print("No se proporcionaron campos para modificar.")
+        return
+
+    set_clause = ", ".join(updates)
+    where_clause = ""
+    if nombre_acceso:
+        where_clause = "nombre_acceso = ?"
+        params.append(nombre_acceso)
+    elif id:
+        where_clause = "id = ?"
+        params.append(id)
+
+    try:
+        conn = sqlite3.connect(ruta_BDapp)
+        with conn:
+            cursor = conn.cursor()
+            query = f"UPDATE USUARIOS SET {set_clause} WHERE {where_clause}"
+            cursor.execute(query, tuple(params))
+            conn.commit()
+
+            if cursor.rowcount > 0:
+                print(f"Usuario modificado exitosamente.")
+            else:
+                print(f"No se encontró el usuario para modificar.")
+    except sqlite3.IntegrityError as e:
+        print(f"Error de integridad al modificar usuario: {e}. "
+              "Asegúrate de que los nuevos valores cumplan con las restricciones (ej. mail, teléfono, empresa_id existente).")
+    except sqlite3.Error as e:
+        print(f"Error al modificar datos en la tabla USUARIOS: {e}")
+        raise
+
 
 
 # ---------------------------------------- OTRAS FUNCIONES DATOS ------------------------------
@@ -1297,8 +1788,8 @@ def mostrar_cuentas_por_grupo_flet(ruta_BDapp: str, grupo_id_buscado: int) -> li
 
 # ---------------------------------------- FUNCIONES DE INICIO ----------------------------------------
 
-def inicio_Base_datos():
-    crear_base_datos()
+def inicio_Base_datos(ruta_BDapp):
+    crear_base_datos(ruta_BDapp)
     crear_tabla_GRUPO(ruta_BDapp)
     crear_tabla_SUBGRUPO(ruta_BDapp)
     #crear_tabla_CUENTAS(ruta_BDapp)
@@ -1538,6 +2029,14 @@ def insertar_datos_iniciales_cuentas(ruta_BDapp):
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Fondos Inv.")
     insertar_datos_cuenta(ruta_BDapp, 4, 2, "Crowfunding")
     insertar_datos_cuenta(ruta_BDapp, 4, 3, "Otros Ingresos")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "T.R.Publicidad")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Bufete_Perez_Pozo")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "CarmonInversores")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Kontactalia (Neus)")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Pis Terrassa")
+    insertar_datos_cuenta(ruta_BDapp, 1, 13, "Fisiolevel")
+
+
 
 # insertar SALDOS iniciales
 

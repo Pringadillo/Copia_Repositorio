@@ -1,0 +1,20 @@
+MEJORAS A DESARROLLAR DE LA app
+
+- podemos crear en la tabla codigos una columna que se llame bloquear y fecha_bloqueo, 
+    con la idea de no utilizar esta cuenta desde una fecha
+- crear una carpeta de imagenes
+- crear la tabla USUARIOS y EMPRESA
+- configuracion del programa:
+    CRUD Usuario
+    CRUD Empresa
+
+
+
+* dar nombre a las zonas del cuerpo TABLA CODIGOS, o crear una estructura comun
+    codigos_titulo: titulo y botones (CRUD de los codigos)
+    codigos_subtitulos: submenu de los botones
+    codigos_cuerpo: parte dinamica del cuerpo, el contenido a mostrar
+* comprobar la repeticion de lo codigos, evitar duplicidades por numero y descripcion
+* la grupo_id cambiar formato a 1 digito
+* 
+
