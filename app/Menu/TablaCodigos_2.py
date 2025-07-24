@@ -125,8 +125,6 @@ def proves2():
     
     return globals.contenido_central_container.content
 
-
-
 def proves3():
         
     ruta_BDapp = globals.ruta_BD
@@ -240,7 +238,6 @@ def proves3():
     
     return globals.contenido_central_container.content
     
-
 def proves4():
         
     ruta_BDapp = globals.ruta_BD
@@ -412,7 +409,6 @@ def proves4():
     
     return globals.contenido_central_container.content
    
-
 def proves5():
         
     ruta_BDapp = globals.ruta_BD
@@ -441,8 +437,8 @@ def proves5():
 
 
 
-    # Fila superior de Tabla Códigos, el submenu
-    texto1 = ft.Container(
+    # Título de la Tabla Códigos
+    TablaCodigo_titulo = ft.Container(
         content= ft.Row(  
             controls=[
                 ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
@@ -480,8 +476,316 @@ def proves5():
                 ),
             )
 
+    # Subtitulo de la tabla Códigos
+    TablaCodigo_subtitulo=""
+    
     # Cuerpo de Tabla Códigos
-    texto2 = ft.Container(
+    TablaCodigo_contenido = ft.Container(
+        content=ft.Row(
+            controls=[
+                # Columna 1: Cuentas Financieras
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas1,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.LIGHT_BLUE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10),
+                ),
+                ft.VerticalDivider(),
+                
+                # Columna 2: Deudas
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas2,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.RED_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 3: Gastos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas3,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.ORANGE_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                ft.VerticalDivider(),
+
+                # Columna 4: Ingresos
+                ft.Container(
+                    content=ft.Column(
+                        controls=controles_cuentas4,
+                        spacing=0, # Reduce el espaciado entre líneas para una apariencia más compacta
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        scroll=ft.ScrollMode.AUTO, 
+                        expand=True,
+                    ),
+                    expand=True,
+                    bgcolor=ft.Colors.GREEN_100,
+                    padding=ft.padding.all(10),
+                    border_radius=ft.border_radius.all(10)
+                ),
+                
+            ],
+            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+            wrap=False,
+            expand=True
+
+        ),
+
+        padding=10,
+        expand=True
+        
+    )
+
+
+
+    # ----------------------  Estructura principal -----------------
+
+    globals.contenido_central_container.content = ft.Container(
+        content=ft.Column(
+            controls=[
+                TablaCodigo_titulo,
+                TablaCodigo_subtitulo,
+                TablaCodigo_contenido,
+            ],
+            alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
+        ),
+        bgcolor=ft.Colors.WHITE,
+
+        )
+    
+    return globals.contenido_central_container.content
+   
+def proves6():
+
+    # --- Funciones de acción para los botones del subtítulo ---
+    # Estas funciones se llamarán cuando los botones "Crear", "Editar", "Eliminar" sean presionados.
+    # Por ahora, solo actualizan el contenido de TablaCodigo_contenido.
+    # ¡Recuerda llamar a e.page.update() para que los cambios se muestren!
+
+    def crear_codigo_accion(e):
+        print("Botón 'Crear Código' presionado.")
+        # Modificar TablaCodigo_contenido
+        # Accede al contenedor principal a través de 'e.page' o 'globals' si lo gestionas así.
+        # Necesitamos una referencia a TablaCodigo_contenido que sea accesible aquí.
+        # Una forma es que mi_funcion_principal devuelva los componentes o los haga accesibles.
+        # Para este ejemplo, simularé el cambio asumiendo que TablaCodigo_contenido es accesible.
+        if globals.contenido_central_container.content and \
+        isinstance(globals.contenido_central_container.content.content, ft.Column) and \
+        len(globals.contenido_central_container.content.content.controls) > 2:
+            # Asumiendo que TablaCodigo_contenido es el tercer control en el Column principal
+            tabla_contenido_ref = globals.contenido_central_container.content.content.controls[2]
+            tabla_contenido_ref.content = ft.Column(
+                controls=[
+                    ft.Text("Formulario para CREAR un nuevo código.", size=18, weight=ft.FontWeight.BOLD),
+                    ft.TextField(label="Nombre del Código"),
+                    ft.TextField(label="Descripción"),
+                    ft.ElevatedButton("Guardar Nuevo Código"),
+                ]
+            )
+            e.page.update()
+
+
+    def editar_codigo_accion(e):
+        print("Botón 'Editar Código' presionado.")
+        if globals.contenido_central_container.content and \
+        isinstance(globals.contenido_central_container.content.content, ft.Column) and \
+        len(globals.contenido_central_container.content.content.controls) > 2:
+            tabla_contenido_ref = globals.contenido_central_container.content.content.controls[2]
+            tabla_contenido_ref.content = ft.Column(
+                controls=[
+                    ft.Text("Formulario para EDITAR un código existente.", size=18, weight=ft.FontWeight.BOLD),
+                    ft.Dropdown(label="Seleccionar Código", options=[ft.dropdown.Option("COD001"), ft.dropdown.Option("COD002")]),
+                    ft.TextField(label="Nuevo Nombre"),
+                    ft.ElevatedButton("Guardar Cambios"),
+                ]
+            )
+            e.page.update()
+
+
+    def eliminar_codigo_accion(e):
+        print("Botón 'Eliminar Código' presionado.")
+        if globals.contenido_central_container.content and \
+        isinstance(globals.contenido_central_container.content.content, ft.Column) and \
+        len(globals.contenido_central_container.content.content.controls) > 2:
+            tabla_contenido_ref = globals.contenido_central_container.content.content.controls[2]
+            tabla_contenido_ref.content = ft.Column(
+                controls=[
+                    ft.Text("Confirma la ELIMINACIÓN de un código.", size=18, weight=ft.FontWeight.BOLD, color=ft.colors.RED_700),
+                    ft.Dropdown(label="Código a Eliminar", options=[ft.dropdown.Option("COD001"), ft.dropdown.Option("COD002")]),
+                    ft.ElevatedButton("Eliminar Código", style=ft.ButtonStyle(bgcolor=ft.colors.RED_500, color=ft.colors.WHITE)),
+                ]
+            )
+            e.page.update()
+
+    # --- Función principal que construye la interfaz de usuario ---
+    def mi_funcion_principal():
+        # El subtítulo y sus botones, inicialmente ocultos
+        TablaCodigo_subtitulo_content = ft.Row(
+            controls=[
+                ft.FilledButton(
+                    text="Crear Código",
+                    icon=ft.Icons.ADD,
+                    on_click=crear_codigo_accion # Llama a la función que actualiza TablaCodigo_contenido
+                ),
+                ft.FilledButton(
+                    text="Editar Código",
+                    icon=ft.Icons.EDIT,
+                    on_click=editar_codigo_accion # Llama a la función que actualiza TablaCodigo_contenido
+                ),
+                ft.FilledButton(
+                    text="Eliminar Código",
+                    icon=ft.Icons.DELETE_OUTLINE,
+                    on_click=eliminar_codigo_accion # Llama a la función que actualiza TablaCodigo_contenido
+                ),
+            ],
+            spacing=10,
+            alignment=ft.MainAxisAlignment.START # Alinea los botones a la izquierda
+        )
+
+        # Contenedor para el subtítulo y sus botones, inicialmente invisible
+        subtitulo_container = ft.Container(
+            content=TablaCodigo_subtitulo_content,
+            visible=False,
+            padding=ft.padding.only(top=10, bottom=10), # Pequeño padding para separación
+        )
+
+        # Botón principal para mostrar/ocultar TablaCodigo_subtitulo
+        def toggle_subtitulo_visibility(e):
+            subtitulo_container.visible = not subtitulo_container.visible
+            e.page.update() # Muy importante para que los cambios se reflejen en la UI
+
+        TablaCodigo_titulo = ft.Container(
+            content=ft.Row(
+                controls=[
+                    ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                    ft.ElevatedButton(
+                        content=ft.Row(
+                            controls=[
+                                ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),
+                                ft.Text("Configurar Tabla Códigos", size=16)
+                            ],
+                            spacing=5,
+                        ),
+                        on_click=toggle_subtitulo_visibility, # Este botón controlará la visibilidad
+                        tooltip="Mostrar/Ocultar opciones de configuración",
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                spacing=150, # Espacio entre el título y el botón
+            ),
+        )
+
+        # Esta es la sección que tus funciones de acción modificarán.
+        TablaCodigo_contenido = ft.Container(
+            content=ft.Column(
+                controls=[
+                    ft.Text("Contenido principal de la tabla de códigos.", size=18),
+                    ft.Text("Aquí se mostrará la información relevante según la acción seleccionada.", size=14, color=ft.Colors.GREY_600),
+                ],
+                spacing=10
+            ),
+            padding=20,
+            bgcolor=ft.colors.BLUE_GREY_50,
+            border_radius=10,
+            expand=True, # Para que ocupe el espacio disponible
+        )
+
+        # ---------------------- Estructura principal -----------------
+
+        globals.contenido_central_container.content = ft.Container(
+            content=ft.Column(
+                controls=[
+                    TablaCodigo_titulo,
+                    subtitulo_container, # El contenedor con los 3 botones
+                    TablaCodigo_contenido, # El contenido que se modificará
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER, # Centra el contenido horizontalmente
+                spacing=20, # Espacio entre los controles principales
+            ),
+            bgcolor=ft.Colors.WHITE,
+            padding=20, # Un poco de padding general
+            expand=True, # Para que el contenedor principal ocupe todo el espacio
+        )
+
+        return globals.contenido_central_container.content
+
+def proves7():
+    
+    ruta_BDapp = globals.ruta_BD
+
+    # Llama a ver_tabla_nivel1 para obtener los datos
+    controles_cuentas1 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 1)
+    controles_cuentas2 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 2)
+    controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3)
+    controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4)
+
+    # funciones de la configuracion de la tabla
+    def crear_codigo(e):
+        pass
+
+    def modificar_codigo(e):
+        pass
+
+    def eliminar_codigo(e):
+        pass
+
+
+
+    # Título de la Tabla Códigos
+
+    def toggle_subtitulo_visibility():
+        pass
+
+
+    TablaCodigo_titulo = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.Text("TABLA DE CÓDIGOS", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                ft.ElevatedButton(
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(ft.Icons.SETTINGS_OUTLINED, size=20),
+                            ft.Text("Configurar Tabla Códigos", size=16)
+                        ],
+                        spacing=5,
+                    ),
+                    on_click=toggle_subtitulo_visibility, # Este botón controla la visibilidad
+                    tooltip="Mostrar/Ocultar opciones de configuración",
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=150, # Espacio entre el título y el botón
+        ),
+    )
+    # Subtitulo de la tabla Códigos
+    TablaCodigo_subtitulo=""
+    
+    # Cuerpo de Tabla Códigos
+    TablaCodigo_contenido = ft.Container(
         content=ft.Row(
             controls=[
                 # Columna 1: Cuentas Financieras
@@ -565,8 +869,9 @@ def proves5():
     globals.contenido_central_container.content = ft.Container(
         content=ft.Column(
             controls=[
-                texto1,
-                texto2,
+                TablaCodigo_titulo,
+                TablaCodigo_subtitulo,
+                TablaCodigo_contenido,
             ],
             alignment=ft.MainAxisAlignment.START,  # Alineación vertical en la parte superior
         ),
