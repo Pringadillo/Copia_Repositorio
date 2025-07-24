@@ -16,5 +16,6 @@ MEJORAS A DESARROLLAR DE LA app
     codigos_cuerpo: parte dinamica del cuerpo, el contenido a mostrar
 * comprobar la repeticion de lo codigos, evitar duplicidades por numero y descripcion
 * la grupo_id cambiar formato a 1 digito
+* mejorar la visibilidad de los botones en referencia al titulo de codigos_título
 * 
 

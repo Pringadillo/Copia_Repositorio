@@ -743,22 +743,13 @@ def proves7():
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3)
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4)
 
-    # funciones de la configuracion de la tabla
-    def crear_codigo(e):
-        pass
-
-    def modificar_codigo(e):
-        pass
-
-    def eliminar_codigo(e):
-        pass
-
-
 
     # Título de la Tabla Códigos
 
-    def toggle_subtitulo_visibility():
-        pass
+    # creamos previamente la funcion de hacer visible TablaCodigo_subtitulo
+    def toggle_subtitulo_visibility(e):
+        TablaCodigo_subtitulo.visible = not TablaCodigo_subtitulo.visible
+        e.page.update() # Actualiza la UI para mostrar/ocultar el subtítulo
 
 
     TablaCodigo_titulo = ft.Container(
@@ -782,7 +773,44 @@ def proves7():
         ),
     )
     # Subtitulo de la tabla Códigos
-    TablaCodigo_subtitulo=""
+    
+    #funciones de los botones
+    def crear_codigo_accion(e):
+        pass
+    def editar_codigo_accion(e):
+        pass
+    def eliminar_codigo_accion(e):
+        pass
+
+
+    # Contiene los 3 botones, y su visibilidad será controlada.
+    # Inicialmente está invisible.
+    TablaCodigo_subtitulo = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.FilledButton(
+                    text="Crear Código",
+                    icon=ft.Icons.ADD,
+                    on_click=crear_codigo_accion
+                ),
+                ft.FilledButton(
+                    text="Editar Código",
+                    icon=ft.Icons.EDIT,
+                    on_click=editar_codigo_accion
+                ),
+                ft.FilledButton(
+                    text="Eliminar Código",
+                    icon=ft.Icons.DELETE_OUTLINE,
+                    on_click=eliminar_codigo_accion
+                ),
+            ],
+            spacing=10,
+            alignment=ft.MainAxisAlignment.CENTER
+        ),
+        visible=False, # ¡Inicialmente invisible!
+        padding=ft.padding.only(top=10, bottom=10),
+        
+    )
     
     # Cuerpo de Tabla Códigos
     TablaCodigo_contenido = ft.Container(
