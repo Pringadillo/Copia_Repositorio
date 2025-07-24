@@ -1,4 +1,4 @@
-MEJORAS A DESARROLLAR DE LA app
+------------ MEJORAS A DESARROLLAR DE LA app --------------
 
 - podemos crear en la tabla codigos una columna que se llame bloquear y fecha_bloqueo, 
     con la idea de no utilizar esta cuenta desde una fecha
@@ -9,6 +9,7 @@ MEJORAS A DESARROLLAR DE LA app
     CRUD Empresa
 
 
+----------- DESARROLLAR ----------------
 
 * dar nombre a las zonas del cuerpo TABLA CODIGOS, o crear una estructura comun
     codigos_titulo: titulo y botones (CRUD de los codigos)
