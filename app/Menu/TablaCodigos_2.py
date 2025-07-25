@@ -10,6 +10,8 @@ from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obte
 
 
 
+#ruta_BDapp = globals.ruta_BD
+
 def menu_TablaDeCodigos():
     """
     Esta función construye y retorna la vista principal de la "Tabla de Códigos".
@@ -18,13 +20,14 @@ def menu_TablaDeCodigos():
     """
     ruta_BDapp = globals.ruta_BD
 
-
     # 1. Cargar datos iniciales para las 4 columnas
     # (Estos datos son simulados por 'mostrar_cuentas_por_grupo_flet2')
     controles_cuentas1 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 1) # Cuentas Financieras
     controles_cuentas2 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 2) # Deudas
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3) # Gastos
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4) # Ingresos
+
+    
 
     # --- Definición del Contenedor Principal de la Tabla de Códigos ---
     # Este es el contenedor que contendrá el contenido dinámico.
@@ -90,6 +93,7 @@ def menu_TablaDeCodigos():
     # --- Funciones para cambiar el contenido de TablaCodigo_contenido ---
     # Nota: Reciben 'container_to_update' (que es TablaCodigo_contenido) y 'page'
 
+    # Función para volver a cargar los datos por si acaso han cambiado o se han añadido nuevos
     def reset_tabla_codigo_contenido(e, container_to_update, page):
         """Restaura el contenido de TablaCodigo_contenido a la vista de las 4 columnas."""
         # Vuelve a cargar los datos por si acaso han cambiado o se han añadido nuevos
@@ -148,19 +152,15 @@ def menu_TablaDeCodigos():
 
 
     def crear_codigo_accion(e, container_to_update, page):
-        """Muestra un formulario para crear un nuevo código."""
+        print("Crear Código button clicked!")
 
-        # La función ventana_codigo() devuelve un ft.Row con los dropdowns
-        dropdowns_grupos_cuentas = globals.ventana_codigo()
-
-        container_to_update.content = ft.Column(
+        dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
+        
+        new_content_column = ft.Column(
             controls=[
                 ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
-                # Integrar la fila de dropdowns aquí
-                # Ya no necesitas ft.Text("GRUPO:") porque los dropdowns tienen etiquetas
-                dropdowns_grupos_cuentas, # Se inserta la fila de dropdowns directamente aquí
-                ft.TextField(label="Nombre del Código", hint_text="Ej: Alquiler"),
-                
+                dynamic_dropdown_selectors,
+                ft.TextField(label="Nombre del Código", hint_text="Ej: Nuevo Código"),
                 ft.FilledButton(text="Guardar Código", icon=ft.Icons.SAVE),
                 ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
             ],
@@ -168,7 +168,14 @@ def menu_TablaDeCodigos():
             spacing=15,
             expand=True
         )
-        page.update()
+        container_to_update.content = new_content_column
+        container_to_update.update() # Update the specific container itself
+        page.update() # Then update the whole page to propagate changes
+
+        print("Container content assigned and updated calls made.")
+
+
+    
     def editar_codigo_accion(e, container_to_update, page):
         """Muestra un formulario para editar un código existente."""
         container_to_update.content = ft.Column(

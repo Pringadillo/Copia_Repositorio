@@ -58,7 +58,7 @@ else:
         funciones_BD.insertar_datos_iniciales_grupos(ruta_BDapp)
         funciones_BD.insertar_datos_iniciales_subgrupos(ruta_BDapp)
         funciones_BD.insertar_datos_iniciales_cuentas(ruta_BDapp)
-        #funciones_BD.
+        
 
 
         

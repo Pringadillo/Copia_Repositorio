@@ -17,7 +17,7 @@ cuerpo_principal_diario = None
 def crear_dropdown_grupo():
     return ft.Dropdown(
         label="Grupo",
-        width=200,
+        width=250,
         text_size=16,
         options=[],
         hint_text="Elige Grupo",
@@ -27,7 +27,7 @@ def crear_dropdown_grupo():
 def crear_dropdown_subgrupo():
     return ft.Dropdown(
         label="Subgrupo",
-        width=200,
+        width=250,
         text_size=16,
         options=[],
         hint_text="Elige Subgrupo",
@@ -37,20 +37,25 @@ def crear_dropdown_subgrupo():
 def crear_dropdown_cuentas():
     return ft.Dropdown(
         label="Cuentas",
-        width=200,
+        width=250,
         text_size=16,
         options=[],
         hint_text="Elige Cuenta",
         border_radius=ft.border_radius.all(8)
     )
  
-def ventana_codigo():
+
+def ventana_codigo(ruta_BD):
     dd_grupo = crear_dropdown_grupo()
     dd_subgrupo = crear_dropdown_subgrupo()
     dd_cuenta = crear_dropdown_cuentas()
 
+    dd_subgrupo.disabled = True
+    dd_cuenta.disabled = True
+
     def cambia_Grupo(event: ft.ControlEvent):
-        grupo_id = event.control.value
+        grupo_id_str = event.control.value
+        
         dd_subgrupo.options.clear()
         dd_subgrupo.value = None
         dd_cuenta.options.clear()
@@ -60,41 +65,64 @@ def ventana_codigo():
         dd_subgrupo.options.append(ft.dropdown.Option(key=None, text="Elige subgrupo"))
         dd_cuenta.options.append(ft.dropdown.Option(key=None, text="Elige cuenta"))
 
-        if grupo_id:
+        if grupo_id_str:
             try:
-                dd_grupo.data = int(grupo_id)
-                seleccion_subgrupo = funciones_BD.obtener_datos_subgrupo(ruta_BD, grupo_id=int(grupo_id))
+                grupo_id = int(grupo_id_str)
+                dd_grupo.data = grupo_id
+
+                seleccion_subgrupo = funciones_BD.obtener_datos_subgrupo(ruta_BD, grupo_id=grupo_id)
                 subgrupo_options = []
-                for id_val, nombre_completo in seleccion_subgrupo:
-                    opcion = ft.dropdown.Option(key=str(id_val), text=nombre_completo)
+                for row_dict in seleccion_subgrupo:
+                    # **Subgrupo Display Format: 'grupo_id.cod_2 - desc_subgrupo'**
+                    # We need the 'grupo_id' from the currently selected group, which is stored in dd_grupo.data
+                    # The 'cod_2' and 'desc_subgrupo' come from the current row_dict.
+                    display_text = f"{grupo_id}.{row_dict['cod_2']} - {row_dict['desc_subgrupo']}"
+                    opcion = ft.dropdown.Option(
+                        key=str(row_dict['subgrupo_id']), # Key is still just the subgrupo_id
+                        text=display_text
+                    )
                     subgrupo_options.append(opcion)
                 dd_subgrupo.options.extend(subgrupo_options)
                 dd_subgrupo.disabled = False
             except ValueError:
                 dd_grupo.data = None
-                print(f"Error: ID de grupo no válido: {grupo_id}")
+                print(f"Error: ID de grupo no válido: {grupo_id_str}")
+            except KeyError as e:
+                # Added specific error handling for debugging if column names are wrong
+                print(f"Error de KeyError al procesar datos de subgrupos: {e}. "
+                      f"Asegúrate que la tabla SUBGRUPO tiene las columnas 'subgrupo_id', 'cod_2' y 'desc_subgrupo'.")
+        
         event.page.update()
 
     def cambia_Subgrupo(event: ft.ControlEvent):
-        subgrupo_id = event.control.value
+        subgrupo_id_str = event.control.value
         grupo_id = dd_grupo.data
+
         dd_cuenta.options.clear()
         dd_cuenta.value = None
         dd_cuenta.disabled = True
         dd_cuenta.options.append(ft.dropdown.Option(key=None, text="Elige cuenta"))
 
-        if subgrupo_id and grupo_id is not None:
+        if subgrupo_id_str and grupo_id is not None:
             try:
-                seleccion_cuentas = funciones_BD.obtener_datos_cuentas(ruta_BD, grupo_id=int(grupo_id), subgrupo_id=int(subgrupo_id))
+                subgrupo_id = int(subgrupo_id_str)
+                seleccion_cuentas = funciones_BD.obtener_datos_cuentas(ruta_BD, grupo_id=grupo_id, subgrupo_id=subgrupo_id)
                 cuenta_options = []
-                for codigo, descripcion in seleccion_cuentas:
+                for row_dict in seleccion_cuentas:
+                    codigo = row_dict['cod_3']
+                    descripcion = row_dict['descripcion_n3']
+                    # **Cuentas Display Format: 'cod_3 - descripcion_n3' (already correct)**
                     visible_text = f"{codigo} - {descripcion}"
-                    flet_options = ft.dropdown.Option(key=codigo, text=visible_text)
+                    flet_options = ft.dropdown.Option(key=str(codigo), text=visible_text)
                     cuenta_options.append(flet_options)
                 dd_cuenta.options.extend(cuenta_options)
                 dd_cuenta.disabled = False
             except ValueError:
-                print(f"Error: ID de subgrupo o grupo no válido. Grupo: {grupo_id}, Subgrupo: {subgrupo_id}")
+                print(f"Error: ID de subgrupo o grupo no válido. Grupo: {grupo_id}, Subgrupo: {subgrupo_id_str}")
+            except KeyError as e:
+                print(f"Error de KeyError al procesar datos de cuentas: {e}. "
+                      f"Asegúrate que la tabla CUENTAS tiene las columnas 'cod_3' y 'descripcion_n3'.")
+        
         event.page.update()
 
     dd_grupo.on_change = cambia_Grupo
@@ -102,8 +130,11 @@ def ventana_codigo():
 
     grupos_iniciales = funciones_BD.obtener_datos_grupo(ruta_BD)
     dd_grupo.options.append(ft.dropdown.Option(key=None, text="Elige Grupo"))
-    for id_val, nombre_completo in grupos_iniciales:
-        dd_grupo.options.append(ft.dropdown.Option(key=str(id_val), text=nombre_completo))
+    for row_dict in grupos_iniciales:
+        id_val = row_dict['grupo_id']
+        # **Grupo Display Format: 'grupo_id - desc_grupo'**
+        display_text = f"{id_val} - {row_dict['desc_grupo']}"
+        dd_grupo.options.append(ft.dropdown.Option(key=str(id_val), text=display_text))
 
     return ft.Row(
         controls=[
@@ -115,42 +146,40 @@ def ventana_codigo():
         alignment=ft.MainAxisAlignment.START
     )
 
+def ventana_botones_finales(
+    mostrar_btn_guardar: bool = True,
+    mostrar_btn_cancelar: bool = True,
+    ):
+    """
+    Crea una fila horizontal con botones "Grabar" y "Cancelar",
+    cuya visibilidad puede ser controlada por parámetros.
+    """
+    controles_botones = []
 
-def crear_codigo_accion(e, container_to_update, page):
-    """Muestra un formulario para crear un nuevo código."""
+    # Crear el botón "Grabar" si mostrar_btn_guardar es True
+    if mostrar_btn_guardar:
+        btn_guardar = ft.ElevatedButton(
+            "Grabar",
+            icon=ft.icons.SAVE,
+            on_click=lambda e: print("Botón Grabar presionado")
+            # Puedes añadir tu lógica de guardado aquí
+        )
+        controles_botones.append(btn_guardar)
 
-    # La función ventana_codigo() devuelve un ft.Row con los dropdowns
-    dropdowns_grupos_cuentas = ventana_codigo()
+    # Crear el botón "Cancelar" si mostrar_btn_cancelar es True
+    if mostrar_btn_cancelar:
+        btn_cancelar = ft.OutlinedButton( # Usamos OutlinedButton para distinguirlo
+            "Cancelar",
+            icon=ft.icons.CANCEL,
+            on_click=lambda e: print("Botón Cancelar presionado")
+            # Puedes añadir tu lógica de cancelación aquí
+        )
+        controles_botones.append(btn_cancelar)
 
-    container_to_update.content = ft.Column(
-        controls=[
-            ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
-            # Integrar la fila de dropdowns aquí
-            # Ya no necesitas ft.Text("GRUPO:") porque los dropdowns tienen etiquetas
-            dropdowns_grupos_cuentas, # Se inserta la fila de dropdowns directamente aquí
-            ft.TextField(label="Nombre del Código", hint_text="Ej: Alquiler"),
-            ft.Dropdown(
-                label="Tipo de Código",
-                options=[
-                    ft.dropdown.Option("Financiero"),
-                    ft.dropdown.Option("Deuda"),
-                    ft.dropdown.Option("Gasto"),
-                    ft.dropdown.Option("Ingreso"),
-                ],
-                hint_text="Selecciona el tipo de cuenta"
-            ),
-            ft.FilledButton(text="Guardar Código", icon=ft.Icons.SAVE), 
-            ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
-        ],
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=15,
-        expand=True
+    # Devolvemos una Row que contiene solo los botones que se han añadido
+    return ft.Row(
+        controls=controles_botones,
+        spacing=10, # Espacio entre los botones
+        alignment=ft.MainAxisAlignment.END # Alineación de los botones en la fila
     )
-    page.update()
-
-# Mock de la función reset_tabla_codigo_contenido para que el ejemplo sea ejecutable
-def reset_tabla_codigo_contenido(e, container_to_update, page):
-    container_to_update.content = ft.Text("Contenido simulado: aquí va el contenido dinamico")
-    page.update()
-
 
