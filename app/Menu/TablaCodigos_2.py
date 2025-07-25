@@ -152,10 +152,24 @@ def menu_TablaDeCodigos():
 
 
     def crear_codigo_accion(e, container_to_update, page):
-        print("Crear Código button clicked!")
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Código".
+        Reemplaza el contenido de un contenedor objetivo con un formulario para
+        crear un nuevo código. Este formulario incluye desplegables en cascada
+        para Grupo, Subgrupo y Cuentas, y un botón para volver a la vista anterior.
 
+        Args:
+            e (ft.ControlEvent): El objeto evento del clic del botón.
+            container_to_update (ft.Container): El contenedor de Flet cuyo contenido
+                                            será reemplazado por el nuevo formulario de creación de código.
+            page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
+        """
+
+        # Llama a 'ventana_codigo' desde el módulo 'globals' para obtener un control Row
+        # que contiene los tres desplegables en cascada (Grupo, Subgrupo, Cuentas).
         dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
         
+        # Crea un nuevo control Column para agrupar todos los elementos del formulario
         new_content_column = ft.Column(
             controls=[
                 ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
@@ -168,11 +182,12 @@ def menu_TablaDeCodigos():
             spacing=15,
             expand=True
         )
+        # Actualiza el contenido del contenedor objetivo para mostrar el nuevo formulario.
         container_to_update.content = new_content_column
         container_to_update.update() # Update the specific container itself
         page.update() # Then update the whole page to propagate changes
 
-        print("Container content assigned and updated calls made.")
+        
 
 
     
