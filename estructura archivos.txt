@@ -1,3 +1,4 @@
+ESTRUCTURA:
 app/
     __init__.py
     data/
@@ -19,6 +20,19 @@ app/
     cuerpo.py
     login.py
     main.py
+
+FRONT-OFFICE:
+main:ft.Row
+    0 appBar: def crear_appbar(page)
+        Botones que modifican contenido_central_container.content
+    1 barra_lateral_contenido
+        1.1 def crear_barra_lateral(page)
+            a desarrollar: ahora hay texto y botones
+    2 globals.contenido_central_container
+        2.1 titulo
+        2.2 subtitulo
+        2.3 contenido
+
 
 
 

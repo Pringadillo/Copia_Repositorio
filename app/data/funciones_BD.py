@@ -5,6 +5,7 @@ from app import globals
 from datetime import datetime
 import pandas as pd
 
+ruta_BDapp = globals.ruta_BD
 
 # ---------------------------------------- FUNCIONES DE CREAR BASE DE DATOS Y TABLAS ----------------------------------------
 def crear_base_datos(ruta_BDapp):

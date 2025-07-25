@@ -18,7 +18,7 @@ lista_Cuentas =[]
 
 # --- Funciones de la UI ---
 
-def boton_diario2():
+def menu_diario2():
     """
     Función que configura la sección "Diario" de la aplicación,
     incluyendo su submenú y el área de contenido principal que se actualiza.
@@ -152,7 +152,7 @@ def boton_diario2():
     # establecerá el contenido de contenido_central_container.
     return globals.contenido_central_container.content
 
-def boton_diario3():
+def menu_diario3():
     """
     Función que configura la sección "Diario" de la aplicación,
     incluyendo su submenú y el área de contenido principal que se actualiza.
@@ -483,7 +483,7 @@ def boton_diario3():
     # establecerá el contenido de contenido_central_container.
     return globals.contenido_central_container.content
 
-def boton_diario4():
+def menu_diario4():
     """
     Función que configura la sección "Diario" de la aplicación,
     incluyendo su submenú y el área de contenido principal que se actualiza.
@@ -1322,4 +1322,9 @@ def boton_CrearCodigo():
     # establecerá el contenido de contenido_central_container.
     return globals.contenido_central_container.content
 
+def boton_EditarCodigo():
+    pass
+
+def boto_EliminarCodigo():
+    pass
 

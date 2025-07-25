@@ -1,11 +1,11 @@
 import flet as ft
 
 from app.data.funciones_BD import *
-
+import app.data.funciones_BD as funciones_BD
 
 # Variables Globales
 ruta_imagenes = "./imagenes/"
-empresa = "Mi_Empresa_22"
+empresa = "Mi_Empresa_23"
 BasedeDatos = f"bd_{empresa}.db"
 ruta_BD = f"./data/{BasedeDatos}"
 usuario = "Usuario_1"  # Nombre del usuario

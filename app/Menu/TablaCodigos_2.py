@@ -8,7 +8,9 @@ import os
 import globals
 from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet, mostrar_cuentas_por_grupo_flet2
 
-def proves8():
+
+
+def menu_TablaDeCodigos():
     """
     Esta función construye y retorna la vista principal de la "Tabla de Códigos".
     Maneja la visibilidad de los botones de configuración y el cambio de contenido
@@ -149,7 +151,7 @@ def proves8():
         """Muestra un formulario para crear un nuevo código."""
 
         # La función ventana_codigo() devuelve un ft.Row con los dropdowns
-        dropdowns_grupos_cuentas = ventana_codigo()
+        dropdowns_grupos_cuentas = globals.ventana_codigo()
 
         container_to_update.content = ft.Column(
             controls=[
@@ -158,16 +160,7 @@ def proves8():
                 # Ya no necesitas ft.Text("GRUPO:") porque los dropdowns tienen etiquetas
                 dropdowns_grupos_cuentas, # Se inserta la fila de dropdowns directamente aquí
                 ft.TextField(label="Nombre del Código", hint_text="Ej: Alquiler"),
-                ft.Dropdown(
-                    label="Tipo de Código",
-                    options=[
-                        ft.dropdown.Option("Financiero"),
-                        ft.dropdown.Option("Deuda"),
-                        ft.dropdown.Option("Gasto"),
-                        ft.dropdown.Option("Ingreso"),
-                    ],
-                    hint_text="Selecciona el tipo de cuenta"
-                ),
+                
                 ft.FilledButton(text="Guardar Código", icon=ft.Icons.SAVE),
                 ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
             ],
@@ -300,3 +293,6 @@ def proves8():
 
     # Retorna el contenido para ser añadido a la página principal de Flet
     return globals.contenido_central_container.content
+
+
+
