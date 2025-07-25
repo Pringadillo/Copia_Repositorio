@@ -9,6 +9,9 @@
     CRUD Empresa
 - crear un estilo de formatos (tipo letra)
 - utilizar CLASES
+- si se elimina un codigo, y tiene datos, se ha de cambiar el nombre de la cuenta de los datos, para que se pueda eliminar.
+  la idea es traspasar el nombre de los datos.
+  luego se podria marcar una columna de habilitado/deshabilitado
 - 
 
 

@@ -832,7 +832,7 @@ def boton_diario4():
 
 
 
-def boton_diario5():
+def boton_CrearCodigo():
     """
     Función que configura la sección "Diario" de la aplicación,
     incluyendo su submenú y el área de contenido principal que se actualiza.
