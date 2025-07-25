@@ -7,6 +7,8 @@ import os
 
 
 from app.data.funciones_BD import *
+import app.data.funciones_BD as funciones_BD
+
 import globals
 
 ruta_BDapp = globals.ruta_BD
@@ -164,7 +166,7 @@ def boton_diario3():
 
     def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
         ruta_BDapp= globals.ruta_BD
-        asientos = obtener_asientos_diario(ruta_BDapp)
+        asientos = funciones_BD.mostrar_datos_Diario(ruta_BDapp)
         
         if not asientos:
             # Si no hay datos, se actualiza el contenido del contenedor principal
@@ -488,9 +490,9 @@ def boton_diario4():
     """
     cuerpo_principal_diario=ft.Container()
  
-    def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
+    def mostrar_Tabla_Diario(e: ft.ControlEvent): 
         ruta_BDapp= globals.ruta_BD
-        asientos = obtener_asientos_diario(ruta_BDapp)
+        asientos = funciones_BD.mostrar_datos_Diario(ruta_BDapp)
         
         if not asientos:
             # Si no hay datos, se actualiza el contenido del contenedor principal
@@ -582,7 +584,7 @@ def boton_diario4():
                                     text_size=16, # Adjust text size for the dropdown
                                 ),
                                 ft.Dropdown(
-                                    label="Subrupo",  # This acts like the "Grupo" text
+                                    label="Subgrupo",  # This acts like the "Grupo" text
                                     options=[ft.dropdown.Option("Opción 1"),
                                             ft.dropdown.Option("Opción 2"),],
                                     width=200,  # You can adjust the width as needed
@@ -864,9 +866,9 @@ def boton_diario5():
         hint_text="Elige Cuenta",
     )
 
-    def mostrar_Tabla_Diario(e: ft.ControlEvent): # Asumo que esta es la función a la que te referías
-        ruta_BDapp= globals.ruta_BD
-        asientos = obtener_asientos_diario(ruta_BDapp)
+    def mostrar_Tabla_Diario(e: ft.ControlEvent): 
+        
+        asientos = funciones_BD.mostrar_datos_Diario(ruta_BDapp)
         
         if not asientos:
             # Si no hay datos, se actualiza el contenido del contenedor principal

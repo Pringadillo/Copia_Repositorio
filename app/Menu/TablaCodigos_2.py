@@ -14,8 +14,8 @@ def proves8():
     Maneja la visibilidad de los botones de configuración y el cambio de contenido
     en el área principal de la tabla.
     """
-
     ruta_BDapp = globals.ruta_BD
+
 
     # 1. Cargar datos iniciales para las 4 columnas
     # (Estos datos son simulados por 'mostrar_cuentas_por_grupo_flet2')
@@ -23,7 +23,6 @@ def proves8():
     controles_cuentas2 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 2) # Deudas
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3) # Gastos
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4) # Ingresos
-
 
     # --- Definición del Contenedor Principal de la Tabla de Códigos ---
     # Este es el contenedor que contendrá el contenido dinámico.
@@ -85,7 +84,6 @@ def proves8():
         ),
         padding=10, expand=True
     )
-
 
     # --- Funciones para cambiar el contenido de TablaCodigo_contenido ---
     # Nota: Reciben 'container_to_update' (que es TablaCodigo_contenido) y 'page'
@@ -149,9 +147,16 @@ def proves8():
 
     def crear_codigo_accion(e, container_to_update, page):
         """Muestra un formulario para crear un nuevo código."""
+
+        # La función ventana_codigo() devuelve un ft.Row con los dropdowns
+        dropdowns_grupos_cuentas = ventana_codigo()
+
         container_to_update.content = ft.Column(
             controls=[
-                ft.Text("FORMULARIO: Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
+                ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
+                # Integrar la fila de dropdowns aquí
+                # Ya no necesitas ft.Text("GRUPO:") porque los dropdowns tienen etiquetas
+                dropdowns_grupos_cuentas, # Se inserta la fila de dropdowns directamente aquí
                 ft.TextField(label="Nombre del Código", hint_text="Ej: Alquiler"),
                 ft.Dropdown(
                     label="Tipo de Código",
@@ -168,10 +173,9 @@ def proves8():
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
-            expand=True # ¡CORRECCIÓN CLAVE! Asegura que el Column ocupe el espacio disponible.
+            expand=True
         )
-        page.update() # ¡Importante! Actualiza la UI para mostrar el nuevo contenido.
-
+        page.update()
     def editar_codigo_accion(e, container_to_update, page):
         """Muestra un formulario para editar un código existente."""
         container_to_update.content = ft.Column(
@@ -277,7 +281,7 @@ def proves8():
         TablaCodigo_subtitulo.visible = not TablaCodigo_subtitulo.visible
         e.page.update() # Actualiza la UI para mostrar/ocultar el subtítulo
 
-
+    
     # ---------------------- Estructura principal de la vista -----------------
     # Agrupa todos los elementos definidos anteriormente en un Column
     globals.contenido_central_container.content = ft.Container(
@@ -286,6 +290,7 @@ def proves8():
                 TablaCodigo_titulo,
                 TablaCodigo_subtitulo,
                 TablaCodigo_contenido, # Este es el contenedor que cambia de contenido
+                
             ],
             alignment=ft.MainAxisAlignment.START,
         ),

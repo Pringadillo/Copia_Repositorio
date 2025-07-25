@@ -7,6 +7,9 @@
 - configuracion del programa:
     CRUD Usuario
     CRUD Empresa
+- crear un estilo de formatos (tipo letra)
+- utilizar CLASES
+- 
 
 
 ----------- DESARROLLAR ----------------
@@ -18,5 +21,8 @@
 * comprobar la repeticion de lo codigos, evitar duplicidades por numero y descripcion
 * la grupo_id cambiar formato a 1 digito
 * mejorar la visibilidad de los botones en referencia al titulo de codigos_título
+* def ventana_Codigo()
+* presentación de tablas codigo que sea por orden numerico int, no str
 * 
+
 
