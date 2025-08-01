@@ -44,7 +44,6 @@ def crear_dropdown_cuentas():
         border_radius=ft.border_radius.all(8)
     )
  
-
 def ventana_codigo(ruta_BD):
     dd_grupo = crear_dropdown_grupo()
     dd_subgrupo = crear_dropdown_subgrupo()
@@ -147,6 +146,8 @@ def ventana_codigo(ruta_BD):
     )
 
 def ventana_botones_finales(
+    on_click_guardar = None,
+    on_click_cancelar = None,
     mostrar_btn_guardar: bool = True,
     mostrar_btn_cancelar: bool = True,
     ):
@@ -155,13 +156,13 @@ def ventana_botones_finales(
     cuya visibilidad puede ser controlada por parámetros.
     """
     controles_botones = []
-
+ 
     # Crear el botón "Grabar" si mostrar_btn_guardar es True
     if mostrar_btn_guardar:
         btn_guardar = ft.ElevatedButton(
             "Grabar",
-            icon=ft.icons.SAVE,
-            on_click=lambda e: print("Botón Grabar presionado")
+            icon=ft.Icons.SAVE,
+            on_click=on_click_guardar,
             # Puedes añadir tu lógica de guardado aquí
         )
         controles_botones.append(btn_guardar)
@@ -170,8 +171,8 @@ def ventana_botones_finales(
     if mostrar_btn_cancelar:
         btn_cancelar = ft.OutlinedButton( # Usamos OutlinedButton para distinguirlo
             "Cancelar",
-            icon=ft.icons.CANCEL,
-            on_click=lambda e: print("Botón Cancelar presionado")
+            icon=ft.Icons.CANCEL,
+            on_click=on_click_cancelar,
             # Puedes añadir tu lógica de cancelación aquí
         )
         controles_botones.append(btn_cancelar)
@@ -180,6 +181,6 @@ def ventana_botones_finales(
     return ft.Row(
         controls=controles_botones,
         spacing=10, # Espacio entre los botones
-        alignment=ft.MainAxisAlignment.END # Alineación de los botones en la fila
+        alignment=ft.MainAxisAlignment.CENTER # Alineación de los botones en la fila
     )
 

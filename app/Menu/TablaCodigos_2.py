@@ -6,7 +6,7 @@ import sys
 import os
 
 import globals
-from app.data.funciones_BD import mostrar_datos_grupo, obtener_datos_grupo, obtener_datos_subgrupo, mostrar_cuentas_por_grupo_flet, mostrar_cuentas_por_grupo_flet2
+from app.data.funciones_BD import mostrar_cuentas_por_grupo_flet2, insertar_datos_cuenta
 
 
 
@@ -27,7 +27,6 @@ def menu_TablaDeCodigos():
     controles_cuentas3 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 3) # Gastos
     controles_cuentas4 = mostrar_cuentas_por_grupo_flet2(ruta_BDapp, 4) # Ingresos
 
-    
 
     # --- Definición del Contenedor Principal de la Tabla de Códigos ---
     # Este es el contenedor que contendrá el contenido dinámico.
@@ -150,7 +149,6 @@ def menu_TablaDeCodigos():
         )
         page.update()
 
-
     def crear_codigo_accion(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Código".
@@ -168,20 +166,34 @@ def menu_TablaDeCodigos():
         # Llama a 'ventana_codigo' desde el módulo 'globals' para obtener un control Row
         # que contiene los tres desplegables en cascada (Grupo, Subgrupo, Cuentas).
         dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
+        cancelar = lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page)
+        guardar = lambda ev: insertar_datos_cuenta()
+        botones_final_ventana = globals.ventana_botones_finales(on_click_cancelar=cancelar, mostrar_btn_guardar=guardar)
         
+
+
         # Crea un nuevo control Column para agrupar todos los elementos del formulario
         new_content_column = ft.Column(
             controls=[
                 ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
                 dynamic_dropdown_selectors,
-                ft.TextField(label="Nombre del Código", hint_text="Ej: Nuevo Código"),
+                ft.Row(
+                    controls =[ft.TextField(label="Nombre del Código", 
+                                            hint_text="Ej: Alquiler", 
+                                            width=500),
+                                            
+                    ],
+                    alignment=ft.MainAxisAlignment.START,
+                 ),
+                botones_final_ventana,
                 ft.FilledButton(text="Guardar Código", icon=ft.Icons.SAVE),
-                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+                ft.FilledButton(text="Volver", on_click=cancelar, icon=ft.Icons.ARROW_BACK),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
             expand=True
         )
+
         # Actualiza el contenido del contenedor objetivo para mostrar el nuevo formulario.
         container_to_update.content = new_content_column
         container_to_update.update() # Update the specific container itself
