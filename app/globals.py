@@ -27,7 +27,7 @@ def crear_dropdown_grupo():
 def crear_dropdown_subgrupo():
     return ft.Dropdown(
         label="Subgrupo",
-        width=250,
+        width=260,
         text_size=16,
         options=[],
         hint_text="Elige Subgrupo",
@@ -43,7 +43,7 @@ def crear_dropdown_cuentas():
         hint_text="Elige Cuenta",
         border_radius=ft.border_radius.all(8)
     )
- 
+
 def ventana_codigo(ruta_BD):
     dd_grupo = crear_dropdown_grupo()
     dd_subgrupo = crear_dropdown_subgrupo()
@@ -51,6 +51,8 @@ def ventana_codigo(ruta_BD):
 
     dd_subgrupo.disabled = True
     dd_cuenta.disabled = True
+    #dd_subgrupo.visible = False
+    #dd_cuenta.visible = False
 
     def cambia_Grupo(event: ft.ControlEvent):
         grupo_id_str = event.control.value
@@ -145,6 +147,99 @@ def ventana_codigo(ruta_BD):
         alignment=ft.MainAxisAlignment.START
     )
 
+
+def ventana_grupo(ruta_BD):
+    dd_grupo = crear_dropdown_grupo()
+
+    grupos_iniciales = funciones_BD.obtener_datos_grupo(ruta_BD)
+    dd_grupo.options.append(ft.dropdown.Option(key=None, text="Elige Grupo"))
+    for row_dict in grupos_iniciales:
+        id_val = row_dict['grupo_id']
+        # **Grupo Display Format: 'grupo_id - desc_grupo'**
+        display_text = f"{id_val} - {row_dict['desc_grupo']}"
+        dd_grupo.options.append(ft.dropdown.Option(key=str(id_val), text=display_text))
+
+    return ft.Row(
+        controls=[
+            dd_grupo,
+        ],
+        spacing=10,
+        alignment=ft.MainAxisAlignment.START
+    )
+
+def ventana_hasta_subgrupo(ruta_BD):
+    dd_grupo = crear_dropdown_grupo()
+    dd_subgrupo = crear_dropdown_subgrupo()
+
+
+    dd_subgrupo.disabled = True
+    #dd_subgrupo.visible = False
+
+
+    def cambia_Grupo(event: ft.ControlEvent):
+        grupo_id_str = event.control.value
+        
+        dd_subgrupo.options.clear()
+        dd_subgrupo.value = None
+
+        dd_subgrupo.disabled = True
+
+        dd_subgrupo.options.append(ft.dropdown.Option(key=None, text="Elige subgrupo"))
+
+
+        if grupo_id_str:
+            try:
+                grupo_id = int(grupo_id_str)
+                dd_grupo.data = grupo_id
+
+                seleccion_subgrupo = funciones_BD.obtener_datos_subgrupo(ruta_BD, grupo_id=grupo_id)
+                subgrupo_options = []
+                for row_dict in seleccion_subgrupo:
+                    # **Subgrupo Display Format: 'grupo_id.cod_2 - desc_subgrupo'**
+                    # We need the 'grupo_id' from the currently selected group, which is stored in dd_grupo.data
+                    # The 'cod_2' and 'desc_subgrupo' come from the current row_dict.
+                    display_text = f"{grupo_id}.{row_dict['cod_2']} - {row_dict['desc_subgrupo']}"
+                    opcion = ft.dropdown.Option(
+                        key=str(row_dict['subgrupo_id']), # Key is still just the subgrupo_id
+                        text=display_text
+                    )
+                    subgrupo_options.append(opcion)
+                dd_subgrupo.options.extend(subgrupo_options)
+                dd_subgrupo.disabled = False
+            except ValueError:
+                dd_grupo.data = None
+                print(f"Error: ID de grupo no válido: {grupo_id_str}")
+            except KeyError as e:
+                # Added specific error handling for debugging if column names are wrong
+                print(f"Error de KeyError al procesar datos de subgrupos: {e}. "
+                      f"Asegúrate que la tabla SUBGRUPO tiene las columnas 'subgrupo_id', 'cod_2' y 'desc_subgrupo'.")
+        
+        event.page.update()
+
+
+    dd_grupo.on_change = cambia_Grupo
+
+
+    grupos_iniciales = funciones_BD.obtener_datos_grupo(ruta_BD)
+    dd_grupo.options.append(ft.dropdown.Option(key=None, text="Elige Grupo"))
+    for row_dict in grupos_iniciales:
+        id_val = row_dict['grupo_id']
+        # **Grupo Display Format: 'grupo_id - desc_grupo'**
+        display_text = f"{id_val} - {row_dict['desc_grupo']}"
+        dd_grupo.options.append(ft.dropdown.Option(key=str(id_val), text=display_text))
+
+    return ft.Row(
+        controls=[
+            dd_grupo,
+            dd_subgrupo,
+
+        ],
+        spacing=10,
+        alignment=ft.MainAxisAlignment.START
+    )
+
+
+'''
 def ventana_botones_finales(
     on_click_guardar = None,
     on_click_cancelar = None,
@@ -184,3 +279,4 @@ def ventana_botones_finales(
         alignment=ft.MainAxisAlignment.CENTER # Alineación de los botones en la fila
     )
 
+'''

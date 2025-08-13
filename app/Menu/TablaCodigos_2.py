@@ -149,7 +149,67 @@ def menu_TablaDeCodigos():
         )
         page.update()
 
-    def crear_codigo_accion(e, container_to_update, page):
+    # fUNCIONES de las acciones de los botones
+    def crear_subcuenta(e, container_to_update, page):
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
+        Reemplaza el contenido de un contenedor objetivo con un formulario para
+        crear una nueva subcuenta.
+        """
+
+        instrucciones = ft.Text(
+            spans=[
+                ft.TextSpan(
+                    "Instrucciones\n",  # La línea 1 con el encabezado y un salto de línea
+                    ft.TextStyle(size=20, weight=ft.FontWeight.BOLD)
+                ),
+                ft.TextSpan(
+                    "Vas a crear una SUBCUENTA, revisa previamente que no exista.\n" # La línea 2 con las instrucciones
+                ),
+                ft.TextSpan(
+                    "Utiliza un concepto corto y descriptivo, que englobe a las cuentas que representará \n" # La línea 3
+                ),
+            ],
+            size=16, # Puedes establecer el tamaño base para el resto del texto
+            text_align=ft.TextAlign.LEFT # Alinear el texto a la izquierda
+        )
+
+
+
+
+        
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
+        dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
+
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
+        new_content_column = ft.Column(
+            controls=[
+                ft.Text("Crear nuevo SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
+                dynamic_dropdown_selectors,
+                instrucciones,
+                ft.Row(
+                    controls=[
+                        ft.TextField(
+                            label="Nombre SUBGRUPO",
+                            hint_text="Ej: Gastos Extra",
+                            width=500
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.START,
+                ),
+
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+            expand=True
+        )
+
+        # Actualiza el contenido del contenedor y la página.
+        container_to_update.content = new_content_column
+        container_to_update.update()
+        page.update()
+        
+    def crear_cuenta(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Código".
         Reemplaza el contenido de un contenedor objetivo con un formulario para
@@ -198,12 +258,8 @@ def menu_TablaDeCodigos():
         container_to_update.content = new_content_column
         container_to_update.update() # Update the specific container itself
         page.update() # Then update the whole page to propagate changes
-
-        
-
-
-    
-    def editar_codigo_accion(e, container_to_update, page):
+   
+    def editar_subcuenta(e, container_to_update, page):
         """Muestra un formulario para editar un código existente."""
         container_to_update.content = ft.Column(
             controls=[
@@ -227,7 +283,31 @@ def menu_TablaDeCodigos():
         )
         page.update()
 
-    def eliminar_codigo_accion(e, container_to_update, page):
+    def editar_cuenta(e, container_to_update, page):
+        """Muestra un formulario para editar un código existente."""
+        container_to_update.content = ft.Column(
+            controls=[
+                ft.Text("FORMULARIO: Editar Código Existente", size=20, weight=ft.FontWeight.BOLD),
+                ft.Dropdown(
+                    label="Seleccionar Código a Editar",
+                    options=[
+                        ft.dropdown.Option("Gasto: Comida"),
+                        ft.dropdown.Option("Ingreso: Salario"),
+                        ft.dropdown.Option("Deuda: Tarjeta de Crédito"),
+                    ],
+                    hint_text="Elige el código a modificar"
+                ),
+                ft.TextField(label="Nuevo Nombre del Código", hint_text="Ej: Comida del Mes"),
+                ft.FilledButton(text="Actualizar Código", icon=ft.Icons.UPDATE),
+                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+            expand=True # ¡CORRECCIÓN CLAVE!
+        )
+        page.update()
+
+    def eliminar_subcuenta(e, container_to_update, page):
         """Muestra una confirmación para eliminar un código."""
         container_to_update.content = ft.Column(
             controls=[
@@ -248,6 +328,29 @@ def menu_TablaDeCodigos():
             expand=True # ¡CORRECCIÓN CLAVE!
         )
         page.update()
+
+    def eliminar_cuenta(e, container_to_update, page):
+        """Muestra una confirmación para eliminar un código."""
+        container_to_update.content = ft.Column(
+            controls=[
+                ft.Text("¿CONFIRMAR ELIMINACIÓN DE CÓDIGO?", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_700),
+                ft.Dropdown(
+                    label="Seleccionar Código a Eliminar",
+                    options=[
+                        ft.dropdown.Option("Gasto: Transporte"),
+                        ft.dropdown.Option("Deuda: Préstamo Automóvil"),
+                    ],
+                    hint_text="Elige el código a eliminar"
+                ),
+                ft.FilledButton(text="Eliminar Código Permanentemente", icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
+                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+            expand=True # ¡CORRECCIÓN CLAVE!
+        )
+        page.update()
+
 
 
     # --- Título de la Tabla Códigos ---
@@ -280,19 +383,34 @@ def menu_TablaDeCodigos():
         content=ft.Row(
             controls=[
                 ft.FilledButton(
-                    text="Crear Código",
+                    text="Crear Subgrupo",
                     icon=ft.Icons.ADD,
-                    on_click=lambda e: crear_codigo_accion(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: crear_subcuenta(e, TablaCodigo_contenido, e.page)
                 ),
                 ft.FilledButton(
-                    text="Editar Código",
+                    text="Crear Cuenta",
+                    icon=ft.Icons.ADD,
+                    on_click=lambda e: crear_cuenta(e, TablaCodigo_contenido, e.page)
+                ),                
+                ft.FilledButton(
+                    text="Editar Subgrupo",
                     icon=ft.Icons.EDIT,
-                    on_click=lambda e: editar_codigo_accion(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: editar_subcuenta(e, TablaCodigo_contenido, e.page)
+                ),
+                 ft.FilledButton(
+                    text="Editar Cuenta",
+                    icon=ft.Icons.EDIT,
+                    on_click=lambda e: editar_cuenta(e, TablaCodigo_contenido, e.page)
                 ),
                 ft.FilledButton(
-                    text="Eliminar Código",
+                    text="Eliminar Subgrupo",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: eliminar_codigo_accion(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: eliminar_subcuenta(e, TablaCodigo_contenido, e.page)
+                ),
+                ft.FilledButton(
+                    text="Eliminar Cuenta",
+                    icon=ft.Icons.DELETE_OUTLINE,
+                    on_click=lambda e: eliminar_cuenta(e, TablaCodigo_contenido, e.page)
                 ),
             ],
             spacing=10,
