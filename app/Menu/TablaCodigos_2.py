@@ -149,6 +149,26 @@ def menu_TablaDeCodigos():
         )
         page.update()
 
+
+    def Subcuenta_accion_crear(e, container_to_update, page):
+        print ("CREANDO SUBGRUPO")
+        pass
+    def Subcuenta_accion_modificar(e, container_to_update, page):
+        pass
+    def Subcuenta_accion_eliminar(e, container_to_update, page):
+        pass
+
+    def Cuenta_accion_crear(e, container_to_update, page):
+        pass
+    def Cuenta_accion_modificar(e, container_to_update, page):
+        pass
+    def Cuenta_accion_eliminar(e, container_to_update, page):
+        pass
+
+
+
+
+
     # fUNCIONES de las acciones de los botones
     def crear_subcuenta(e, container_to_update, page):
         """
@@ -156,28 +176,39 @@ def menu_TablaDeCodigos():
         Reemplaza el contenido de un contenedor objetivo con un formulario para
         crear una nueva subcuenta.
         """
-
-        instrucciones = ft.Text(
-            spans=[
-                ft.TextSpan(
-                    "Instrucciones\n",  # La línea 1 con el encabezado y un salto de línea
-                    ft.TextStyle(size=20, weight=ft.FontWeight.BOLD)
-                ),
-                ft.TextSpan(
-                    "Vas a crear una SUBCUENTA, revisa previamente que no exista.\n" # La línea 2 con las instrucciones
-                ),
-                ft.TextSpan(
-                    "Utiliza un concepto corto y descriptivo, que englobe a las cuentas que representará \n" # La línea 3
-                ),
+        # Creamos el contenido de las instrucciones, ahora dentro de un ft.Column para alinear
+        instrucciones_content_column = ft.Column(
+            controls=[
+                ft.Text("1º Escoge en grupo donde crear el subgrupo"),
+                ft.Text("2º Revisa en el desplegable SUBGRUPO, para que no exista un concepto parecido"),
+                ft.Text("3º Si aún así crees que necesitas un nuevo SUBGRUPO"),
+                ft.Text("\t\tUtiliza un concepto corto y descriptivo, que englobe a las cuentas que representará"),
+                ft.Text("\t\tCrear para cerrar el nuevo SUBGRUPO\n\t\tVolver para cancelar")
             ],
-            size=16, # Puedes establecer el tamaño base para el resto del texto
-            text_align=ft.TextAlign.LEFT # Alinear el texto a la izquierda
+            horizontal_alignment=ft.CrossAxisAlignment.START # Alinea todos los Text a la izquierda
+        )
+
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column]
+        )
+
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200, # <-- Le aplicamos el color aquí
         )
 
 
 
 
-        
+
         # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
         dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
 
@@ -185,8 +216,8 @@ def menu_TablaDeCodigos():
         new_content_column = ft.Column(
             controls=[
                 ft.Text("Crear nuevo SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
                 dynamic_dropdown_selectors,
-                instrucciones,
                 ft.Row(
                     controls=[
                         ft.TextField(
@@ -197,8 +228,26 @@ def menu_TablaDeCodigos():
                     ],
                     alignment=ft.MainAxisAlignment.START,
                 ),
-
-            ],
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.Row(
+                    controls=[
+                        ft.ElevatedButton(
+                            text="Crear Subgrupo",
+                            on_click=lambda e: Subcuenta_accion_crear(e, container_to_update, page)
+                        ),
+                        ft.ElevatedButton(
+                            text="Volver",
+                            on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page),
+                            icon=ft.Icons.ARROW_BACK
+                        ),
+                        #ft.Container(width=30) # Añade este espaciador
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ), 
+            ], 
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
             expand=True
@@ -385,32 +434,50 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Crear Subgrupo",
                     icon=ft.Icons.ADD,
-                    on_click=lambda e: crear_subcuenta(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: crear_subcuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
+                        )
                 ),
-                ft.FilledButton(
-                    text="Crear Cuenta",
-                    icon=ft.Icons.ADD,
-                    on_click=lambda e: crear_cuenta(e, TablaCodigo_contenido, e.page)
-                ),                
                 ft.FilledButton(
                     text="Editar Subgrupo",
                     icon=ft.Icons.EDIT,
-                    on_click=lambda e: editar_subcuenta(e, TablaCodigo_contenido, e.page)
-                ),
-                 ft.FilledButton(
-                    text="Editar Cuenta",
-                    icon=ft.Icons.EDIT,
-                    on_click=lambda e: editar_cuenta(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: editar_subcuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
+                        )
                 ),
                 ft.FilledButton(
                     text="Eliminar Subgrupo",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: eliminar_subcuenta(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: eliminar_subcuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
+                        )
+                ),
+                ft.FilledButton(
+                    text="Crear Cuenta",
+                    icon=ft.Icons.ADD,
+                    on_click=lambda e: crear_cuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
+                        )
+                ),                
+                 ft.FilledButton(
+                    text="Editar Cuenta",
+                    icon=ft.Icons.EDIT,
+                    on_click=lambda e: editar_cuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
+                        )
                 ),
                 ft.FilledButton(
                     text="Eliminar Cuenta",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: eliminar_cuenta(e, TablaCodigo_contenido, e.page)
+                    on_click=lambda e: eliminar_cuenta(e, TablaCodigo_contenido, e.page),
+                        style=ft.ButtonStyle(
+                            bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
+                        )
                 ),
             ],
             spacing=10,
