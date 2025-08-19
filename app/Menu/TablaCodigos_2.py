@@ -154,40 +154,48 @@ def menu_TablaDeCodigos():
         print ("CREANDO SUBGRUPO")
         pass
     def Subcuenta_accion_modificar(e, container_to_update, page):
+        print ("modificandeo SUBGRUPO")
         pass
     def Subcuenta_accion_eliminar(e, container_to_update, page):
+        print ("eliminando SUBGRUPO")
         pass
 
     def Cuenta_accion_crear(e, container_to_update, page):
+        print ("CREANDO cuenta")
         pass
     def Cuenta_accion_modificar(e, container_to_update, page):
+        print ("modificancod cuenat")
         pass
     def Cuenta_accion_eliminar(e, container_to_update, page):
+        print ("eliminando CUENTA")
         pass
 
 
 
 
 
-    # fUNCIONES de las acciones de los botones
-    def crear_subcuenta(e, container_to_update, page):
+    # fUNCIONES  de los botones
+    def btn_crear_subcuenta(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
-        Reemplaza el contenido de un contenedor objetivo con un formulario para
-        crear una nueva subcuenta.
+        crear un nuevo SUBGRUPO, a partir de escoger el GRUPO.
+        Args:
+            e (ft.ControlEvent): El objeto evento del clic del botón.
+            container_to_update (ft.Container): El contenedor de Flet cuyo contenido
+                                            será reemplazado por el nuevo formulario de creación de código.
+            page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
         """
-        # Creamos el contenido de las instrucciones, ahora dentro de un ft.Column para alinear
+        # Creamos el contenido de las INSTRUCCIONES
         instrucciones_content_column = ft.Column(
             controls=[
                 ft.Text("1º Escoge en grupo donde crear el subgrupo"),
                 ft.Text("2º Revisa en el desplegable SUBGRUPO, para que no exista un concepto parecido"),
                 ft.Text("3º Si aún así crees que necesitas un nuevo SUBGRUPO"),
                 ft.Text("\t\tUtiliza un concepto corto y descriptivo, que englobe a las cuentas que representará"),
-                ft.Text("\t\tCrear para cerrar el nuevo SUBGRUPO\n\t\tVolver para cancelar")
+                ft.Text("\t\tCrear para tener el nuevo SUBGRUPO\n\t\tVolver para cancelar")
             ],
             horizontal_alignment=ft.CrossAxisAlignment.START # Alinea todos los Text a la izquierda
         )
-
         # Creamos el ExpansionTile
         instrucciones_desplegable = ft.ExpansionTile(
             title=ft.Text(
@@ -198,16 +206,11 @@ def menu_TablaDeCodigos():
             # Le pasamos el ft.Column que creamos para que el contenido esté alineado
             controls=[instrucciones_content_column]
         )
-
         # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
         instrucciones_container = ft.Container(
             content=instrucciones_desplegable,
             bgcolor=ft.colors.BLUE_GREY_200, # <-- Le aplicamos el color aquí
         )
-
-
-
-
 
         # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
         dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
@@ -257,13 +260,181 @@ def menu_TablaDeCodigos():
         container_to_update.content = new_content_column
         container_to_update.update()
         page.update()
-        
-    def crear_cuenta(e, container_to_update, page):
+
+    def btn_editar_subcuenta(e, container_to_update, page):
         """
-        Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Código".
-        Reemplaza el contenido de un contenedor objetivo con un formulario para
-        crear un nuevo código. Este formulario incluye desplegables en cascada
-        para Grupo, Subgrupo y Cuentas, y un botón para volver a la vista anterior.
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
+        Modifica el nombre de un SUBGRUPO
+        Args:
+            e (ft.ControlEvent): El objeto evento del clic del botón.
+            container_to_update (ft.Container): El contenedor de Flet cuyo contenido
+                                            será reemplazado por el nuevo formulario de creación de código.
+            page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
+        """
+        # Creamos el contenido de las INSTRUCCIONES
+        instrucciones_content_column = ft.Column(
+            controls=[
+                ft.Text("1º Escoge el grupo al que pertenece el SUBGRUPO"),
+                ft.Text("2º del desplegable SUBGRUPO escoge el que deseas editar"),
+                ft.Text("3º Escribe el nuevo contenido para el SUBGRUPO"),
+                ft.Text(
+                    "\t\tUtiliza un concepto corto y descriptivo, que englobe a las cuentas que representará"
+                ),
+                ft.Text(
+                    "\t\tActualizar para modificar el SUBGRUPO\n\t\tVolver para cancelar"
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START,  # Alinea todos los Text a la izquierda
+        )
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column],
+        )
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200,  # <-- Le aplicamos el color aquí
+        )
+
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
+        # Se asume que 'globals.ventana_hasta_subgrupo' y 'ruta_BDapp' están definidos.
+        dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
+
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
+        new_content_column = ft.Column(
+            controls=[
+                ft.Text("editar SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
+                dynamic_dropdown_selectors,
+                ft.Row(
+                    controls=[
+                        ft.TextField(
+                            label="Nombre SUBGRUPO", hint_text="Ej: Gastos Extra", width=500
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.START,
+                ),
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.Row(
+                    controls=[
+                        ft.ElevatedButton(
+                            text="Actualizar Subgrupo",
+                            on_click=lambda e: Subcuenta_accion_modificar(
+                                e, container_to_update, page
+                            ),
+                            icon=ft.icons.UPDATE,  
+                        ),
+                        ft.ElevatedButton(
+                            text="Volver",
+                            on_click=lambda ev: reset_tabla_codigo_contenido(
+                                ev, container_to_update, page
+                            ),
+                            icon=ft.icons.ARROW_BACK, 
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+            expand=True,
+        )
+
+        # Actualiza el contenido del contenedor y la página.
+        container_to_update.content = new_content_column
+        container_to_update.update()
+        page.update()
+   
+    def btn_eliminar_subcuenta(e, container_to_update, page):
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Eliminar Subcuenta".
+        Elimina el SUBGRUPO escogido
+        Args:
+            e (ft.ControlEvent): El objeto evento del clic del botón.
+            container_to_update (ft.Container): El contenedor de Flet cuyo contenido
+                                            será reemplazado por el nuevo formulario de creación de código.
+            page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
+        """
+        # Creamos el contenido de las INSTRUCCIONES
+        instrucciones_content_column = ft.Column(
+            controls=[
+                ft.Text("1º Escoge el grupo al que pertenece SUBGRUPO"),
+                ft.Text("2º del desplegable SUBGRUPO escoge el que deseas ELIMINAR"),
+                ft.Text("RECUERDA: "),
+                ft.Text(
+                    "\t\tNo se puede eliminar un SUBGRUPO con cuentas asociadas"
+                ),
+                ft.Text(
+                    "\t\tNo se puede eliminar un SUBGRUPO con importe diferente a cero"
+                ),
+                ft.Text(
+                    "\t\tUna vez eliminado un SUBGRUPO, no se puede recuperar"
+                ),
+                ft.Text(
+                    "\t\tEliminar para borrar el SUBGRUPO\n\t\tVolver para cancelar"
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START,  # Alinea todos los Text a la izquierda
+        )
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column],
+        )
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200,  # <-- Le aplicamos el color aquí
+        )
+
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
+        # Se asume que 'globals.ventana_hasta_subgrupo' y 'ruta_BDapp' están definidos.
+        dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
+
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
+        new_content_column = ft.Column(
+            controls=[
+                ft.Text("Eliminar SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
+                dynamic_dropdown_selectors,
+
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.FilledButton(text="Eliminar Código Permanentemente", on_click=lambda ev: Subcuenta_accion_eliminar(ev, container_to_update, page), icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
+                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+            expand=True,
+        )
+
+        # Actualiza el contenido del contenedor y la página.
+        container_to_update.content = new_content_column
+        container_to_update.update()
+        page.update()
+
+    def btn_crear_cuenta(e, container_to_update, page):
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Cuenta".
+        Este formulario incluye desplegables en cascada
+        para Grupo, Subgrupo y Cuentas.
 
         Args:
             e (ft.ControlEvent): El objeto evento del clic del botón.
@@ -272,137 +443,245 @@ def menu_TablaDeCodigos():
             page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
         """
 
-        # Llama a 'ventana_codigo' desde el módulo 'globals' para obtener un control Row
-        # que contiene los tres desplegables en cascada (Grupo, Subgrupo, Cuentas).
+        # Creamos el contenido de las INSTRUCCIONES
+        instrucciones_content_column = ft.Column(
+            controls=[
+                ft.Text("1º Escoge en grupo y subgrupo"),
+                ft.Text("2º Revisa en el desplegable CUENTA, para que no exista un concepto parecido"),
+                ft.Text("3º Si aún así crees que necesitas una nueva CUENTA"),
+                ft.Text("\t\tUtiliza un concepto corto y descriptivo"),
+                ft.Text("\t\tCrear para tener el nuevo SUBGRUPO\n\t\tVolver para cancelar")
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START # Alinea todos los Text a la izquierda
+        )
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column]
+        )
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200, # <-- Le aplicamos el color aquí
+        )
+
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
         dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
-        cancelar = lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page)
-        guardar = lambda ev: insertar_datos_cuenta()
-        botones_final_ventana = globals.ventana_botones_finales(on_click_cancelar=cancelar, mostrar_btn_guardar=guardar)
-        
 
-
-        # Crea un nuevo control Column para agrupar todos los elementos del formulario
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
         new_content_column = ft.Column(
             controls=[
-                ft.Text("Crear Nuevo Código", size=20, weight=ft.FontWeight.BOLD),
+                ft.Text("Crear nueva CUENTA", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
                 dynamic_dropdown_selectors,
                 ft.Row(
-                    controls =[ft.TextField(label="Nombre del Código", 
-                                            hint_text="Ej: Alquiler", 
-                                            width=500),
-                                            
+                    controls=[
+                        ft.TextField(
+                            label="Nombre CUENTA",
+                            hint_text="Ej: gasolina",
+                            width=500
+                        ),
                     ],
                     alignment=ft.MainAxisAlignment.START,
-                 ),
-                botones_final_ventana,
-                ft.FilledButton(text="Guardar Código", icon=ft.Icons.SAVE),
-                ft.FilledButton(text="Volver", on_click=cancelar, icon=ft.Icons.ARROW_BACK),
-            ],
+                ),
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.Row(
+                    controls=[
+                        ft.ElevatedButton(
+                            text="Crear Cuenta",
+                            on_click=lambda e: Cuenta_accion_crear(e, container_to_update, page)
+                        ),
+                        ft.ElevatedButton(
+                            text="Volver",
+                            on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page),
+                            icon=ft.Icons.ARROW_BACK
+                        ),
+                        #ft.Container(width=30) # Añade este espaciador
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ), 
+            ], 
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
             expand=True
         )
 
-        # Actualiza el contenido del contenedor objetivo para mostrar el nuevo formulario.
+        # Actualiza el contenido del contenedor y la página.
         container_to_update.content = new_content_column
-        container_to_update.update() # Update the specific container itself
-        page.update() # Then update the whole page to propagate changes
-   
-    def editar_subcuenta(e, container_to_update, page):
-        """Muestra un formulario para editar un código existente."""
-        container_to_update.content = ft.Column(
+        container_to_update.update()
+        page.update()
+
+    def btn_editar_cuenta(e, container_to_update, page):
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Editar Subcuenta".
+        Modifica el nombre de la Cuenta seleccionada
+        Args:
+            e (ft.ControlEvent): El objeto evento del clic del botón.
+            container_to_update (ft.Container): El contenedor de Flet cuyo contenido
+                                            será reemplazado por el nuevo formulario de creación de código.
+            page (ft.Page): El objeto de página de Flet, utilizado para actualizar la interfaz de usuario.
+        """
+        # Creamos el contenido de las INSTRUCCIONES
+        instrucciones_content_column = ft.Column(
             controls=[
-                ft.Text("FORMULARIO: Editar Código Existente", size=20, weight=ft.FontWeight.BOLD),
-                ft.Dropdown(
-                    label="Seleccionar Código a Editar",
-                    options=[
-                        ft.dropdown.Option("Gasto: Comida"),
-                        ft.dropdown.Option("Ingreso: Salario"),
-                        ft.dropdown.Option("Deuda: Tarjeta de Crédito"),
-                    ],
-                    hint_text="Elige el código a modificar"
+                ft.Text("1º Escoge el grupo, subgrupo y Cuenta que deseas editarO"),
+                ft.Text("2º Escribe el nuevo nombre de la Cuenta"),
+                ft.Text(
+                    "\t\tUtiliza un concepto corto y descriptivo"
                 ),
-                ft.TextField(label="Nuevo Nombre del Código", hint_text="Ej: Comida del Mes"),
-                ft.FilledButton(text="Actualizar Código", icon=ft.Icons.UPDATE),
-                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+                ft.Text(
+                    "\t\tActualizar para modificar la Cuenta\n\t\tVolver para cancelar"
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START,  # Alinea todos los Text a la izquierda
+        )
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column],
+        )
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200,  # <-- Le aplicamos el color aquí
+        )
+
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
+        # Se asume que 'globals.ventana_hasta_subgrupo' y 'ruta_BDapp' están definidos.
+        dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
+
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
+        new_content_column = ft.Column(
+            controls=[
+                ft.Text("editar CUENTA", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
+                dynamic_dropdown_selectors,
+                ft.Row(
+                    controls=[
+                        ft.TextField(
+                            label="Nombre CUENTA", hint_text="Ej: ocio", width=500
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.START,
+                ),
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.Row(
+                    controls=[
+                        ft.ElevatedButton(
+                            text="Actualizar Cuenta",
+                            on_click=lambda e: Cuenta_accion_modificar(
+                                e, container_to_update, page
+                            ),
+                            icon=ft.icons.UPDATE,  
+                        ),
+                        ft.ElevatedButton(
+                            text="Volver",
+                            on_click=lambda ev: reset_tabla_codigo_contenido(
+                                ev, container_to_update, page
+                            ),
+                            icon=ft.icons.ARROW_BACK, 
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
-            expand=True # ¡CORRECCIÓN CLAVE!
+            expand=True,
         )
-        page.update()
 
-    def editar_cuenta(e, container_to_update, page):
-        """Muestra un formulario para editar un código existente."""
-        container_to_update.content = ft.Column(
+        # Actualiza el contenido del contenedor y la página.
+        container_to_update.content = new_content_column
+        container_to_update.update()
+        page.update()
+ 
+    def btn_eliminar_cuenta(e, container_to_update, page):
+        """
+        Gestiona la acción que ocurre cuando se hace clic en el botón "Eliminar Cuenta".
+        Elimina la CUENTA escogida
+        """
+        # Creamos el contenido de las INSTRUCCIONES
+        instrucciones_content_column = ft.Column(
             controls=[
-                ft.Text("FORMULARIO: Editar Código Existente", size=20, weight=ft.FontWeight.BOLD),
-                ft.Dropdown(
-                    label="Seleccionar Código a Editar",
-                    options=[
-                        ft.dropdown.Option("Gasto: Comida"),
-                        ft.dropdown.Option("Ingreso: Salario"),
-                        ft.dropdown.Option("Deuda: Tarjeta de Crédito"),
-                    ],
-                    hint_text="Elige el código a modificar"
+                ft.Text("1º Escoge el grupo al que pertenece la CUENTA"),
+                ft.Text("2º Escoge el subgrupo al que pertenece la CUENTA"),
+                ft.Text("3º Selecciona la CUENTA que deseas ELIMINAR"),
+                ft.Text("RECUERDA: "),
+                ft.Text(
+                    "\t\tNo se puede eliminar un CUENTA con importe diferente a cero"
                 ),
-                ft.TextField(label="Nuevo Nombre del Código", hint_text="Ej: Comida del Mes"),
-                ft.FilledButton(text="Actualizar Código", icon=ft.Icons.UPDATE),
+                ft.Text(
+                    "\t\tUna vez eliminado la CUENTA, no se puede recuperar"
+                ),
+                ft.Text(
+                    "\t\tEliminar para borrar la CUENTA\n\t\tVolver para cancelar"
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.START,  # Alinea todos los Text a la izquierda
+        )
+        # Creamos el ExpansionTile
+        instrucciones_desplegable = ft.ExpansionTile(
+            title=ft.Text(
+                "Instrucciones",
+                size=20,
+                weight=ft.FontWeight.BOLD,
+            ),
+            # Le pasamos el ft.Column que creamos para que el contenido esté alineado
+            controls=[instrucciones_content_column],
+        )
+        # Envolvemos el ExpansionTile en un ft.Container para darle un color de fondo
+        instrucciones_container = ft.Container(
+            content=instrucciones_desplegable,
+            bgcolor=ft.colors.BLUE_GREY_200,  # <-- Le aplicamos el color aquí
+        )
+
+        # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
+        # Se asume que 'globals.ventana_codigo' y 'ruta_BDapp' están definidos.
+        dynamic_dropdown_selectors = globals.ventana_codigo(ruta_BDapp)
+
+        # Crea el nuevo control Column para agrupar todos los elementos del formulario.
+        new_content_column = ft.Column(
+            controls=[
+                ft.Text("Eliminar CUENTA", size=20, weight=ft.FontWeight.BOLD),
+                instrucciones_container,
+                dynamic_dropdown_selectors,
+
+                # Un "espacio flexible" que empujará los botones hacia abajo
+                ft.Row(
+                    height=10,  # La fila tendrá una altura de 10 píxeles
+                ),
+                ft.FilledButton(text="Eliminar CUENTA Permanentemente", on_click=lambda ev: Cuenta_accion_eliminar(ev, container_to_update, page),icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
                 ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
+
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=15,
-            expand=True # ¡CORRECCIÓN CLAVE!
+            expand=True,
         )
-        page.update()
 
-    def eliminar_subcuenta(e, container_to_update, page):
-        """Muestra una confirmación para eliminar un código."""
-        container_to_update.content = ft.Column(
-            controls=[
-                ft.Text("¿CONFIRMAR ELIMINACIÓN DE CÓDIGO?", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_700),
-                ft.Dropdown(
-                    label="Seleccionar Código a Eliminar",
-                    options=[
-                        ft.dropdown.Option("Gasto: Transporte"),
-                        ft.dropdown.Option("Deuda: Préstamo Automóvil"),
-                    ],
-                    hint_text="Elige el código a eliminar"
-                ),
-                ft.FilledButton(text="Eliminar Código Permanentemente", icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
-                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=15,
-            expand=True # ¡CORRECCIÓN CLAVE!
-        )
-        page.update()
-
-    def eliminar_cuenta(e, container_to_update, page):
-        """Muestra una confirmación para eliminar un código."""
-        container_to_update.content = ft.Column(
-            controls=[
-                ft.Text("¿CONFIRMAR ELIMINACIÓN DE CÓDIGO?", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.RED_700),
-                ft.Dropdown(
-                    label="Seleccionar Código a Eliminar",
-                    options=[
-                        ft.dropdown.Option("Gasto: Transporte"),
-                        ft.dropdown.Option("Deuda: Préstamo Automóvil"),
-                    ],
-                    hint_text="Elige el código a eliminar"
-                ),
-                ft.FilledButton(text="Eliminar Código Permanentemente", icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
-                ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=15,
-            expand=True # ¡CORRECCIÓN CLAVE!
-        )
+        # Actualiza el contenido del contenedor y la página.
+        container_to_update.content = new_content_column
+        container_to_update.update()
         page.update()
 
 
-
-    # --- Título de la Tabla Códigos ---
+    # --- Título de la Tabla Códigos --------------------------------------------
     TablaCodigo_titulo = ft.Container(
         content=ft.Row(
             controls=[
@@ -425,7 +704,7 @@ def menu_TablaDeCodigos():
         ),
     )
 
-    # --- Subtítulo de la tabla Códigos (contiene los botones de acción) ---
+    # --- Subtítulo de la tabla Códigos (contiene los botones de acción) ---------
     # Inicialmente invisible. Su visibilidad se controla con el botón de configuración.
     # IMPORTANTE: Se define aquí para que toggle_subtitulo_visibility pueda referenciarlo.
     TablaCodigo_subtitulo = ft.Container(
@@ -434,7 +713,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Crear Subgrupo",
                     icon=ft.Icons.ADD,
-                    on_click=lambda e: crear_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_crear_subcuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )
@@ -442,7 +721,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Editar Subgrupo",
                     icon=ft.Icons.EDIT,
-                    on_click=lambda e: editar_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_editar_subcuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )
@@ -450,7 +729,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Eliminar Subgrupo",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: eliminar_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_eliminar_subcuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )
@@ -458,7 +737,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Crear Cuenta",
                     icon=ft.Icons.ADD,
-                    on_click=lambda e: crear_cuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_crear_cuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
                         )
@@ -466,7 +745,7 @@ def menu_TablaDeCodigos():
                  ft.FilledButton(
                     text="Editar Cuenta",
                     icon=ft.Icons.EDIT,
-                    on_click=lambda e: editar_cuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_editar_cuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
                         )
@@ -474,7 +753,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Eliminar Cuenta",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: eliminar_cuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_eliminar_cuenta(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.BLUE_500,  # <-- Se agregó esta línea para el color
                         )
@@ -494,7 +773,7 @@ def menu_TablaDeCodigos():
         e.page.update() # Actualiza la UI para mostrar/ocultar el subtítulo
 
     
-    # ---------------------- Estructura principal de la vista -----------------
+    # ---------------------- Estructura principal de la vista -------------------------------------------------------
     # Agrupa todos los elementos definidos anteriormente en un Column
     globals.contenido_central_container.content = ft.Container(
         content=ft.Column(
