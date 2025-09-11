@@ -150,13 +150,27 @@ def menu_TablaDeCodigos():
         page.update()
 
 
-    def Subcuenta_accion_crear(e, container_to_update, page):
-        print ("CREANDO SUBGRUPO")
-        pass
-    def Subcuenta_accion_modificar(e, container_to_update, page):
+    def Subgrupo_accion_crear(e, container_to_update, page, valor_subgrupo):
+        """
+        Función de acción para crear un nuevo subgrupo.
+        Recibe el valor del TextField como un argumento.
+        """
+        # 3. Usa el valor del TextField directamente
+        print(f"Valor del nuevo subgrupo: {valor_subgrupo}")
+
+        # Ahora puedes usar 'valor_subgrupo' para interactuar con la base de datos
+        # Ejemplo: insertar_datos_subgrupo(ruta_BDapp, grupo_id, cod_2_input, valor_subgrupo)
+        # Reemplaza 'insertar_datos_subgrupo' con tu función real.
+
+        # También podrías mostrar un mensaje de éxito o error al usuario.
+        # page.snack_bar = ft.SnackBar(ft.Text(f"Subgrupo '{valor_subgrupo}' creado con éxito."))
+        # page.snack_bar.open = True
+        page.update()
+
+    def Subgrupo_accion_modificar(e, container_to_update, page):
         print ("modificandeo SUBGRUPO")
         pass
-    def Subcuenta_accion_eliminar(e, container_to_update, page):
+    def Subgrupo_accion_eliminar(e, container_to_update, page):
         print ("eliminando SUBGRUPO")
         pass
 
@@ -175,7 +189,7 @@ def menu_TablaDeCodigos():
 
 
     # fUNCIONES  de los botones
-    def btn_crear_subcuenta(e, container_to_update, page):
+    def btn_crear_subgrupo(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
         crear un nuevo SUBGRUPO, a partir de escoger el GRUPO.
@@ -190,7 +204,7 @@ def menu_TablaDeCodigos():
             controls=[
                 ft.Text("1º Escoge en grupo donde crear el subgrupo"),
                 ft.Text("2º Revisa en el desplegable SUBGRUPO, para que no exista un concepto parecido"),
-                ft.Text("3º Si aún así crees que necesitas un nuevo SUBGRUPO"),
+                ft.Text("3º Si aún así, quieres crear un nuevo SUBGRUPO, ten en cuenta:"),
                 ft.Text("\t\tUtiliza un concepto corto y descriptivo, que englobe a las cuentas que representará"),
                 ft.Text("\t\tCrear para tener el nuevo SUBGRUPO\n\t\tVolver para cancelar")
             ],
@@ -215,22 +229,26 @@ def menu_TablaDeCodigos():
         # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
         dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
 
+        # creamos variables para recuperar le valor del TextField
+        # Crea la variable para el TextField
+        textfield_subgrupo = ft.TextField(
+            label="Nombre SUBGRUPO",
+            hint_text="Ej: Gastos Extra",
+            width=500
+        )
+        # Ahora, crea el ft.Row y usa esa variable en su lista de controles
+        nuevo_subgrupo_row = ft.Row(
+            controls=[textfield_subgrupo],
+            alignment=ft.MainAxisAlignment.START,
+        )
+
         # Crea el nuevo control Column para agrupar todos los elementos del formulario.
         new_content_column = ft.Column(
             controls=[
                 ft.Text("Crear nuevo SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
                 instrucciones_container,
                 dynamic_dropdown_selectors,
-                ft.Row(
-                    controls=[
-                        ft.TextField(
-                            label="Nombre SUBGRUPO",
-                            hint_text="Ej: Gastos Extra",
-                            width=500
-                        ),
-                    ],
-                    alignment=ft.MainAxisAlignment.START,
-                ),
+                nuevo_subgrupo_row,
                 # Un "espacio flexible" que empujará los botones hacia abajo
                 ft.Row(
                     height=10,  # La fila tendrá una altura de 10 píxeles
@@ -239,7 +257,7 @@ def menu_TablaDeCodigos():
                     controls=[
                         ft.ElevatedButton(
                             text="Crear Subgrupo",
-                            on_click=lambda e: Subcuenta_accion_crear(e, container_to_update, page)
+                            on_click=lambda e: Subgrupo_accion_crear(e, container_to_update, page, textfield_subgrupo.value)
                         ),
                         ft.ElevatedButton(
                             text="Volver",
@@ -261,7 +279,7 @@ def menu_TablaDeCodigos():
         container_to_update.update()
         page.update()
 
-    def btn_editar_subcuenta(e, container_to_update, page):
+    def btn_editar_subgrupo(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
         Modifica el nombre de un SUBGRUPO
@@ -328,7 +346,7 @@ def menu_TablaDeCodigos():
                     controls=[
                         ft.ElevatedButton(
                             text="Actualizar Subgrupo",
-                            on_click=lambda e: Subcuenta_accion_modificar(
+                            on_click=lambda e: Subgrupo_accion_modificar(
                                 e, container_to_update, page
                             ),
                             icon=ft.icons.UPDATE,  
@@ -354,7 +372,7 @@ def menu_TablaDeCodigos():
         container_to_update.update()
         page.update()
    
-    def btn_eliminar_subcuenta(e, container_to_update, page):
+    def btn_eliminar_subgrupo(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Eliminar Subcuenta".
         Elimina el SUBGRUPO escogido
@@ -416,7 +434,7 @@ def menu_TablaDeCodigos():
                 ft.Row(
                     height=10,  # La fila tendrá una altura de 10 píxeles
                 ),
-                ft.FilledButton(text="Eliminar Código Permanentemente", on_click=lambda ev: Subcuenta_accion_eliminar(ev, container_to_update, page), icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
+                ft.FilledButton(text="Eliminar Código Permanentemente", on_click=lambda ev: Subgrupo_accion_eliminar(ev, container_to_update, page), icon=ft.Icons.WARNING, style=ft.ButtonStyle(bgcolor=ft.Colors.RED_ACCENT_700)),
                 ft.FilledButton(text="Volver", on_click=lambda ev: reset_tabla_codigo_contenido(ev, container_to_update, page), icon=ft.Icons.ARROW_BACK),
 
             ],
@@ -713,7 +731,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Crear Subgrupo",
                     icon=ft.Icons.ADD,
-                    on_click=lambda e: btn_crear_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_crear_subgrupo(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )
@@ -721,7 +739,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Editar Subgrupo",
                     icon=ft.Icons.EDIT,
-                    on_click=lambda e: btn_editar_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_editar_subgrupo(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )
@@ -729,7 +747,7 @@ def menu_TablaDeCodigos():
                 ft.FilledButton(
                     text="Eliminar Subgrupo",
                     icon=ft.Icons.DELETE_OUTLINE,
-                    on_click=lambda e: btn_eliminar_subcuenta(e, TablaCodigo_contenido, e.page),
+                    on_click=lambda e: btn_eliminar_subgrupo(e, TablaCodigo_contenido, e.page),
                         style=ft.ButtonStyle(
                             bgcolor=ft.colors.GREEN_400,  # <-- Se agregó esta línea para el color
                         )

@@ -12,7 +12,6 @@ from datetime import date
 # Agregar el directorio raíz al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-
 # Archivos estructura del codigo
 import appbar
 import cuerpo
@@ -59,15 +58,12 @@ else:
         funciones_BD.insertar_datos_iniciales_subgrupos(ruta_BDapp)
         funciones_BD.insertar_datos_iniciales_cuentas(ruta_BDapp)
         
-
-
-        
+     
 
 #funciones_BD.ver_tablas_base_datos(ruta_BDapp)
 
 def main(page: ft.Page):
     page.title = "Cuentas de Casa"
-    
     
 
     # Crear la AppBar
