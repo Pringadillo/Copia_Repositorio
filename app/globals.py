@@ -228,15 +228,18 @@ def ventana_hasta_subgrupo(ruta_BD):
         display_text = f"{id_val} - {row_dict['desc_grupo']}"
         dd_grupo.options.append(ft.dropdown.Option(key=str(id_val), text=display_text))
 
-    return ft.Row(
+        # Create the Row
+    row_selector = ft.Row(
         controls=[
             dd_grupo,
             dd_subgrupo,
-
         ],
         spacing=10,
         alignment=ft.MainAxisAlignment.START
-    ), dd_grupo, dd_subgrupo
+    )
+
+    # Return the Row and the individual controls as a tuple
+    return row_selector, dd_grupo, dd_subgrupo
 
 
 '''

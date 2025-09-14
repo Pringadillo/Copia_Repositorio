@@ -150,21 +150,31 @@ def menu_TablaDeCodigos():
         page.update()
 
 
-    def Subgrupo_accion_crear(e, container_to_update, page, valor_subgrupo):
+    def Subgrupo_accion_crear(e, page, dd_grupo, textfield_subgrupo, ruta_BDapp):
         """
         Función de acción para crear un nuevo subgrupo.
-        Recibe el valor del TextField como un argumento.
+        Recupera los valores de los controles pasados y los usa para la base de datos.
         """
-        # 3. Usa el valor del TextField directamente
-        print(f"Valor del nuevo subgrupo: {valor_subgrupo}")
+        grupo_id_str = dd_grupo.value
+        valor_subgrupo = textfield_subgrupo.value
+        
+        if not grupo_id_str or not valor_subgrupo:
+            page.snack_bar = ft.SnackBar(ft.Text("Por favor, selecciona un grupo y escribe un nombre."), open=True)
+            page.update()
+            print("Por favor, selecciona un grupo y escribe un nombre.")
+            return
 
-        # Ahora puedes usar 'valor_subgrupo' para interactuar con la base de datos
-        # Ejemplo: insertar_datos_subgrupo(ruta_BDapp, grupo_id, cod_2_input, valor_subgrupo)
-        # Reemplaza 'insertar_datos_subgrupo' con tu función real.
+        try:
+            grupo_id = int(grupo_id_str)
+            # Aquí iría la llamada a tu función de la base de datos
+            # funciones_BD.insertar_datos_subgrupo(ruta_BDapp, grupo_id, valor_subgrupo)
+            
+            page.snack_bar = ft.SnackBar(ft.Text(f"Subgrupo '{valor_subgrupo}' creado con éxito."))
+            page.snack_bar.open = True
+            print(f"Subgrupo '{valor_subgrupo}' creado con éxito.")
+        except (ValueError, Exception) as ex:
+            page.snack_bar = ft.SnackBar(ft.Text(f"Ocurrió un error: {ex}"), open=True)
 
-        # También podrías mostrar un mensaje de éxito o error al usuario.
-        # page.snack_bar = ft.SnackBar(ft.Text(f"Subgrupo '{valor_subgrupo}' creado con éxito."))
-        # page.snack_bar.open = True
         page.update()
 
     def Subgrupo_accion_modificar(e, container_to_update, page):
@@ -227,7 +237,7 @@ def menu_TablaDeCodigos():
         )
 
         # Llama a 'ventana_codigo' para obtener el control Row de los desplegables.
-        dynamic_dropdown_selectors = globals.ventana_hasta_subgrupo(ruta_BDapp)
+        dynamic_dropdown_selectors_row, dd_grupo, dd_subgrupo  = globals.ventana_hasta_subgrupo(ruta_BDapp)
 
         # creamos variables para recuperar le valor del TextField
         # Crea la variable para el TextField
@@ -247,7 +257,7 @@ def menu_TablaDeCodigos():
             controls=[
                 ft.Text("Crear nuevo SUBGRUPO", size=20, weight=ft.FontWeight.BOLD),
                 instrucciones_container,
-                dynamic_dropdown_selectors,
+                dynamic_dropdown_selectors_row,
                 nuevo_subgrupo_row,
                 # Un "espacio flexible" que empujará los botones hacia abajo
                 ft.Row(
@@ -257,7 +267,7 @@ def menu_TablaDeCodigos():
                     controls=[
                         ft.ElevatedButton(
                             text="Crear Subgrupo",
-                            on_click=lambda e: Subgrupo_accion_crear(e, container_to_update, page, textfield_subgrupo.value)
+                            on_click=lambda ev: Subgrupo_accion_crear(ev, page, dd_grupo, textfield_subgrupo, ruta_BDapp),
                         ),
                         ft.ElevatedButton(
                             text="Volver",
