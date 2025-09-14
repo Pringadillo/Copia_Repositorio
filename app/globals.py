@@ -165,7 +165,7 @@ def ventana_grupo(ruta_BD):
         ],
         spacing=10,
         alignment=ft.MainAxisAlignment.START
-    )
+    ), dd_grupo
 
 def ventana_hasta_subgrupo(ruta_BD):
     dd_grupo = crear_dropdown_grupo()
@@ -236,7 +236,7 @@ def ventana_hasta_subgrupo(ruta_BD):
         ],
         spacing=10,
         alignment=ft.MainAxisAlignment.START
-    )
+    ), dd_grupo, dd_subgrupo
 
 
 '''
