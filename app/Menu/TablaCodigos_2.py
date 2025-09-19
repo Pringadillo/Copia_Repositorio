@@ -152,7 +152,7 @@ def menu_TablaDeCodigos():
 
     def Subgrupo_accion_crear(e, page, dd_grupo, textfield_subgrupo, ruta_BDapp):
         """
-        Función de acción para crear un nuevo subgrupo.
+        Función de la acción para crear un nuevo subgrupo.
         Recupera los valores de los controles pasados y los usa para la base de datos.
         """
         grupo_id_str = dd_grupo.value
@@ -198,7 +198,7 @@ def menu_TablaDeCodigos():
 
 
 
-    # fUNCIONES  de los botones
+    # FUNCIONES  de los botones
     def btn_crear_subgrupo(e, container_to_update, page):
         """
         Gestiona la acción que ocurre cuando se hace clic en el botón "Crear Subcuenta".
