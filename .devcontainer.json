@@ -14,5 +14,6 @@
             ]
         }
     },
-    "postCreateCommand": "pip3 install flet pandas"
+    "workspaceFolder": "/workspaces/Cuentas_de_Casa/app",
+    "postCreateCommand": "pip3 install -r requirements.txt"
 }
