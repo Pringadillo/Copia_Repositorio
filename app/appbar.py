@@ -1,7 +1,7 @@
 import flet as ft
 
 import globals
-import app.Menu.CodigosTabla as CodigosTabla
+
 import app.Menu.TablaCodigos_2 as TablaCodigos_2
 import app.Menu.BtnDiario as Btn_Diario
 
